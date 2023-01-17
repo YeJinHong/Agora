@@ -3,6 +3,7 @@ package com.ssafy.common.auth;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,7 @@ public class SsafyUserDetailService implements UserDetailsService{
 	
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		System.out.println("name" + username);
     		User user = userRepository.findByUserId(username).orElseThrow(() -> new NoSuchElementException("없는 회원입니다."));
     		if(user != null) {
     			SsafyUserDetails userDetails = new SsafyUserDetails(user);
