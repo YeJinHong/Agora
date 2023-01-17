@@ -1,5 +1,6 @@
 package com.ssafy.api.response;
 
+import com.ssafy.common.auth.TokenInfo;
 import com.ssafy.common.model.response.BaseResponseBody;
 
 import io.swagger.annotations.ApiModel;
@@ -13,15 +14,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("UserLoginPostResponse")
-public class UserLoginPostRes extends BaseResponseBody{
-	@ApiModelProperty(name="JWT 인증 토큰", example="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN...")
-	String accessToken;
-	
-	public static UserLoginPostRes of(Integer statusCode, String message, String accessToken) {
-		UserLoginPostRes res = new UserLoginPostRes();
+public class UserAuthPostRes extends BaseResponseBody{
+	private TokenInfo tokenInfo;
+
+
+	public static UserAuthPostRes of(Integer statusCode, String message, TokenInfo tokenInfo) {
+		UserAuthPostRes res = new UserAuthPostRes();
 		res.setStatusCode(statusCode);
 		res.setMessage(message);
-		res.setAccessToken(accessToken);
+		res.tokenInfo = tokenInfo;
 		return res;
 	}
 }

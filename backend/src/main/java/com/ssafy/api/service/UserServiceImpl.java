@@ -23,9 +23,6 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     @Autowired
-    UserRepositorySupport userRepositorySupport;
-
-    @Autowired
     PasswordEncoder passwordEncoder;
 
     @Override
@@ -45,17 +42,21 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByUserId(String userId) {
         // 디비에 유저 정보 조회 (userId 를 통한 조회).
-        return userRepositorySupport.findUserByUserId(userId).orElseThrow(NoSuchElementException::new);
+        return userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
     }
 
     @Override
     public boolean checkExist(String userId) {
-        return userRepositorySupport.findUserByUserId(userId).isPresent();
+        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+        if(user != null){
+            return true;
+        }
+        return false;
     }
 
     @Override
     public void updateUser(String userId, UserModifyPatchReq req) {
-        User user = userRepositorySupport.findUserByUserId(userId).orElseThrow(NoSuchElementException::new);
+        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
 
         user.setName(req.getName());
         user.setDepartment(req.getDepartment());
@@ -66,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(String userId) {
-        User user = userRepositorySupport.findUserByUserId(userId).orElseThrow(NoSuchElementException::new);
+        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
         userRepository.delete(user);
     }
 }

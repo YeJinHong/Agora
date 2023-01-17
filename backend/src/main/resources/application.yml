@@ -11,6 +11,8 @@ management:
 spa:
   default-file: /dist/index.html
 spring:
+  main:
+    allow-bean-definition-overriding: true
   web:
     resources:
       static-locations: classpath:/dist/
@@ -35,6 +37,9 @@ spring:
       password: '12341234'
       username: ssafy
     url: jdbc:mysql://192.168.100.156:3306/ssafy_web?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+  redis:
+    host: 127.0.0.1
+    port: 6379
   data:
     web:
       pageable:

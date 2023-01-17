@@ -37,6 +37,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath position = createString("position");
 
+    public final EnumPath<Role> role = createEnum("role", Role.class);
+
     public final ListPath<UserConference, QUserConference> userConferences = this.<UserConference, QUserConference>createList("userConferences", UserConference.class, QUserConference.class, PathInits.DIRECT2);
 
     public final StringPath userId = createString("userId");
