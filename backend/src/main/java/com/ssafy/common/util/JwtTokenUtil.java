@@ -40,15 +40,14 @@ import static com.google.common.collect.Lists.newArrayList;
  * jwt 토큰 유틸 정의.
  */
 @Component
-@NoArgsConstructor
 public class JwtTokenUtil {
 
-    @Autowired
-    private static UserRepository userRepository;
 
-    private static RedisRepository redisRepository;
+    private UserRepository userRepository;
 
-    private static SsafyUserDetailService ssafyUserDetailService;
+    private RedisRepository redisRepository;
+
+    private SsafyUserDetailService ssafyUserDetailService;
     private static String secretKey;
 
     private static final long ACCESS_TOKEN_EXPIRE_TIME =  30 * 60 * 1000L;  // 30분
@@ -60,14 +59,16 @@ public class JwtTokenUtil {
     public static final String ISSUER = "ResetContent";
 
     @Autowired
-    public JwtTokenUtil(UserRepository userRepository, RedisRepository redisRepository, @Value("${jwt.secret}") String secretKey,SsafyUserDetailService ssafyUserDetailService) {
+    public JwtTokenUtil(UserRepository userRepository, RedisRepository redisRepository,
+                        @Value("${jwt.secret}") String secretKey,
+                        SsafyUserDetailService ssafyUserDetailService) {
         this.userRepository = userRepository;
         this.redisRepository = redisRepository;
         this.ssafyUserDetailService = ssafyUserDetailService;
         this.secretKey = secretKey;
     }
 
-    public static TokenInfo generateToken(String userId){
+    public TokenInfo generateToken(String userId){
 
         String accessToken = createAccessToken(userId);
         String refreshToken = createRefreshToken(userId);
