@@ -5,6 +5,7 @@ import com.ssafy.api.service.ConferenceService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.Conference;
 import io.swagger.annotations.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -17,10 +18,11 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "회의 API", tags = {"Conference"})
 @RestController
 @RequestMapping("/api/v1/conferences/")
+@RequiredArgsConstructor
 public class ConferenceController {
 
-	@Autowired
-	ConferenceService conferenceService;
+
+	private final ConferenceService conferenceService;
 
 	@PostMapping()
 	@ApiOperation(value = "회의 생성")

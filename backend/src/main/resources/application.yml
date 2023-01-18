@@ -80,7 +80,8 @@ server:
 build:
   date: '@build.date@'
 jwt:
-  expiration: '1296000000'
+  accessTokenExpiration: '1800000'
+  refreshTokenExpiration: '604800000'
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
 springfox:
   documentation:

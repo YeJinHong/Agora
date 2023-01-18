@@ -36,10 +36,12 @@ public class JwtTokenUtil {
     private RedisRepository redisRepository;
 
     private CustomUserDetailService customUserDetailService;
+
     private static String secretKey;
 
-    private static final long ACCESS_TOKEN_EXPIRE_TIME =  30 * 60 * 1000L;  // 30분
-    private static final long REFRESH_TOKEN_EXPIRE_TIME = 7 * 24 * 60 * 60 * 1000L;    // 7일
+    private static long ACCESS_TOKEN_EXPIRE_TIME;  // 30분
+
+    private static long REFRESH_TOKEN_EXPIRE_TIME;    // 7일
 
 
     public static final String TOKEN_PREFIX = "Bearer ";
@@ -47,12 +49,18 @@ public class JwtTokenUtil {
     public static final String ISSUER = "ResetContent";
 
     @Autowired
-    public JwtTokenUtil(UserRepository userRepository, RedisRepository redisRepository, CustomUserDetailService customUserDetailService,
-                        @Value("${jwt.secret}") String secretKey) {
+    public JwtTokenUtil(UserRepository userRepository,
+                        RedisRepository redisRepository,
+                        CustomUserDetailService customUserDetailService,
+                        @Value("${jwt.secret}") String secretKey,
+                        @Value("${jwt.accessTokenExpiration}") long ACCESS_TOKEN_EXPIRE_TIME,
+                        @Value("${jwt.refreshTokenExpiration}") long REFRESH_TOKEN_EXPIRE_TIME) {
         this.userRepository = userRepository;
         this.redisRepository = redisRepository;
         this.customUserDetailService = customUserDetailService;
         this.secretKey = secretKey;
+        this.ACCESS_TOKEN_EXPIRE_TIME = ACCESS_TOKEN_EXPIRE_TIME;
+        this.REFRESH_TOKEN_EXPIRE_TIME = REFRESH_TOKEN_EXPIRE_TIME;
     }
 
     //토큰 생성
