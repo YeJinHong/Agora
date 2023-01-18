@@ -1,8 +1,8 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.request.UserModifyPatchReq;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.UserService;
-import com.ssafy.common.auth.SsafyUserDetails;
+import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.db.entity.User;
 
@@ -27,10 +27,11 @@ import springfox.documentation.annotations.ApiIgnore;
 @Api(value = "유저 API", tags = {"User"})
 @RestController
 @RequestMapping("/api/v1/users")
+@RequiredArgsConstructor
 public class UserController {
 	
-	@Autowired
-	UserService userService;
+
+	private final UserService userService;
 	
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.") 
@@ -62,7 +63,7 @@ public class UserController {
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
 		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
 		 */
-		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getDetails();
 		String userId = userDetails.getUsername();
 		User user = userService.getUserByUserId(userId);
 
@@ -77,17 +78,11 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<BaseResponseBody> checkUserInfo(@ApiIgnore Authentication authentication, @PathVariable String userId) {
+	public ResponseEntity<BaseResponseBody> checkUserInfo(@PathVariable String userId) {
 
-		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
-		if (!userId.equals(userDetails.getUsername())) {
-			return ResponseEntity.badRequest().build();
+		if(userService.checkExist(userId)) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409, "이미 존재하는 사용자 ID 입니다."));
 		}
-
-		User user = userService.getUserByUserId(userId);
-		if(user != null)
-			return ResponseEntity.status(409).body(BaseResponseBody.of(409,"이미 존재하는 사용자 ID 입니다."));
-
 		return ResponseEntity.ok().build();
 	}
 
@@ -103,7 +98,7 @@ public class UserController {
 			@PathVariable String userId,
 			@RequestBody UserModifyPatchReq req) {
 
-		SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
 		if (!userId.equals(userDetails.getUsername())) {
 			return ResponseEntity.badRequest().build();
 		}
@@ -124,7 +119,7 @@ public class UserController {
 	public ResponseEntity<BaseResponseBody> deleteUser(@ApiIgnore Authentication authentication,
 			@PathVariable String userId) {
 
-		SsafyUserDetails userDetails = (SsafyUserDetails) authentication.getDetails();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
 		if (!userId.equals(userDetails.getUsername())) {
 			return ResponseEntity.badRequest().build();
 		}

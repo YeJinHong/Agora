@@ -5,6 +5,7 @@ import com.ssafy.db.entity.Conference;
 import com.ssafy.db.repository.ConferenceCategoryRepository;
 import com.ssafy.db.repository.ConferenceRepository;
 import com.ssafy.db.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,15 +15,14 @@ import java.util.NoSuchElementException;
  *	회의 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
 @Service("conferenceService")
+@RequiredArgsConstructor
 public class ConferenceServiceImpl implements ConferenceService {
-	@Autowired
-	UserRepository userRepository;
 
-	@Autowired
-	ConferenceRepository conferenceRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	ConferenceCategoryRepository conferenceCategoryRepository;
+	private final ConferenceRepository conferenceRepository;
+
+	private final ConferenceCategoryRepository conferenceCategoryRepository;
 
 	@Override
 	public Conference createConference(ConferenceRegisterPostReq conferenceRegisterInfo) {

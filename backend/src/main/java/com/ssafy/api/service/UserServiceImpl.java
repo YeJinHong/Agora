@@ -1,6 +1,7 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserModifyPatchReq;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -8,22 +9,21 @@ import org.springframework.stereotype.Service;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
-import com.ssafy.db.repository.UserRepositorySupport;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 /**
  * 유저 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
  */
 @Service("userService")
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Autowired
-    UserRepository userRepository;
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    private final UserRepository userRepository;
+
+
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(UserRegisterPostReq userRegisterInfo) {
@@ -45,14 +45,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
     }
 
-    @Override
-    public boolean checkExist(String userId) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
-        if(user != null){
-            return true;
-        }
-        return false;
-    }
 
     @Override
     public void updateUser(String userId, UserModifyPatchReq req) {
@@ -70,4 +62,14 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
         userRepository.delete(user);
     }
+
+    @Override
+    public boolean checkExist(String userId) {
+        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+        if(user != null){
+            return true;
+        }
+        return false;
+    }
+
 }

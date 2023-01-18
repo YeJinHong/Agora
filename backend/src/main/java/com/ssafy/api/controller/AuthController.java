@@ -3,11 +3,8 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.UserReissuePostReq;
 import com.ssafy.api.response.UserAuthPostRes;
 import com.ssafy.common.auth.RefreshToken;
-import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.util.RedisRepository;
-import io.jsonwebtoken.Jwt;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,7 +15,6 @@ import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.User;
-import com.ssafy.db.repository.UserRepositorySupport;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,8 +22,6 @@ import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
 import springfox.documentation.annotations.ApiIgnore;
-
-import java.util.Optional;
 
 /**
  * 인증 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -73,21 +67,21 @@ public class AuthController {
 	}
 
 	@PostMapping("/reissue")
-	@ApiOperation(value = "로그인", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")
+	@ApiOperation(value = "토큰 재발급", notes = "<strong>AccessToken,RefreshToken</strong>을 받아 재발급 합니다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공", response = UserAuthPostRes.class),
-			@ApiResponse(code = 401, message = "인증 실패", response = UserAuthPostRes.class),
-			@ApiResponse(code = 404, message = "사용자 없음", response = UserAuthPostRes.class),
+			@ApiResponse(code = 401, message = "RefreshToken 유효하지 않음", response = UserAuthPostRes.class),
+			@ApiResponse(code = 404, message = "RefreshToken 정보가 잘못되었음", response = UserAuthPostRes.class),
 			@ApiResponse(code = 500, message = "서버 오류", response = UserAuthPostRes.class)
 	})
 	public ResponseEntity<?> reissue(@RequestBody UserReissuePostReq userReissuePostReq){
 		if(jwtTokenUtil.validateToken(userReissuePostReq.getRefreshToken())){
-			return ResponseEntity.ok(UserAuthPostRes.of(200, "Refresh Token 정보가 유효하지 않습니다.",null));
+			return ResponseEntity.status(401).body(UserAuthPostRes.of(401, "Refresh Token 정보가 유효하지 않습니다.",null));
 		}
 		Authentication authentication = jwtTokenUtil.getAuthentication(userReissuePostReq.getAccessToken());
 		RefreshToken refreshToken = redisRepository.findById(authentication.getName()).get();
 		if(!refreshToken.getRefreshToken().equals(userReissuePostReq.getRefreshToken())){
-			return ResponseEntity.ok(UserAuthPostRes.of(200, "RefreshToken 정보가 잘못되었습니다..",null));
+			return ResponseEntity.status(404).body(UserAuthPostRes.of(404, "RefreshToken 정보가 잘못되었습니다..",null));
 		}
 		return ResponseEntity.ok(UserAuthPostRes.of(200, "Token 정보가 갱신되었습니다.", jwtTokenUtil.generateToken(authentication.getName())));
 
@@ -102,8 +96,10 @@ public class AuthController {
 	})
 	public ResponseEntity<?> logout(@ApiIgnore Authentication authentication) {
 
-		
 		return ResponseEntity.ok(BaseResponseBody.of(200,"로그아웃이 성공적으로 이루어졌습니다."));
+
 	}
+
+
 
 }

@@ -15,6 +15,8 @@ public class TokenInfo {
     private String grantType;
     private String authorization;
     private String refreshToken;
+
+    private Long accessTokenExpirationTime;
     private Long refreshTokenExpirationTime;
 
 }
