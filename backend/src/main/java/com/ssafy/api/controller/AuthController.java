@@ -2,6 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.UserReissuePostReq;
 import com.ssafy.api.response.UserAuthPostRes;
+import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.auth.RefreshToken;
 import com.ssafy.common.util.RedisRepository;
 import lombok.RequiredArgsConstructor;
@@ -96,7 +97,13 @@ public class AuthController {
 	})
 	public ResponseEntity<?> logout(@ApiIgnore Authentication authentication) {
 
-		return ResponseEntity.ok(BaseResponseBody.of(200,"로그아웃이 성공적으로 이루어졌습니다."));
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+		String userId = userDetails.getUsername();
+		if(userId != null){
+			redisRepository.deleteById(userDetails.getUsername());
+			return ResponseEntity.ok(BaseResponseBody.of(200,"로그아웃이 성공적으로 이루어졌습니다."));
+		}
+		return ResponseEntity.status(404).body(BaseResponseBody.of(404,"로그아웃이 실패하였습니다."));
 
 	}
 
