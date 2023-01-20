@@ -1,6 +1,7 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.request.UserModifyPatchReq;
+import com.ssafy.dto.BaseResponseBody;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +12,6 @@ import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.CustomUserDetails;
-import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.User;
 
 import io.swagger.annotations.Api;

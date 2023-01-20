@@ -2,7 +2,7 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.ConferenceRegisterPostReq;
 import com.ssafy.api.service.ConferenceService;
-import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.dto.BaseResponseBody;
 import com.ssafy.entity.Conference;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;

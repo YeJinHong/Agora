@@ -5,6 +5,7 @@ import com.ssafy.api.response.UserAuthPostRes;
 import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.auth.RefreshToken;
 import com.ssafy.common.util.RedisRepository;
+import com.ssafy.dto.BaseResponseBody;
 import com.ssafy.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.api.request.UserLoginPostReq;
 import com.ssafy.api.service.UserService;
-import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.JwtTokenUtil;
 
 import io.swagger.annotations.Api;

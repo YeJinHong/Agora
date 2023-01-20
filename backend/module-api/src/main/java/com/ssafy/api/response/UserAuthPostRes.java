@@ -1,8 +1,8 @@
 package com.ssafy.api.response;
 
 import com.ssafy.common.auth.TokenInfo;
-import com.ssafy.common.model.response.BaseResponseBody;
 
+import com.ssafy.dto.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("UserLoginPostResponse")
-public class UserAuthPostRes extends BaseResponseBody{
+public class UserAuthPostRes extends BaseResponseBody {
 	private TokenInfo tokenInfo;
 
 
