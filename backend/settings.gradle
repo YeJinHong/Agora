@@ -1,1 +1,3 @@
 rootProject.name = 'ssafy-web-project'
+include 'module-core'
+include 'module-api'
