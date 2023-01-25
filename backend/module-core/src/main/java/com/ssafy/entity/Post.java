@@ -3,27 +3,33 @@ package com.ssafy.entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ConferenceHistory extends BaseEntity {
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "conference_id")
-    private Conference conference;
+public class Post extends BaseEntity{
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Enumerated(EnumType.STRING)
-    private Action action;
+    @Column
+    private String CategoryCode;
+
+    @Column
+    private String title;
+
+    @Column
+    private String detail;
 
     @Column
     private LocalDateTime insertedTime;
+
+
 }

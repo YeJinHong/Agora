@@ -19,33 +19,39 @@ import java.util.List;
 @ToString
 public class User extends BaseEntity {
 
-    @Column
-    private String position;
-
-    @Column
-    private String department;
-
-    @Column
-    private String name;
-
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     @Column(unique = true)
-    private String userId;
+    private String userEmail;
 
     @ToString.Exclude
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Column(name = "userName")
+    private String name;
+
+    @Column
+    private String department;
+
+    @Column
+    private String position;
+
+    @Column
+    private int grade;
+
+    @Column(name = "class")
+    private int classNum;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private Role role;
+
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Conference> conferences = new ArrayList<>();
+    private List<Debate> debates = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ConferenceHistory> conferenceHistories = new ArrayList<>();
+    private List<DebateHistory> debateHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<UserConference> userConferences = new ArrayList<>();
+    private List<UserDebate> userDebates = new ArrayList<>();
 }
