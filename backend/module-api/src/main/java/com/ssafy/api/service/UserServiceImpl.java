@@ -2,7 +2,6 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserModifyPatchReq;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +27,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(UserRegisterPostReq userRegisterInfo) {
         User user = new User();
-        user.setUserId(userRegisterInfo.getId());
+        user.setUserEmail(userRegisterInfo.getEmail());
         // 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
         user.setPassword(passwordEncoder.encode(userRegisterInfo.getPassword()));
 
@@ -40,15 +39,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserByUserId(String userId) {
+    public User getUserByUserEmail(String userEmail) {
         // 디비에 유저 정보 조회 (userId 를 통한 조회).
-        return userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+        return userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
     }
 
 
     @Override
-    public void updateUser(String userId, UserModifyPatchReq req) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+    public void updateUser(String userEmail, UserModifyPatchReq req) {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
 
         user.setName(req.getName());
         user.setDepartment(req.getDepartment());
@@ -58,14 +57,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(String userId) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+    public void deleteUser(String userEmail) {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
         userRepository.delete(user);
     }
 
     @Override
-    public boolean checkExist(String userId) {
-        User user = userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+    public boolean checkExist(String userEmail) {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
         if(user != null){
             return true;
         }

@@ -13,8 +13,8 @@ import lombok.Setter;
 @Setter
 @ApiModel("UserResponse")
 public class UserRes{
-	@ApiModelProperty(name="User ID")
-	String userId;
+	@ApiModelProperty(name="User Email")
+	String userEmail;
 
 	@ApiModelProperty(name="User 직위")
 	String position;
@@ -27,7 +27,7 @@ public class UserRes{
 
 	public static UserRes of(User user) {
 		UserRes res = new UserRes();
-		res.setUserId(user.getUserId());
+		res.setUserEmail(user.getUserEmail());
 		res.setPosition(user.getPosition());
 		res.setDepartment(user.getDepartment());
 		res.setName(user.getName());

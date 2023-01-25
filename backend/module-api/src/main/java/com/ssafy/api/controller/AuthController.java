@@ -4,8 +4,8 @@ import com.ssafy.api.request.UserReissuePostReq;
 import com.ssafy.api.response.UserAuthPostRes;
 import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.auth.RefreshToken;
+import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.util.RedisRepository;
-import com.ssafy.dto.BaseResponseBody;
 import com.ssafy.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -53,7 +53,7 @@ public class AuthController {
 		String userId = loginInfo.getId();
 		String password = loginInfo.getPassword();
 		
-		User user = userService.getUserByUserId(userId);
+		User user = userService.getUserByUserEmail(userId);
 		// 로그인 시도하려는 회원이 존재하지 않는 경우
 		if(user == null) {
 			return ResponseEntity.status(404).body(new UserAuthPostRes().of(404, "존재하지 않는 회원입니다.", null));
