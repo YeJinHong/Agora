@@ -9,10 +9,10 @@ import com.ssafy.entity.User;
  */
 public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
-	User getUserByUserId(String userId);
-	void updateUser(String userId, UserModifyPatchReq req);
-	void deleteUser(String userId);
+	User getUserByUserEmail(String userEmail);
+	void updateUser(String userEmail, UserModifyPatchReq req);
+	void deleteUser(String userEmail);
 
-	boolean checkExist(String userId);
+	boolean checkExist(String userEmail);
 
 }

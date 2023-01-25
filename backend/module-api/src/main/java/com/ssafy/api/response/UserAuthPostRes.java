@@ -2,7 +2,7 @@ package com.ssafy.api.response;
 
 import com.ssafy.common.auth.TokenInfo;
 
-import com.ssafy.dto.BaseResponseBody;
+import com.ssafy.common.model.response.BaseResponseBody;
 import io.swagger.annotations.ApiModel;
 import lombok.Getter;
 import lombok.Setter;
