@@ -6,7 +6,6 @@ import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.User;
 import com.ssafy.repository.RedisRepository;
-import com.ssafy.repository.RefreshToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
