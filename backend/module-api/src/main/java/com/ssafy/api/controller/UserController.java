@@ -1,9 +1,8 @@
 package com.ssafy.api.controller;
 
 import com.ssafy.api.request.UserModifyPatchReq;
-import com.ssafy.dto.BaseResponseBody;
+import com.ssafy.common.model.response.BaseResponseBody;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -65,7 +64,7 @@ public class UserController {
 		 */
 		CustomUserDetails userDetails = (CustomUserDetails)authentication.getDetails();
 		String userId = userDetails.getUsername();
-		User user = userService.getUserByUserId(userId);
+		User user = userService.getUserByUserEmail(userId);
 
 		return ResponseEntity.status(200).body(UserRes.of(user));
 	}

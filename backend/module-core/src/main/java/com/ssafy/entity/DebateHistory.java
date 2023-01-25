@@ -4,22 +4,26 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserConference extends BaseEntity {
+public class DebateHistory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "conference_id")
-    private Conference conference;
+    @JoinColumn(name = "debate_id")
+    private Debate debate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Enumerated(EnumType.STRING)
+    private Action action;
+
+    @Column
+    private LocalDateTime insertedTime;
 }

@@ -121,7 +121,7 @@ public class JwtTokenUtil {
     }
 
     public Role getRoles(String userId) {
-        return userRepository.findByUserId(userId).get().getRole();
+        return userRepository.findByUserEmail(userId).get().getRole();
     }
     
     //    public static void handleError(String token) {
