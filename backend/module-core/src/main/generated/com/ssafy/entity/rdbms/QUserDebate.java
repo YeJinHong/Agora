@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,20 +8,19 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.ssafy.entity.rdbms.Vote;
 
 
 /**
- * QVote is a Querydsl query type for Vote
+ * QUserDebate is a Querydsl query type for UserDebate
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QVote extends EntityPathBase<Vote> {
+public class QUserDebate extends EntityPathBase<UserDebate> {
 
-    private static final long serialVersionUID = 887815854L;
+    private static final long serialVersionUID = -1768102088L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QVote vote = new QVote("vote");
+    public static final QUserDebate userDebate = new QUserDebate("userDebate");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
@@ -30,33 +29,29 @@ public class QVote extends EntityPathBase<Vote> {
     //inherited
     public final NumberPath<Long> id = _super.id;
 
-    public final QUser mvpUser;
-
-    public final QPerspective perspective;
+    public final StringPath role = createString("role");
 
     public final QUser user;
 
-    public QVote(String variable) {
-        this(Vote.class, forVariable(variable), INITS);
+    public QUserDebate(String variable) {
+        this(UserDebate.class, forVariable(variable), INITS);
     }
 
-    public QVote(Path<? extends Vote> path) {
+    public QUserDebate(Path<? extends UserDebate> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QVote(PathMetadata metadata) {
+    public QUserDebate(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QVote(PathMetadata metadata, PathInits inits) {
-        this(Vote.class, metadata, inits);
+    public QUserDebate(PathMetadata metadata, PathInits inits) {
+        this(UserDebate.class, metadata, inits);
     }
 
-    public QVote(Class<? extends Vote> type, PathMetadata metadata, PathInits inits) {
+    public QUserDebate(Class<? extends UserDebate> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.debate = inits.isInitialized("debate") ? new QDebate(forProperty("debate"), inits.get("debate")) : null;
-        this.mvpUser = inits.isInitialized("mvpUser") ? new QUser(forProperty("mvpUser")) : null;
-        this.perspective = inits.isInitialized("perspective") ? new QPerspective(forProperty("perspective"), inits.get("perspective")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 

@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.EntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = 887789455L;
+    private static final long serialVersionUID = 974322023L;
 
     public static final QUser user = new QUser("user");
 

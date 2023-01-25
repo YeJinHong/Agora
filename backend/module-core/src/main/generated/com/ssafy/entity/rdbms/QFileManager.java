@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -7,8 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
-import com.ssafy.entity.rdbms.FileManager;
-import com.ssafy.entity.rdbms.FileOrigin;
 
 
 /**
@@ -17,7 +15,7 @@ import com.ssafy.entity.rdbms.FileOrigin;
 @Generated("com.querydsl.codegen.EntitySerializer")
 public class QFileManager extends EntityPathBase<FileManager> {
 
-    private static final long serialVersionUID = 1078074957L;
+    private static final long serialVersionUID = -1776780939L;
 
     public static final QFileManager fileManager = new QFileManager("fileManager");
 

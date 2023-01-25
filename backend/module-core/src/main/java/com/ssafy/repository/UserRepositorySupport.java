@@ -1,8 +1,8 @@
 package com.ssafy.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.ssafy.entity.QUser;
-import com.ssafy.entity.User;
+import com.ssafy.entity.rdbms.QUser;
+import com.ssafy.entity.rdbms.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 

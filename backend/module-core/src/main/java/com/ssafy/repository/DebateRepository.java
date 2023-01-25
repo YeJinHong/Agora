@@ -1,6 +1,6 @@
 package com.ssafy.repository;
 
-import com.ssafy.entity.Debate;
+import com.ssafy.entity.rdbms.Debate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

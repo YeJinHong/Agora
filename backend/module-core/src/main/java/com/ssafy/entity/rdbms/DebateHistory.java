@@ -1,31 +1,29 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Evaluation extends BaseEntity{
+public class DebateHistory extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "debate_id")
     private Debate debate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "evaluator_id")
-    private User evaluator;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "evaluated_id")
-    private User evaluated;
+    @Enumerated(EnumType.STRING)
+    private Action action;
 
     @Column
-    private String content;
+    private LocalDateTime insertedTime;
 }

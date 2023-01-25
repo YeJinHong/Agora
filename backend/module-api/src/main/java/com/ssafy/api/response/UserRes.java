@@ -1,6 +1,6 @@
 package com.ssafy.api.response;
 
-import com.ssafy.entity.User;
+import com.ssafy.entity.rdbms.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.ssafy.repository;
 
-import com.ssafy.entity.DebaseResult;
+import com.ssafy.entity.rdbms.DebaseResult;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

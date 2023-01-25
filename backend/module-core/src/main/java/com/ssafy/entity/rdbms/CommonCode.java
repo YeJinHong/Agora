@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

@@ -3,7 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.api.service.DebateService;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.entity.Debate;
+import com.ssafy.entity.rdbms.Debate;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

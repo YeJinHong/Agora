@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.ssafy.entity.rdbms.Debate;
 
 
 /**
@@ -17,7 +16,7 @@ import com.ssafy.entity.rdbms.Debate;
 @Generated("com.querydsl.codegen.EntitySerializer")
 public class QDebate extends EntityPathBase<Debate> {
 
-    private static final long serialVersionUID = -2032552523L;
+    private static final long serialVersionUID = -479133299L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

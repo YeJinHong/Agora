@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.ssafy.entity.rdbms.DebaseResult;
 
 
 /**
@@ -17,7 +16,7 @@ import com.ssafy.entity.rdbms.DebaseResult;
 @Generated("com.querydsl.codegen.EntitySerializer")
 public class QDebaseResult extends EntityPathBase<DebaseResult> {
 
-    private static final long serialVersionUID = -1734909613L;
+    private static final long serialVersionUID = -41129173L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

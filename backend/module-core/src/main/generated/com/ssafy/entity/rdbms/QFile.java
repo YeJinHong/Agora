@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,7 +8,6 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.ssafy.entity.rdbms.File;
 
 
 /**
@@ -17,7 +16,7 @@ import com.ssafy.entity.rdbms.File;
 @Generated("com.querydsl.codegen.EntitySerializer")
 public class QFile extends EntityPathBase<File> {
 
-    private static final long serialVersionUID = 887333184L;
+    private static final long serialVersionUID = 973865752L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 

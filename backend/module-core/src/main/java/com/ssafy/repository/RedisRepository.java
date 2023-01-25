@@ -1,6 +1,5 @@
-package com.ssafy.common.util;
+package com.ssafy.repository;
 
-import com.ssafy.common.auth.RefreshToken;
 import org.springframework.data.repository.CrudRepository;
 
 public interface RedisRepository extends CrudRepository<RefreshToken,String> {

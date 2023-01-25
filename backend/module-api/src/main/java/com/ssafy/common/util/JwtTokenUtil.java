@@ -4,9 +4,10 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import com.ssafy.common.auth.CustomUserDetailService;
-import com.ssafy.common.auth.RefreshToken;
 import com.ssafy.common.auth.TokenInfo;
-import com.ssafy.entity.Role;
+import com.ssafy.entity.rdbms.Role;
+import com.ssafy.repository.RedisRepository;
+import com.ssafy.repository.RefreshToken;
 import com.ssafy.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

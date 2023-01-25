@@ -1,4 +1,4 @@
-package com.ssafy.entity;
+package com.ssafy.entity.rdbms;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -8,54 +8,52 @@ import com.querydsl.core.types.PathMetadata;
 import javax.annotation.Generated;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.PathInits;
-import com.ssafy.entity.rdbms.Post;
 
 
 /**
- * QPost is a Querydsl query type for Post
+ * QDebateHistory is a Querydsl query type for DebateHistory
  */
 @Generated("com.querydsl.codegen.EntitySerializer")
-public class QPost extends EntityPathBase<Post> {
+public class QDebateHistory extends EntityPathBase<DebateHistory> {
 
-    private static final long serialVersionUID = 887637092L;
+    private static final long serialVersionUID = 1041896007L;
 
     private static final PathInits INITS = PathInits.DIRECT2;
 
-    public static final QPost post = new QPost("post");
+    public static final QDebateHistory debateHistory = new QDebateHistory("debateHistory");
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final StringPath CategoryCode = createString("CategoryCode");
+    public final EnumPath<Action> action = createEnum("action", Action.class);
 
-    public final StringPath detail = createString("detail");
+    public final QDebate debate;
 
     //inherited
     public final NumberPath<Long> id = _super.id;
 
     public final DateTimePath<java.time.LocalDateTime> insertedTime = createDateTime("insertedTime", java.time.LocalDateTime.class);
 
-    public final StringPath title = createString("title");
-
     public final QUser user;
 
-    public QPost(String variable) {
-        this(Post.class, forVariable(variable), INITS);
+    public QDebateHistory(String variable) {
+        this(DebateHistory.class, forVariable(variable), INITS);
     }
 
-    public QPost(Path<? extends Post> path) {
+    public QDebateHistory(Path<? extends DebateHistory> path) {
         this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
-    public QPost(PathMetadata metadata) {
+    public QDebateHistory(PathMetadata metadata) {
         this(metadata, PathInits.getFor(metadata, INITS));
     }
 
-    public QPost(PathMetadata metadata, PathInits inits) {
-        this(Post.class, metadata, inits);
+    public QDebateHistory(PathMetadata metadata, PathInits inits) {
+        this(DebateHistory.class, metadata, inits);
     }
 
-    public QPost(Class<? extends Post> type, PathMetadata metadata, PathInits inits) {
+    public QDebateHistory(Class<? extends DebateHistory> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.debate = inits.isInitialized("debate") ? new QDebate(forProperty("debate"), inits.get("debate")) : null;
         this.user = inits.isInitialized("user") ? new QUser(forProperty("user")) : null;
     }
 

@@ -6,7 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ssafy.api.request.UserRegisterPostReq;
-import com.ssafy.entity.User;
+import com.ssafy.entity.rdbms.User;
 import com.ssafy.repository.UserRepository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,8 +40,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User getUserByUserEmail(String userEmail) {
-        // 디비에 유저 정보 조회 (userId 를 통한 조회).
+        // 디비에 유저 정보 조회 (userId 를 통한 조회)
         return userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
+
     }
 
 

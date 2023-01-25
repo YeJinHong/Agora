@@ -11,7 +11,7 @@ import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.CustomUserDetails;
-import com.ssafy.entity.User;
+import com.ssafy.entity.rdbms.User;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

@@ -6,8 +6,6 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // Redis
-    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.7.5'
 
     // Swagger
     implementation("io.springfox:springfox-swagger2:3.0.0")

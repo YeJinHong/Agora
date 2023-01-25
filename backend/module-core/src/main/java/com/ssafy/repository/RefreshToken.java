@@ -1,4 +1,4 @@
-package com.ssafy.common.auth;
+package com.ssafy.repository;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
