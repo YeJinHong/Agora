@@ -5,6 +5,7 @@ import com.ssafy.api.response.UserAuthPostRes;
 import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.User;
+import com.ssafy.entity.redis.RefreshToken;
 import com.ssafy.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -75,7 +76,7 @@ public class AuthController {
 			@ApiResponse(code = 500, message = "서버 오류", response = UserAuthPostRes.class)
 	})
 	public ResponseEntity<?> reissue(@RequestBody UserReissuePostReq userReissuePostReq){
-		if(jwtTokenUtil.validateToken(userReissuePostReq.getRefreshToken())){
+		if(!jwtTokenUtil.validateToken(userReissuePostReq.getRefreshToken())){
 			return ResponseEntity.status(401).body(UserAuthPostRes.of(401, "Refresh Token 정보가 유효하지 않습니다.",null));
 		}
 		Authentication authentication = jwtTokenUtil.getAuthentication(userReissuePostReq.getAccessToken());

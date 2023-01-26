@@ -28,7 +28,7 @@ dependencies {
     annotationProcessor("com.querydsl:querydsl-apt:${querydslVer}:jpa")
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-     implementation ("javax.annotation:javax.annotation-api:1.2")
+    implementation ("javax.annotation:javax.annotation-api:1.2")
 }
 
 //querydsl 추가 시작

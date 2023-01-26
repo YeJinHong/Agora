@@ -62,7 +62,7 @@ public class UserController {
 		 * 요청 헤더 액세스 토큰이 포함된 경우에만 실행되는 인증 처리이후, 리턴되는 인증 정보 객체(authentication) 통해서 요청한 유저 식별.
 		 * 액세스 토큰이 없이 요청하는 경우, 403 에러({"error": "Forbidden", "message": "Access Denied"}) 발생.
 		 */
-		CustomUserDetails userDetails = (CustomUserDetails)authentication.getDetails();
+		CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
 		String userId = userDetails.getUsername();
 		User user = userService.getUserByUserEmail(userId);
 
@@ -85,7 +85,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PatchMapping("/{userId}")
+	@PatchMapping("/{userEmail}")
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -94,15 +94,15 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<?> modifyUserInfo(@ApiIgnore Authentication authentication,
-			@PathVariable String userId,
+			@PathVariable String userEmail,
 			@RequestBody UserModifyPatchReq req) {
 
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
-		if (!userId.equals(userDetails.getUsername())) {
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		if (!userEmail.equals(userDetails.getUsername())) {
 			return ResponseEntity.badRequest().build();
 		}
 
-		userService.updateUser(userId, req);
+		userService.updateUser(userEmail, req);
 
 		return ResponseEntity.status(409).body(BaseResponseBody.of(200,"Success"));
 	}
@@ -118,7 +118,7 @@ public class UserController {
 	public ResponseEntity<BaseResponseBody> deleteUser(@ApiIgnore Authentication authentication,
 			@PathVariable String userId) {
 
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getDetails();
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		if (!userId.equals(userDetails.getUsername())) {
 			return ResponseEntity.badRequest().build();
 		}
