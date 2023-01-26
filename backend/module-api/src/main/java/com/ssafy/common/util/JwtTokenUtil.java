@@ -95,7 +95,7 @@ public class JwtTokenUtil {
     }
 
     // 토큰에서 회원 정보(아이디) 추출
-    public String getUserId(String jwtToken) {
+    public String getUserEmail(String jwtToken) {
         return Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
                 .build().parseClaimsJws(jwtToken).getBody().getSubject();
     }
@@ -105,12 +105,12 @@ public class JwtTokenUtil {
         Date expiration = Jwts.parserBuilder().setSigningKey(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
                 .build().parseClaimsJws(jwtToken)
                 .getBody().getExpiration();
-        return expiration.before(new Date());
+        return expiration.after(new Date());
     }
 
 
     public Authentication getAuthentication(String token) {
-        UserDetails userDetails = customUserDetailService.loadUserByUsername(this.getUserId(token.substring(7)));
+        UserDetails userDetails = customUserDetailService.loadUserByUsername(this.getUserEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
     

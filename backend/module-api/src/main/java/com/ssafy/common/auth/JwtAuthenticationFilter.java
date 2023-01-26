@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.ssafy.common.util.JwtTokenUtil;
@@ -17,7 +18,7 @@ import com.ssafy.common.util.JwtTokenUtil;
 /**
  * 요청 헤더에 jwt 토큰이 있는 경우, 토큰 검증 및 인증 처리 로직 정의.
  */
-
+@Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
@@ -27,11 +28,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // Read the Authorization header, where the JWT Token should be
         // 헤더에서 JWT 를 받아옵니다.
-        String accessToken = jwtTokenUtil.resolveAccessToken(request);
+        String headerAccessToken = jwtTokenUtil.resolveAccessToken(request);
 
         // 유효한 토큰인지 확인합니다.
-        if (accessToken != null) {
+        if (headerAccessToken != null) {
             // 어세스 토큰이 유효한 상황
+            String accessToken = headerAccessToken.substring(7);
             if (jwtTokenUtil.validateToken(accessToken)) {
                 this.setAuthentication(accessToken);
             }
