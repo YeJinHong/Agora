@@ -2,11 +2,11 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Debate;
-import com.ssafy.repository.DebateResultRepository;
-import com.ssafy.repository.DebateRepository;
-import com.ssafy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import com.ssafy.repository.DebateRepository;
+import com.ssafy.repository.DebateResultRepository;
+import com.ssafy.repository.UserRepository;
 
 import java.util.NoSuchElementException;
 

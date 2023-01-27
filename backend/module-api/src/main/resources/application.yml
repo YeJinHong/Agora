@@ -14,7 +14,7 @@ spring:
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -25,8 +25,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       password: '12341234'
-      username: ssafy
-    url: jdbc:mysql://192.168.100.156:3306/ssafy_web?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+      username: root
+    url: jdbc:mysql://localhost:3306/ssafy_web?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
 
 jwt:
   accessTokenExpiration: '1800000'
