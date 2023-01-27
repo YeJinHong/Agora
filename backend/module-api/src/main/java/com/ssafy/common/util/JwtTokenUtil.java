@@ -5,10 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 
 import com.ssafy.common.auth.CustomUserDetailService;
 import com.ssafy.common.auth.TokenInfo;
-import com.ssafy.entity.rdbms.Role;
-import com.ssafy.entity.redis.RefreshToken;
-import com.ssafy.repository.RedisRepository;
-import com.ssafy.repository.UserRepository;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,18 +27,14 @@ import java.util.Date;
 @Component
 public class JwtTokenUtil {
 
-
-    private UserRepository userRepository;
-
-    private RedisRepository redisRepository;
-
+    @Autowired
     private CustomUserDetailService customUserDetailService;
 
     private static String secretKey;
 
     private static long ACCESS_TOKEN_EXPIRE_TIME;  // 30분
 
-    private static long REFRESH_TOKEN_EXPIRE_TIME;    // 7일
+    public static long REFRESH_TOKEN_EXPIRE_TIME;    // 7일
 
 
     public static final String TOKEN_PREFIX = "Bearer ";
@@ -50,26 +42,14 @@ public class JwtTokenUtil {
     public static final String ISSUER = "ResetContent";
 
     @Autowired
-    public JwtTokenUtil(UserRepository userRepository,
-                        RedisRepository redisRepository,
-                        CustomUserDetailService customUserDetailService,
-                        @Value("${jwt.secret}") String secretKey,
-                        @Value("${jwt.accessTokenExpiration}") long ACCESS_TOKEN_EXPIRE_TIME,
-                        @Value("${jwt.refreshTokenExpiration}") long REFRESH_TOKEN_EXPIRE_TIME) {
-        this.userRepository = userRepository;
-        this.redisRepository = redisRepository;
-        this.customUserDetailService = customUserDetailService;
+    public JwtTokenUtil(@Value("${jwt.secret}") String secretKey, @Value("${jwt.accessTokenExpiration}") long ACCESS_TOKEN_EXPIRE_TIME, @Value("${jwt.refreshTokenExpiration}") long REFRESH_TOKEN_EXPIRE_TIME) {
         this.secretKey = secretKey;
         this.ACCESS_TOKEN_EXPIRE_TIME = ACCESS_TOKEN_EXPIRE_TIME;
         this.REFRESH_TOKEN_EXPIRE_TIME = REFRESH_TOKEN_EXPIRE_TIME;
     }
 
     //토큰 생성
-    public TokenInfo generateToken(String userId){
-
-        String accessToken = createToken(userId,ACCESS_TOKEN_EXPIRE_TIME);
-        String refreshToken = createToken(userId,REFRESH_TOKEN_EXPIRE_TIME);
-        redisRepository.save(new RefreshToken(userId,refreshToken,REFRESH_TOKEN_EXPIRE_TIME));
+    public TokenInfo generateToken(String userId, String accessToken, String refreshToken){
 
         return TokenInfo.builder()
                 .userId(userId)
@@ -83,9 +63,22 @@ public class JwtTokenUtil {
     }
 
 
-    public static String createToken(String userId, Long expireTime) {
+    //accessToken 생성
+    public  String createAccessToken(String userId) {
         Date now = new Date();
-        Date expires =  new Date(now.getTime() + expireTime);
+        Date expires =  new Date(now.getTime() + ACCESS_TOKEN_EXPIRE_TIME);
+        return JWT.create()
+                .withSubject(userId)
+                .withExpiresAt(expires)
+                .withIssuer(ISSUER)
+                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .sign(Algorithm.HMAC512(secretKey.getBytes()));
+    }
+
+    //refreshToken 생성
+    public  String createRefreshToken(String userId) {
+        Date now = new Date();
+        Date expires =  new Date(now.getTime() + REFRESH_TOKEN_EXPIRE_TIME);
         return JWT.create()
                 .withSubject(userId)
                 .withExpiresAt(expires)
@@ -108,7 +101,6 @@ public class JwtTokenUtil {
         return expiration.after(new Date());
     }
 
-
     public Authentication getAuthentication(String token) {
         UserDetails userDetails = customUserDetailService.loadUserByUsername(this.getUserEmail(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
@@ -121,9 +113,9 @@ public class JwtTokenUtil {
         return null;
     }
 
-    public Role getRoles(String userId) {
-        return userRepository.findByUserEmail(userId).get().getRole();
-    }
+//    public Role getRoles(String userId) {
+//        return userRepository.findByUserEmail(userId).get().getRole();
+//    }
     
     //    public static void handleError(String token) {
 //        JWTVerifier verifier = JWT

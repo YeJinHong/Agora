@@ -5,8 +5,6 @@ import com.ssafy.api.response.UserAuthPostRes;
 import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.User;
-import com.ssafy.entity.redis.RefreshToken;
-import com.ssafy.repository.RedisRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -22,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponses;
 import io.swagger.annotations.ApiResponse;
+import com.ssafy.repository.RedisRepository;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -61,7 +60,7 @@ public class AuthController {
 		// 로그인 요청한 유저로부터 입력된 패스워드 와 디비에 저장된 유저의 암호화된 패스워드가 같은지 확인.(유효한 패스워드인지 여부 확인)
 		if(passwordEncoder.matches(password, user.getPassword())) {
 			// 유효한 패스워드가 맞는 경우, 로그인 성공으로 응답.(액세스 토큰을 포함하여 응답값 전달)
-			return ResponseEntity.ok(new UserAuthPostRes().of(200, "Success", jwtTokenUtil.generateToken(userId)));
+			return ResponseEntity.ok(new UserAuthPostRes().of(200, "Success", userService.login(user)));
 		}
 		// 유효하지 않는 패스워드인 경우, 로그인 실패로 응답.
 		return ResponseEntity.status(401).body(new UserAuthPostRes().of(401, "Invalid Password", null));
@@ -76,16 +75,7 @@ public class AuthController {
 			@ApiResponse(code = 500, message = "서버 오류", response = UserAuthPostRes.class)
 	})
 	public ResponseEntity<?> reissue(@RequestBody UserReissuePostReq userReissuePostReq){
-		if(!jwtTokenUtil.validateToken(userReissuePostReq.getRefreshToken())){
-			return ResponseEntity.status(401).body(UserAuthPostRes.of(401, "Refresh Token 정보가 유효하지 않습니다.",null));
-		}
-		Authentication authentication = jwtTokenUtil.getAuthentication(userReissuePostReq.getAccessToken());
-		RefreshToken refreshToken = redisRepository.findById(authentication.getName()).get();
-		if(!refreshToken.getRefreshToken().equals(userReissuePostReq.getRefreshToken())){
-			return ResponseEntity.status(404).body(UserAuthPostRes.of(404, "RefreshToken 정보가 잘못되었습니다..",null));
-		}
-		return ResponseEntity.ok(UserAuthPostRes.of(200, "Token 정보가 갱신되었습니다.", jwtTokenUtil.generateToken(authentication.getName())));
-
+		return userService.reissue(userReissuePostReq);
 	}
 	@GetMapping("/auth")
 	@ApiOperation(value = "로그아웃", notes = "<strong>아이디와 패스워드</strong>를 통해 로그인 한다.")

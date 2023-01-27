@@ -2,13 +2,12 @@ package com.ssafy.common.auth;
 
 import java.util.NoSuchElementException;
 
+import com.ssafy.entity.rdbms.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
-
-import com.ssafy.entity.rdbms.User;
 import com.ssafy.repository.UserRepository;
 
 
@@ -18,6 +17,7 @@ import com.ssafy.repository.UserRepository;
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService{
+
 
 	private final UserRepository userRepository;
 	

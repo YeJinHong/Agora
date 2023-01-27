@@ -136,22 +136,22 @@ Windows 기준 개발 환경 구성 설명
     │           │   └── util
     │           │       ├── JwtTokenUtil.java
     │           │       └── ResponseBodyWriteUtil.java
-    │           ├── config /* WebMvc 및 JPA, Security, Swagger 등의 추가 플러그인 설정 정의*/
+    │           ├── com.ssafy.config /* WebMvc 및 JPA, Security, Swagger 등의 추가 플러그인 설정 정의*/
     │           │   ├── JpaConfig.java
     │           │   ├── SecurityConfig.java
     │           │   ├── SwaggerConfig.java
     │           │   └── WebMvcConfig.java
     │           └── db /* 디비에 저장될 모델 정의 및 쿼리 구현 */
-    │               ├── entity
+    │               ├── com.ssafy.entity
     │               │   ├── BaseEntity.java
     │               │   └── User.java
-    │               └── repository
+    │               └── com.ssafy.repository
     │                   ├── UserRepository.java
     │                   └── UserRepositorySupport.java
     └── resources
         ├── README.md
         ├── application.properties /* 웹 리소스(서버 host/port, 디비 host/port/계정/패스워드) 관련 설정 정의 */
-        ├── babel.config.js
+        ├── babel.com.ssafy.config.js
         ├── dist
         ├── package-lock.json
         ├── package.json

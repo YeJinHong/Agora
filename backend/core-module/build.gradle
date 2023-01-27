@@ -1,0 +1,67 @@
+//buildscript {
+//    ext {
+//        querydslVer = '4.4.0'
+//    }
+//}
+
+plugins {
+    id 'java'
+//    id "com.ewerk.gradle.plugins.querydsl" version "1.0.10"
+}
+
+jar {
+    enabled = true
+}
+bootJar {
+    enabled = false
+}
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation('mysql:mysql-connector-java:8.0.31')
+
+    // Redis
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.7.5'
+
+//    implementation("com.querydsl:querydsl-jpa:${querydslVer}")
+//    implementation("com.querydsl:querydsl-apt:${querydslVer}")
+//
+//    annotationProcessor("com.querydsl:querydsl-apt:${querydslVer}:jpa")
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    implementation ("javax.annotation:javax.annotation-api:1.2")
+
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+
+    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
+
+}
+//// Querydsl 설정부
+//def generated = 'src/main/generated'
+//
+//// querydsl QClass 파일 생성 위치를 지정
+//tasks.withType(JavaCompile) {
+//    options.getGeneratedSourceOutputDirectory().set(file(generated))
+//}
+//
+//// java source set 에 querydsl QClass 위치 추가
+//sourceSets {
+//    main.java.srcDirs += [ generated ]
+//}
+//
+//// gradle clean 시에 QClass 디렉토리 삭제
+//clean {
+//    delete file(generated)
+//}
+
+test {
+    useJUnitPlatform()
+}
