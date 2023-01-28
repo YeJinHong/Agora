@@ -21,11 +21,9 @@ repositories {
     mavenCentral()
 }
 
-
-
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation('mysql:mysql-connector-java:8.0.31')
+    api  'org.springframework.boot:spring-boot-starter-data-jpa'
+    api ('mysql:mysql-connector-java:8.0.31')
 
     // Redis
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.7.5'
@@ -41,10 +39,9 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 
-    implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.8'
-
 }
-//// Querydsl 설정부
+
+// Querydsl 설정부
 //def generated = 'src/main/generated'
 //
 //// querydsl QClass 파일 생성 위치를 지정
@@ -61,7 +58,3 @@ dependencies {
 //clean {
 //    delete file(generated)
 //}
-
-test {
-    useJUnitPlatform()
-}
