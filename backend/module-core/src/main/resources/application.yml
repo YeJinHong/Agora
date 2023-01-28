@@ -20,3 +20,10 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
     show-sql: true
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      password: 'ssafy'
+      username: root
+    url: jdbc:mysql://i8c205.p.ssafy.io:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+

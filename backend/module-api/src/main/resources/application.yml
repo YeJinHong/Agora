@@ -5,10 +5,6 @@ spring:
     resources:
       static-locations: classpath:/dist/
       add-mappings: 'false'
-  sql:
-    init:
-      data-locations: classpath:import.sql
-      mode: always
   jpa:
     hibernate:
       naming:
@@ -20,13 +16,12 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
     show-sql: true
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      password: '12341234'
-      username: ssafy
-    url: jdbc:mysql://localhost:3306/ssafy_web?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+      password: 'ssafy'
+      username: root
+    url: jdbc:mysql://i8c205.p.ssafy.io:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
 
 jwt:
   accessTokenExpiration: '1800000'
