@@ -20,6 +20,7 @@ package com.ssafy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import lombok.RequiredArgsConstructor;
 import org.kurento.client.IceCandidate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,17 +37,16 @@ import java.io.IOException;
  * @author Ivan Gracia (izanmail@gmail.com)
  * @since 4.3.1
  */
+@RequiredArgsConstructor
 public class CallHandler extends TextWebSocketHandler {
 
   private static final Logger log = LoggerFactory.getLogger(CallHandler.class);
 
   private static final Gson gson = new GsonBuilder().create();
 
-  @Autowired
-  private RoomManager roomManager;
+  private final RoomManager roomManager;
 
-  @Autowired
-  private UserRegistry registry;
+  private final UserRegistry registry;
 
   @Override
   public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
