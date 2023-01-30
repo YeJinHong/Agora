@@ -20,15 +20,12 @@
                         <h1>Sign up</h1>
                         <form action="login">
                             <div class="form-group">
-                                <label class="form-control-label">Full Name</label>
-                                <input type="text" class="form-control" placeholder="Enter your Full Name">
-                            </div>
-                            <div class="form-group">
-                                <label class="form-control-label">Email</label>
+                                <label class="form-control-label">E-mail 아이디</label>
                                 <input type="email" class="form-control" placeholder="Enter your email address">
+                                <button> </button>
                             </div>
                             <div class="form-group">
-                                <label class="form-control-label">Password</label>
+                                <label class="form-control-label">비밀번호</label>
                                 <div class="pass-group" id="passwordInput">																	
                                     <input type="password" class="form-control pass-input" placeholder="Enter your password">
                                     <span class="toggle-password feather-eye"></span>
@@ -42,6 +39,35 @@
                                 </div>
                                 <div id="passwordInfo"></div>	
                             </div>
+                            <div class="form-group">
+                              <label class="form-control-label">이름</label>
+                              <input type="text" class="form-control" placeholder="Enter your Full Name">
+                            </div>
+
+                            <div class="form-group">
+                              <label class="form-control-label">소속</label>
+                              <input type="text" class="form-control" placeholder="Enter your department">
+                            </div>
+
+                            <div class="form-group">
+                              <label class="form-control-label">학년</label>
+                              <input type="number" class="form-control" placeholder="Enter your grade">
+                            </div>
+
+                            <div class="form-group">
+                              <label class="form-control-label">반</label>
+                              <input type="number" class="form-control" placeholder="Enter your classNum">
+                            </div>
+
+                            <div class="form-group">
+                              <label class="form-control-label">직위</label>
+                              <input type="text" class="form-control" placeholder="Enter your position">
+                            </div>
+
+                            <div class="form-group">
+                              <label class="form-control-label">권한</label>
+                              <input type="text" class="form-control" placeholder="Enter your role">
+                            </div>
 
                             <div class="form-check remember-me">
                                 <label class="form-check-label mb-0">
@@ -52,7 +78,7 @@
                                 <button class="btn btn-primary btn-start" type="submit">Create Account</button>
                             </div>
                         </form>
-                    </div>
+
                     <div class="google-bg text-center">
                         <span><a href="javascript:void(0);">Or sign in with</a></span>
                         <div class="sign-google">

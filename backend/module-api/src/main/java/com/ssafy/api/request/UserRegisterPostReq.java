@@ -29,4 +29,12 @@ public class UserRegisterPostReq {
 	@ApiModelProperty(name="User 이름")
 	String name;
 
+	@ApiModelProperty(name="User 학년")
+	int grade;
+
+	@ApiModelProperty(name="User 반")
+	int classNum;
+
+	@ApiModelProperty(name="User 역할")
+	String role;
 }
