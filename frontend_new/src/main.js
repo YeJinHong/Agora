@@ -2,6 +2,10 @@ import { createApp } from 'vue';
 import App from "./App.vue";
 import { router } from './router';
 import Vue3Autocounter from 'vue3-autocounter';
+import global from './Globals/global';
+import store from './Store/store';
+import axios from 'axios';
+
 /*********Header component**********/
 import Header from './views/layouts/header.vue'
 import IndexHeader from './views/layouts/indexheader.vue'
@@ -388,5 +392,15 @@ app.component('datepicker', DatePicker);
 app.component(VueFeather.name, VueFeather);
 app.use(VueApexCharts);
 
+app.config.globalProperties.$store = store;
+app.config.globalProperties.$axios = axios;
+
 app.use(router)
 .mount('#app');
+
+app.use(global);
+app.use(store);
+
+
+
+
