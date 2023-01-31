@@ -96,11 +96,12 @@ public class CallHandler extends TextWebSocketHandler {
         final String debateId = params.get("debateId").getAsString();
         final String userName = params.get("userName").getAsString();
         final String roomName = params.get("roomName").getAsString();
+        final String position = params.get("position").getAsString();
 
         log.info("PARTICIPANT {}: trying to join room {}", userName, debateId);
 
         Room room = roomManager.getRoom(debateId, roomName);
-        final UserSession user = room.join(userName, session);
+        final UserSession user = room.join(userName, position, session);
         registry.register(user);
     }
 

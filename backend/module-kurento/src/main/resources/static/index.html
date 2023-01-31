@@ -22,6 +22,10 @@
 						<input type="text" name="room" value="" id="roomName"
 							placeholder="Room" required>
 					</p>
+					<p>
+						<input type="text" name="postion" value="" id="position"
+							   placeholder="Position" required>
+					</p>
 					<p class="submit">
 						<input type="submit" name="commit" value="Join!">
 					</p>
@@ -30,6 +34,7 @@
 			<div id="room" style="display: none;">
 				<h2 id="room-header"></h2>
 				<div id="participants"></div>
+				<div id="participants-opp" style="float: right;"></div>
 				<input type="button" id="button-leave" onmouseup="leaveRoom();"
 					value="Leave room">
 			</div>

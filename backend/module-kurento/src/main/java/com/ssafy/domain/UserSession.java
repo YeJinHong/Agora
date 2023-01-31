@@ -18,6 +18,7 @@
 package com.ssafy.domain;
 
 import com.google.gson.JsonObject;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.kurento.client.*;
 import org.kurento.jsonrpc.JsonUtils;
@@ -34,6 +35,7 @@ import java.util.concurrent.ConcurrentMap;
  * @since 4.3.1
  */
 @Slf4j
+@Getter
 public class UserSession implements Closeable {
 
     private final String name;
@@ -42,15 +44,17 @@ public class UserSession implements Closeable {
     private final MediaPipeline pipeline;
 
     private final String roomName;
+    private final String position;
     private final WebRtcEndpoint outgoingMedia;
     private final ConcurrentMap<String, WebRtcEndpoint> incomingMedia = new ConcurrentHashMap<>();
 
-    public UserSession(final String name, String roomName, final WebSocketSession session, MediaPipeline pipeline) {
+    public UserSession(final String name, String roomName, String position, final WebSocketSession session, MediaPipeline pipeline) {
 
         this.pipeline = pipeline;
         this.name = name;
         this.session = session;
         this.roomName = roomName;
+        this.position = position;
         this.outgoingMedia = new WebRtcEndpoint.Builder(pipeline).build();
 
         this.outgoingMedia.addIceCandidateFoundListener(event -> {
@@ -72,21 +76,8 @@ public class UserSession implements Closeable {
         return outgoingMedia;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public WebSocketSession getSession() {
         return session;
-    }
-
-    /**
-     * The room to which the user is currently attending.
-     *
-     * @return The room
-     */
-    public String getRoomName() {
-        return this.roomName;
     }
 
     public void receiveVideoFrom(UserSession sender, String sdpOffer) throws IOException {
@@ -119,21 +110,17 @@ public class UserSession implements Closeable {
             log.debug("PARTICIPANT {}: creating new endpoint for {}", this.name, sender.getName());
             incoming = new WebRtcEndpoint.Builder(pipeline).build();
 
-            incoming.addIceCandidateFoundListener(new EventListener<IceCandidateFoundEvent>() {
-
-                @Override
-                public void onEvent(IceCandidateFoundEvent event) {
-                    JsonObject response = new JsonObject();
-                    response.addProperty("id", "iceCandidate");
-                    response.addProperty("name", sender.getName());
-                    response.add("candidate", JsonUtils.toJsonObject(event.getCandidate()));
-                    try {
-                        synchronized (session) {
-                            session.sendMessage(new TextMessage(response.toString()));
-                        }
-                    } catch (IOException e) {
-                        log.debug(e.getMessage());
+            incoming.addIceCandidateFoundListener(event -> {
+                JsonObject response = new JsonObject();
+                response.addProperty("id", "iceCandidate");
+                response.addProperty("name", sender.getName());
+                response.add("candidate", JsonUtils.toJsonObject(event.getCandidate()));
+                try {
+                    synchronized (session) {
+                        session.sendMessage(new TextMessage(response.toString()));
                     }
+                } catch (IOException e) {
+                    log.debug(e.getMessage());
                 }
             });
 

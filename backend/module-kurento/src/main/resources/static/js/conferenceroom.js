@@ -18,6 +18,7 @@
 var ws = new WebSocket('wss://' + location.host + '/groupcall');
 var participants = {};
 var name;
+var position;
 
 window.onbeforeunload = function() {
 	ws.close();
@@ -56,6 +57,7 @@ ws.onmessage = function(message) {
 function register() {
 	name = document.getElementById('name').value;
 	var room = document.getElementById('roomName').value;
+	position = document.getElementById('position').value;
 
 	document.getElementById('room-header').innerText = 'ROOM ' + room;
 	document.getElementById('join').style.display = 'none';
@@ -65,12 +67,14 @@ function register() {
 		id : 'joinRoom',
 		userName : name,
 		debateId : room,
+		roomName : room,
+		position : position,
 	}
 	sendMessage(message);
 }
 
 function onNewParticipant(request) {
-	receiveVideo(request.name);
+	receiveVideo(request.name, request.position);
 }
 
 function receiveVideoResponse(result) {
@@ -102,7 +106,7 @@ function onExistingParticipants(msg) {
 		}
 	};
 	console.log(name + " registered in room " + room);
-	var participant = new Participant(name);
+	var participant = new Participant(name, position);
 	participants[name] = participant;
 	var video = participant.getVideoElement();
 
@@ -119,7 +123,7 @@ function onExistingParticipants(msg) {
 		  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
 	});
 
-	msg.data.forEach(receiveVideo);
+	msg.data.forEach(m => (receiveVideo(m.name, m.position)));
 }
 
 function leaveRoom() {
@@ -137,8 +141,10 @@ function leaveRoom() {
 	ws.close();
 }
 
-function receiveVideo(sender) {
-	var participant = new Participant(sender);
+function receiveVideo(name, position) {
+	console.log(name, position)
+	var sender = name;
+	var participant = new Participant(sender, position);
 	participants[sender] = participant;
 	var video = participant.getVideoElement();
 

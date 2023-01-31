@@ -24,12 +24,17 @@ const PARTICIPANT_CLASS = 'participant';
  * @param {String} name - the name of the new participant, to be used as tag
  *                        name of the video element.
  *                        The tag of the new element will be 'video<name>'
+ * @param {String} position - the name of the new participant, to be used as tag
+ *                        name of the video element.
+ *                        The tag of the new element will be 'video<name>'
  * @return
  */
-function Participant(name) {
+function Participant(name, position) {
 	this.name = name;
+	this.position = position;
 	var container = document.createElement('div');
-	container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+	// container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
+	container.className = PARTICIPANT_CLASS;
 	container.id = name;
 	var span = document.createElement('span');
 	var video = document.createElement('video');
@@ -37,8 +42,14 @@ function Participant(name) {
 
 	container.appendChild(video);
 	container.appendChild(span);
-	container.onclick = switchContainerClass;
-	document.getElementById('participants').appendChild(container);
+	// container.onclick = switchContainerClass;
+	console.log(this.position)
+	console.log(this.position === '반대')
+	if (this.position === '반대') {
+		document.getElementById('participants-opp').appendChild(container);
+	} else {
+		document.getElementById('participants').appendChild(container);
+	}
 
 	span.appendChild(document.createTextNode(name));
 
