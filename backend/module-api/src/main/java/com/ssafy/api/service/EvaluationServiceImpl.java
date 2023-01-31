@@ -11,10 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.*;
 
 /**
  * 평가 관련 비즈니스 로직 처리를 위한 서비스 구현 정의.
@@ -46,7 +43,7 @@ public class EvaluationServiceImpl implements EvaluationService {
             sb.append(evaluationBase.getPoint());
             sb.append("},\n ");
         }
-        sb.append("\n]");
+        sb.append("]");
         return sb.toString();
     }
 
@@ -58,7 +55,7 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
-    public List<Evaluation> getEvaluationList(String userId) {
-        return evaluationRepository.findByEvaluatedId(userId);
+    public List<Evaluation> getEvaluationList(Long id) {
+        return Optional.ofNullable(evaluationRepository.findByEvaluatedId(id)).orElse(Collections.emptyList());
     }
 }

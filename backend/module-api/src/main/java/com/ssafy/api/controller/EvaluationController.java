@@ -46,18 +46,14 @@ public class EvaluationController {
         return ResponseEntity.status(204).body(BaseResponseBody.of(204, "Success"));
     }
 
-    @GetMapping("/users/{:userId}")
+    @GetMapping("/users/{id}")
     @ApiOperation(value="토론 상호 평가 조회", notes="")
-    public ResponseEntity<EvaluationRes> getEvaluations(@ApiIgnore Authentication authentication,
-                                                        @PathVariable String userId)
-    {
-        CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
-        if (!userId.equals(userDetails.getUsername())) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> getEvaluations(@PathVariable Long id) {
 
-        List<Evaluation> evaluationList = evaluationService.getEvaluationList(userId);
+        List<Evaluation> evaluationList = evaluationService.getEvaluationList(id);
+        if(evaluationList.isEmpty())
+            return ResponseEntity.status(204).body(BaseResponseBody.of(204, "Success"));
 
-        return ResponseEntity.status(200).body(EvaluationRes.of(evaluationList));
+        return ResponseEntity.status(200).body(EvaluationRes.of(evaluationList, id));
     }
 }

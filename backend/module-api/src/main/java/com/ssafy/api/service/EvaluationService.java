@@ -12,5 +12,5 @@ public interface EvaluationService {
     Evaluation createEvaluation(EvaluationRegisterPostReq evaluationRegisterPostReq);
     void deleteEvaluation(Long evaluationId);
 
-    List<Evaluation> getEvaluationList(String userId);
+    List<Evaluation> getEvaluationList(Long id);
 }

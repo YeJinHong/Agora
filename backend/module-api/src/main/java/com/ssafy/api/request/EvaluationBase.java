@@ -12,5 +12,5 @@ import lombok.Setter;
 public class EvaluationBase {
     Long parentId;
     Long id;
-    Integer point;
+    Float point;
 }
