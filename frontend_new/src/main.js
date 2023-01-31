@@ -2,6 +2,10 @@ import { createApp } from 'vue';
 import App from "./App.vue";
 import { router } from './router';
 import Vue3Autocounter from 'vue3-autocounter';
+import global from './Globals/global';
+import store from './Store/store';
+import axios from 'axios';
+
 /*********Header component**********/
 import Header from './views/layouts/header.vue'
 import IndexHeader from './views/layouts/indexheader.vue'
@@ -190,8 +194,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './assets/css/feather.css';
 import './assets/plugins/fontawesome/css/fontawesome.min.css';
 import './assets/plugins/fontawesome/css/all.min.css';
-import'./assets/plugins/summernote/summernote-lite.min.css';
-import'./assets/plugins/summernote/summernote-lite.min.js';
+import'./assets/plugins/summernote/dist/summernote-lite.min.css';
+import'./assets/plugins/summernote/dist/summernote-lite.min.js';
 import'./assets/plugins/slick/slick.css';
 import'./assets/plugins/slick/slick-theme.css';
 import'./assets/plugins/slick/slick.js';
@@ -388,5 +392,15 @@ app.component('datepicker', DatePicker);
 app.component(VueFeather.name, VueFeather);
 app.use(VueApexCharts);
 
+app.config.globalProperties.$store = store;
+app.config.globalProperties.$axios = axios;
+
 app.use(router)
 .mount('#app');
+
+app.use(global);
+app.use(store);
+
+
+
+
