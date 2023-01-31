@@ -51,7 +51,6 @@ public class KurentoConfig implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         registry.addHandler(groupCallHandler(), "/groupcall")
-                .setAllowedOrigins("*")
-                .withSockJS();
+                .setAllowedOriginPatterns("*");
     }
 }
