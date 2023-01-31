@@ -3,6 +3,9 @@
         <li v-bind:class="{'active': currentPath == 'index' || currentPath == 'index'}">
             <router-link to="/">Home</router-link>
         </li>
+        <li v-bind:class="{'active': currentPath == 'index' || currentPath == 'index'}">
+            <router-link to="/debate">Debate</router-link>
+        </li>
         <li class="has-submenu" :class=" InstructorMenu ? 'active' : 'notactive'">
             <a href="javascript:void(0);">Instructor <i class="fas fa-chevron-down"></i></a>
             <ul class="submenu">
