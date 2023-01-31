@@ -10,5 +10,3 @@ export default {
   data: function() { return { status: false } },
 }
 </script>
-
-
