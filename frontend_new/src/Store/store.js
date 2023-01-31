@@ -3,7 +3,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import createPersistedState from "vuex-persistedstate";
 
-import userStore from "@/store/modules/userStore";
+// import userStore from "@/Store/modules/userStore";
+import userStore from "./modules/userStore";
 
 
 // [store 데이터 설정 실시]
