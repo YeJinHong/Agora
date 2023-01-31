@@ -1,8 +1,9 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.VoteRegisterPostReq;
-import com.ssafy.api.response.VoteRes;
 import com.ssafy.entity.rdbms.Vote;
+
+import java.util.List;
 
 /**
  *	청중 투표 관련 비즈니스 로직 처리를 위한 서비스 인터페이스 정의.
@@ -10,6 +11,5 @@ import com.ssafy.entity.rdbms.Vote;
 public interface VoteService {
     Vote createVote(VoteRegisterPostReq voteRegisterPostReq);
     void deleteVote(Long id);
-
-    VoteRes getVoteByDebateId(Long debateId);
+    List<Vote> getVoteByDebateId(Long debateId);
 }
