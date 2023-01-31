@@ -18,10 +18,9 @@
 package com.ssafy.domain;
 
 import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonPrimitive;
 import lombok.Getter;
+import lombok.SneakyThrows;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
@@ -31,9 +30,7 @@ import org.springframework.web.socket.WebSocketSession;
 import javax.annotation.PreDestroy;
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -50,6 +47,9 @@ public class Room implements Closeable {
   private final String roomName;
 
   private final String debateId;
+
+  private long time = 10 * 60;
+  private Timer timer;
 
   public Room(String roomName, String debateId, MediaPipeline pipeline) {
     this.roomName = roomName;
@@ -181,5 +181,44 @@ public class Room implements Closeable {
     });
 
     log.debug("Room {} closed", this.roomName);
+  }
+
+  public void startCountDown(UserSession user) {
+    TimerTask task = new TimerTask() {
+      @SneakyThrows
+      @Override
+      public void run() {
+        if (time > 0) {
+          JsonObject jsonObject = new JsonObject();
+          jsonObject.addProperty("id", "timeRemaining");
+          jsonObject.addProperty("time", time--);
+          for (final UserSession participant : participants.values()) {
+            try {
+              participant.sendMessage(jsonObject);
+            } catch (final IOException e) {
+              log.debug("ROOM {}: participant {} could not be notified", user.getName(), participant.getName(), e);
+            }
+          }
+        } else {
+          timer.cancel();
+        }
+      }
+    };
+    this.timer = new Timer();
+    this.timer.schedule(task, 1000, 1000);
+  }
+
+  public void pauseCountDown(UserSession user) throws IOException {
+    this.timer.cancel();
+    JsonObject jsonObject = new JsonObject();
+    jsonObject.addProperty("id", "pauseSpeaking");
+    jsonObject.addProperty("time", time);
+    for (final UserSession participant : participants.values()) {
+      try {
+        participant.sendMessage(jsonObject);
+      } catch (final IOException e) {
+        log.debug("ROOM {}: participant {} could not be notified", user.getName(), participant.getName(), e);
+      }
+    }
   }
 }

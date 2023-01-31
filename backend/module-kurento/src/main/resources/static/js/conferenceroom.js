@@ -49,6 +49,14 @@ ws.onmessage = function(message) {
 	        }
 	    });
 	    break;
+	case 'timeRemaining':
+		var time = parsedMessage.time;
+		document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
+		break
+	case 'pauseSpeaking':
+		var time = parsedMessage.time;
+		document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
+		break
 	default:
 		console.error('Unrecognized message', parsedMessage);
 	}
@@ -124,6 +132,24 @@ function onExistingParticipants(msg) {
 	});
 
 	msg.data.forEach(m => (receiveVideo(m.name, m.position)));
+}
+
+function start() {
+	var room = document.getElementById('roomName').value;
+
+	sendMessage({
+		id : 'startSpeaking',
+		debateId: room
+	});
+}
+
+function stop() {
+	var room = document.getElementById('roomName').value;
+
+	sendMessage({
+		id : 'pauseSpeaking',
+		debateId: room
+	});
 }
 
 function leaveRoom() {

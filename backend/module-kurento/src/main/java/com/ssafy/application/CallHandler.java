@@ -81,6 +81,16 @@ public class CallHandler extends TextWebSocketHandler {
                     user.addCandidate(cand, jsonMessage.get("name").getAsString());
                 }
                 break;
+            case "startSpeaking":
+                String debateId = jsonMessage.get("debateId").getAsString();
+                Room room = roomManager.getRoom(debateId);
+                room.startCountDown(user);
+                break;
+            case "pauseSpeaking":
+                debateId = jsonMessage.get("debateId").getAsString();
+                room = roomManager.getRoom(debateId);
+                room.pauseCountDown(user);
+                break;
             default:
                 break;
         }
