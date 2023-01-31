@@ -21,7 +21,7 @@ spring:
     hikari:
       password: 'ssafy'
       username: root
-    url: jdbc:mysql://localhost:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: jdbc:mysql://i8c205.p.ssafy.io:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
 
 jwt:
   accessTokenExpiration: '1800000'
