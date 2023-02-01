@@ -33,6 +33,8 @@
     "npm-force-resolutions": "0.0.10",
     "owl.carousel": "^2.3.4",
     "sass-loader": "^11.0.1",
+    "sockjs-client": "^1.6.1",
+    "stomp": "^0.1.1",
     "theia-sticky-sidebar": "^1.7.0",
     "vee-validate": "^4.5.9",
     "vue": "^3.2.37",
@@ -58,6 +60,7 @@
     "vue3-summernote-editor": "^1.0.2",
     "vue3-tags-input": "^1.0.2",
     "vuex": "^4.0.0-beta.4",
+    "webstomp-client": "^1.2.6",
     "yup": "^0.32.11"
   },
   "devDependencies": {

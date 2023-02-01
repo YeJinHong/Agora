@@ -3,4 +3,6 @@ rootProject.name = 'ssafy-web-project'
 include 'module-api'
 include 'module-core'
 include 'module-kurento'
+include 'module-chat'
+
 

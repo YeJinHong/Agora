@@ -107,6 +107,6 @@ module.exports = (env = {}) => ({
       warnings: true,
       errors: true
     },
-    historyApiFallback: true,
+    historyApiFallback: false,
   }
 });

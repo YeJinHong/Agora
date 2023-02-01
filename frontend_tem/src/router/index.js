@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router';
+import {createRouter, createWebHashHistory ,createWebHistory} from 'vue-router';
 import AddCourse from '../views/pages/pages/course/add-course'
 import Blogdetails from '../views/pages/blog/blog-details'
 import Bloggrid from '../views/pages/blog/blog-grid'
@@ -93,8 +93,14 @@ import verificationcode from '../views/pages/pages/verification-code.vue'
 import viewinvoice from '../views/pages/student/view-invoice.vue'
 import wishlist from '../views/pages/pages/wishlist.vue'
 import withdrawalinstructor from '../views/pages/instructor/withdrawal-instructor.vue'
+import debate from "../views/pages/blog/debate.vue"
 
 const routes = [
+  {
+    path: '/debate',
+    name: 'debate',
+    component: debate
+  },
   {
     path: '/add-course',
     name: 'add-course',
