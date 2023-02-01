@@ -259,3 +259,28 @@ function sendMessage(message) {
     console.log('Sending message: ' + jsonMessage);
     ws.send(jsonMessage);
 }
+
+function videoOnOff() {
+    if (participants[name].rtcPeer.videoEnabled) {
+        // 끌때
+        participants[name].rtcPeer.videoEnabled = false;
+        document.getElementById("vidOn").style.display = "";
+        document.getElementById("vidOff").style.display = "none";
+    } else {
+        participants[name].rtcPeer.videoEnabled = true;
+        document.getElementById("vidOn").style.display = "none";
+        document.getElementById("vidOff").style.display = "";
+    }
+}
+
+function audioOnOff() {
+    if (participants[name].rtcPeer.audioEnabled) {
+        participants[name].rtcPeer.audioEnabled = false;
+        document.getElementById("audOn").style.display = "";
+        document.getElementById("audOff").style.display = "none";
+    } else {
+        participants[name].rtcPeer.audioEnabled = true;
+        document.getElementById("audOn").style.display = "none";
+        document.getElementById("audOff").style.display = "";
+    }
+}
