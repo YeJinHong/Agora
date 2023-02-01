@@ -1,6 +1,6 @@
 <template>
 
-
+    <!-- TODO : UI 수정 -->
     <div v-if="evaluation_open" class="evaluationmodal">
         <h4 class="m-3">"{{debateTitle}}" 상호평가 </h4>
         <hr/>
