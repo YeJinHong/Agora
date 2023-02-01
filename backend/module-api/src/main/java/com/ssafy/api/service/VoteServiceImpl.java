@@ -27,14 +27,11 @@ public class VoteServiceImpl implements VoteService{
     private final PerspectiveRepository perspectiveRepository;
 
     @Override
-    public Vote createVote(VoteRegisterPostReq voteRegisterPostReq) {
+    public Vote createVote(VoteRegisterPostReq voteRegisterPostReq, String userId) {
         Vote vote = new Vote();
-        System.out.println(voteRegisterPostReq.getUserId());
-        System.out.println(voteRegisterPostReq.getMvpId());
-        System.out.println(voteRegisterPostReq.getDebateId());
         vote.setDebate(debateRepository.findById(voteRegisterPostReq.getDebateId()).orElseThrow(NoSuchElementException::new));
-        vote.setUser(userRepository.findById(voteRegisterPostReq.getUserId()).orElseThrow(NoSuchElementException::new));
-        vote.setMvpUser(userRepository.findById(voteRegisterPostReq.getMvpId()).orElseThrow(NoSuchElementException::new));
+        vote.setUser(userRepository.findByUserEmail(userId).orElseThrow(NoSuchElementException::new));
+        vote.setMvpUser(userRepository.findByUserEmail(voteRegisterPostReq.getMvpId()).orElseThrow(NoSuchElementException::new));
         vote.setPerspective(perspectiveRepository.findById(voteRegisterPostReq.getPerspectiveId()).orElseThrow(NoSuchElementException::new));
         return voteRepository.save(vote);
     }
