@@ -405,7 +405,7 @@ export default {
 
     const clickSignUp = function () {
       console.log("signup start")
-      http.post(`/api/v1/users`, {user_email: state.form.userEmail, password: state.form.password,
+      http.post(`/users`, {user_email: state.form.userEmail, password: state.form.password,
         department: state.form.department, position: state.form.position, name: state.form.name,
         grade: state.form.grade, classNum: state.form.classNum, role: state.form.role})
           .then(({ data }) => {

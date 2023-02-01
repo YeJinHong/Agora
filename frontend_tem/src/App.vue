@@ -8,6 +8,9 @@
 export default {
   name: 'App',
   data: function() { return { status: false } },
+  setup(){
+    const regeneratorRuntime = require("regenerator-runtime");
+  }
 }
 </script>
 

@@ -1,13 +1,13 @@
 <template>
     <!-- Main Wrapper -->
     <div class="main-wrapper">
-       
+
         <div class="row">
-			
+
             <loginbanner></loginbanner>
-            
-            <div class="col-md-6 login-wrap-bg">		
-            
+
+            <div class="col-md-6 login-wrap-bg">
+
                 <!-- Login -->
                 <div class="login-wrapper">
                     <div class="loginbox">
@@ -64,9 +64,9 @@
                     </div>
                 </div>
                 <!-- /Login -->
-                
+
             </div>
-            
+
         </div>
     </div>
     <!-- /Main Wrapper -->
@@ -135,18 +135,18 @@ import { useRouter, useRoute } from 'vue-router';
           }
         })
 
-        const clickLogin =  () => {
+        const clickLogin = async () => {
           console.log(loginForm.value);
-           store.dispatch("userStore/userConfirm", {
+          await store.dispatch("userStore/userConfirm", {
             user_email: state.form.userEmail,
             password: state.form.password
           });
           let token = sessionStorage.getItem("access-token");
           // console.log("1. confirm() token >> " + token);
           if (store.state.userStore.isLogin) {
-             store.dispatch("userStore/getUserInfo", token);
+             await store.dispatch("userStore/getUserInfo", token);
             console.log(store.state.userStore.userInfo);
-             router.push({name: "Home"});
+             await router.push({name: "index"});
 
           }
         }
