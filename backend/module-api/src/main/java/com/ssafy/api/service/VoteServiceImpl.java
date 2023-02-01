@@ -29,6 +29,9 @@ public class VoteServiceImpl implements VoteService{
     @Override
     public Vote createVote(VoteRegisterPostReq voteRegisterPostReq) {
         Vote vote = new Vote();
+        System.out.println(voteRegisterPostReq.getUserId());
+        System.out.println(voteRegisterPostReq.getMvpId());
+        System.out.println(voteRegisterPostReq.getDebateId());
         vote.setDebate(debateRepository.findById(voteRegisterPostReq.getDebateId()).orElseThrow(NoSuchElementException::new));
         vote.setUser(userRepository.findById(voteRegisterPostReq.getUserId()).orElseThrow(NoSuchElementException::new));
         vote.setMvpUser(userRepository.findById(voteRegisterPostReq.getMvpId()).orElseThrow(NoSuchElementException::new));

@@ -18,11 +18,14 @@ public class VoteRegisterPostReq {
     Long userId;
 
     @ApiModelProperty(name="토론 ID", example="1")
+    @JsonProperty("debate_id")
     Long debateId;
 
     @ApiModelProperty(name="mvp ID", example="2")
+    @JsonProperty("mvp_id")
     Long mvpId;
 
     @ApiModelProperty(name="관점 ID")
+    @JsonProperty("perspective_id")
     Long perspectiveId;
 }
