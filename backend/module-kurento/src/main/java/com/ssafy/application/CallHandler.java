@@ -91,9 +91,25 @@ public class CallHandler extends TextWebSocketHandler {
                 room = roomManager.getRoom(debateId);
                 room.pauseCountDown(user);
                 break;
+            case "shareScreen":
+                shareScreen(jsonMessage, session);
+                break;
             default:
                 break;
         }
+    }
+
+    private void shareScreen(JsonObject params, WebSocketSession session) throws IOException {
+        final String debateId = params.get("debateId").getAsString();
+        final String userName = "screen_" + params.get("userName").getAsString();
+        final String roomName = params.get("roomName").getAsString();
+        final String position = params.get("position").getAsString();
+
+        log.info("PARTICIPANT {}: trying to join room {}", userName, roomName);
+
+        Room room = roomManager.getRoom(debateId, roomName);
+        final UserSession user = room.join(userName, position, session);
+        registry.register(user);
     }
 
     @Override

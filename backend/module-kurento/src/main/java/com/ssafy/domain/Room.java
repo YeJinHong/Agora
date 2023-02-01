@@ -85,10 +85,13 @@ public class Room implements Closeable {
     newParticipantMsg.addProperty("position", newParticipant.getPosition());
 
     final List<String> participantsList = new ArrayList<>(participants.values().size());
-    log.debug("ROOM {}: notifying other participants of new participant {}", roomName,
-        newParticipant.getName());
+    log.info("ROOM {}: notifying other participants of new participant {}", roomName, newParticipant.getName());
 
     for (final UserSession participant : participants.values()) {
+      if (newParticipant.getName().startsWith("screen_") || participant.getName().startsWith("screen_")) {
+        continue;
+      }
+
       try {
         participant.sendMessage(newParticipantMsg);
       } catch (final IOException e) {
