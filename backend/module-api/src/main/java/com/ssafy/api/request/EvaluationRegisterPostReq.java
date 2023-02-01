@@ -18,10 +18,8 @@ import java.util.Map;
 public class EvaluationRegisterPostReq {
     @ApiModelProperty(name="토론 ID", example="1")
     Long debateId;
-    @ApiModelProperty(name="평가자 ID", example="130")
-    Long evaluatorId;
-    @ApiModelProperty(name="피평가자 ID", example="90")
-    Long evaluatedId;
+    @ApiModelProperty(name="피평가자 ID", example="ssafy@naver.com")
+    String evaluatedId;
     @ApiModelProperty(name="평가 내용", example="")
     ArrayList<EvaluationBase> content;
 }

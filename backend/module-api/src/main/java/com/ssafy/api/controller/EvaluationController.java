@@ -30,10 +30,13 @@ public class EvaluationController {
 
     @PostMapping()
     @ApiOperation(value = "토론 상호 평가 생성")
-    public ResponseEntity<? extends BaseResponseBody> register(
+    public ResponseEntity<? extends BaseResponseBody> register(@ApiIgnore Authentication authentication,
             @RequestBody @ApiParam(value="상호 평가 정보", required = true) EvaluationRegisterPostReq evaluationRegisterPostReq) {
 
-        Evaluation evaluation = evaluationService.createEvaluation(evaluationRegisterPostReq);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        Evaluation evaluation = evaluationService.createEvaluation(evaluationRegisterPostReq, userId);
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 

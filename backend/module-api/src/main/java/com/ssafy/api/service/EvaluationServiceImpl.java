@@ -25,11 +25,11 @@ public class EvaluationServiceImpl implements EvaluationService {
     private final DebateRepository debateRepository;
 
     @Override
-    public Evaluation createEvaluation(EvaluationRegisterPostReq evaluationRegisterPostReq) {
+    public Evaluation createEvaluation(EvaluationRegisterPostReq evaluationRegisterPostReq, String userId) {
         Evaluation evaluation = new Evaluation();
         evaluation.setDebate(debateRepository.findById(evaluationRegisterPostReq.getDebateId()).orElseThrow(NoSuchElementException::new));
-        evaluation.setEvaluator(userRepository.findById(evaluationRegisterPostReq.getEvaluatorId()).orElseThrow(NoSuchElementException::new));
-        evaluation.setEvaluated(userRepository.findById(evaluationRegisterPostReq.getEvaluatedId()).orElseThrow(NoSuchElementException::new));
+        evaluation.setEvaluator(userRepository.findByUserEmail(userId).orElseThrow(NoSuchElementException::new));
+        evaluation.setEvaluated(userRepository.findByUserEmail(evaluationRegisterPostReq.getEvaluatedId()).orElseThrow(NoSuchElementException::new));
         evaluation.setContent(convertToText(evaluationRegisterPostReq.getContent()));
         return evaluationRepository.save(evaluation);
     }

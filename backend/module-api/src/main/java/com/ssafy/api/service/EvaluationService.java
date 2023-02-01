@@ -9,7 +9,7 @@ import com.ssafy.entity.rdbms.Evaluation;
 import java.util.List;
 
 public interface EvaluationService {
-    Evaluation createEvaluation(EvaluationRegisterPostReq evaluationRegisterPostReq);
+    Evaluation createEvaluation(EvaluationRegisterPostReq evaluationRegisterPostReq, String userId);
     void deleteEvaluation(Long evaluationId);
 
     List<Evaluation> getEvaluationList(Long id);
