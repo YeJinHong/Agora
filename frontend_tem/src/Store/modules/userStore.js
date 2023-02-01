@@ -34,13 +34,11 @@ const memberStore = {
         },
     },
     actions: {
-        async userConfirm({ commit }, user) {
-            await login(
-                user,
-                ({ data }) => {
-                    if (data.message === "success") {
-                        let accessToken = data["access-token"];
-                        let refreshToken = data["refresh-token"];
+         userConfirm({ commit }, user) {
+             login(user, ({ data }) => {
+                    if (data.message === "Success") {
+                        let accessToken = data["tokenInfo.authorization"];
+                        let refreshToken = data["tokeninfo.refreshToken"];
                         // console.log("login success token created!!!! >> ", accessToken, refreshToken);
                         commit("SET_IS_LOGIN", true);
                         commit("SET_IS_LOGIN_ERROR", false);
@@ -58,10 +56,10 @@ const memberStore = {
                 }
             );
         },
-        async getUserInfo({ commit, dispatch }, token) {
+        getUserInfo({ commit, dispatch }, token) {
             let decodeToken = jwtDecode(token);
             // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
-            await findById(
+            findById(
                 decodeToken.userId,
                 ({ data }) => {
                     if (data.message === "success") {
@@ -78,9 +76,9 @@ const memberStore = {
                 }
             );
         },
-        async tokenRegeneration({ commit, state }) {
+        tokenRegeneration({ commit, state }) {
             console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("access-token"));
-            await tokenRegeneration(
+            tokenRegeneration(
                 JSON.stringify(state.userInfo),
                 ({ data }) => {
                     if (data.message === "success") {
@@ -119,8 +117,8 @@ const memberStore = {
                 }
             );
         },
-        async userLogout({ commit }, userid) {
-            await logout(
+        userLogout({ commit }, userid) {
+             logout(
                 userid,
                 ({ data }) => {
                     if (data.message === "success") {

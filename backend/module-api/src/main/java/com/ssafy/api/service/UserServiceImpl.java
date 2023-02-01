@@ -40,14 +40,14 @@ public class UserServiceImpl implements UserService {
     public User createUser(UserRegisterPostReq userRegisterInfo) {
         User user = User.builder()
                 .userEmail(userRegisterInfo.getEmail())
-                // 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
                 .password(passwordEncoder.encode(userRegisterInfo.getPassword()))
-                .name(userRegisterInfo.getName())
-                .position(userRegisterInfo.getPosition())
                 .department(userRegisterInfo.getDepartment())
+                .grade(userRegisterInfo.getGrade())
+                .classNum(userRegisterInfo.getClassNum())
+                .name(userRegisterInfo.getName())
                 .role(Role.ROLE_USER)
+                .position(userRegisterInfo.getPosition())
                 .build();
-
         return userRepository.save(user);
     }
 

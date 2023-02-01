@@ -113,7 +113,6 @@
 import  Vue, { reactive, computed, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import http from '../../../api/http';
-import {requestSignup} from "../../../api/User";
 
 export default {
   name: "register",
@@ -406,27 +405,17 @@ export default {
 
     const clickSignUp = function () {
       console.log("signup start")
-      // 로그인 클릭 시 validate 체크 후 그 결과 값에 따라, 로그인 API 호출 또는 경고창 표시
-      SignupForm.value.validate(async (valid) => {
-        if (state.form.password !== state.form.passwordCheck) {
-          alert('Those passwords are different')
-          return
-        }
-        if (valid) {
-          // console.log('valid-signup')
-          // const response = await requestSignup({user_id: state.form.userEmail, password: state.form.password,
-          //   department: state.form.department, position: state.form.position, name: state.form.name,
-          //   grade: state.form.grade, classNum: state.form.classNum, role: state.form.role});
-          // if(response.data.message === "Success") {
-          //   console.log(response)
-          //   alert('회원가입이 성공하였습니다.')
-          // }else{
-          //   alert('회원가입이 실패하였습니다.')
-          // }
-        } else {
-          alert('Validate error!')
-        }
-      })
+      http.post(`/api/v1/users`, {user_email: state.form.userEmail, password: state.form.password,
+        department: state.form.department, position: state.form.position, name: state.form.name,
+        grade: state.form.grade, classNum: state.form.classNum, role: state.form.role})
+          .then(({ data }) => {
+                let msg = "등록 처리시 문제가 발생했습니다.";
+                if (data.message === "Success") {
+                  msg = "등록이 완료되었습니다.";
+                }
+                alert(msg);
+              }
+          )
     }
     const isValid = () => {
       SignupForm.value.validate((valid) => {

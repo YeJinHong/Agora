@@ -19,16 +19,22 @@
                                 </div>
                             </div>
                             <h1>로그인하세요</h1>
-                            <form action="instructor-dashboard">
+                            <form :model="state.form" :rules="state.rules"  ref="loginForm" :label-position="state.form.align" @keyup="isValid" >
                                 <div class="form-group">
-                                    <label class="form-control-label">Email</label>
-                                    <input type="email" class="form-control" placeholder="이메일을 입력하세요">
+                                    <label class="input-title" :class="{ 'title-danger': state.emailHasError }">Email</label>
+                                    <input type="email" class="form-control" v-model="state.form.userEmail" :class="{ 'input-danger': state.emailHasError }" placeholder="이메일을 입력하세요">
+                                    <p v-show="state.valid.email" class="input-error">
+                                      이메일 주소를 정확히 입력해주세요.
+                                    </p>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-control-label">Password</label>
+                                    <label class="form-control-label" :class="{ 'title-danger': state.passwordHasError }" >Password</label>
                                     <div class="pass-group">
-                                        <input type="password" class="form-control pass-input" placeholder="비밀번호를 입력하세요">
+                                        <input type="password" v-model="state.form.password" class="form-control pass-input" :class="{ 'input-danger': state.emailHasError }" placeholder="비밀번호를 입력하세요">
                                         <span class="feather-eye toggle-password"></span>
+                                        <p v-show="state.valid.password" class="input-error">
+                                          비밀번호를 정확히 입력해주세요.
+                                        </p>
                                     </div>
                                 </div>
                                 <div class="forgot">
@@ -40,10 +46,10 @@
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
-                                <div class="d-grid">
-                                    <button class="btn btn-primary btn-start" type="submit">로그인</button>
-                                </div>
                             </form>
+                            <div class="d-grid">
+                              <button class="btn btn-primary btn-start" type="primary" @click="clickLogin" :disabled="state.form.isFormValid">로그인</button>
+                            </div>
                         </div>
                     </div>
                     <div class="google-bg text-center">
@@ -66,29 +72,87 @@
     <!-- /Main Wrapper -->
 </template>
 <script>
-    import Vue from 'vue'
+import Vue, {reactive, computed, ref, onMounted, watch} from 'vue';
+import { useStore } from 'vuex';
+import { useRouter, useRoute } from 'vue-router';
     export default {
-      computed:{
-           
-        },
-      data() {
-            return {
-                
-               
-            }
-        },
-        mounted() {
-            if($('.toggle-password').length > 0) {
-		$(document).on('click', '.toggle-password', function() {
-			$(this).toggleClass("feather-eye feather-eye-off");
-			var input = $(".pass-input");
-			if (input.attr("type") == "password") {
-				input.attr("type", "text");
-			} else {
-				input.attr("type", "password");
-			}
-		});
-	}
+      name: 'login',
+      components: {},
+      props: {},
+      setup(props) {
+        const store = useStore();
+        const loginForm = ref(null)
+        const router = useRouter();
+        const route = useRoute();
+        const state = reactive({
+          form: {
+            userEmail: '',
+            password: '',
+            align: 'left',
+            isFormValid: false,
+          },
+          valid: {
+            email: false,
+            password: false,
+          },
+          emailHasError: false,
+          passwordHasError: false,
+        });
+
+        onMounted(() => {
+          console.log(loginForm.value);
+          if ($('.toggle-password').length > 0) {
+            $(document).on('click', '.toggle-password', function () {
+              $(this).toggleClass("feather-eye feather-eye-off");
+              var input = $(".pass-input");
+              if (input.attr("type") === "password") {
+                input.attr("type", "text");
+              } else {
+                input.attr("type", "password");
+              }
+            });
+          }
+        })
+
+        watch(() => state.form.userEmail, function (value) {
+          const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/;
+          if (!validateEmail.test(value) || !value) {
+            state.valid.email = true
+            state.emailHasError = true
+          } else {
+            state.valid.email = false
+            state.emailHasError = false
+          }
+        })
+        watch(() => state.form.password, (value) => {
+          const validatePassword = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
+          if (!validatePassword.test(value) || !value) {
+            state.valid.password = true
+            state.passwordHasError = true
+          } else {
+            state.valid.password = false
+            state.passwordHasError = false
+          }
+        })
+
+        const clickLogin =  () => {
+          console.log(loginForm.value);
+           store.dispatch("userStore/userConfirm", {
+            user_email: state.form.userEmail,
+            password: state.form.password
+          });
+          let token = sessionStorage.getItem("access-token");
+          // console.log("1. confirm() token >> " + token);
+          if (store.state.userStore.isLogin) {
+             store.dispatch("userStore/getUserInfo", token);
+            console.log(store.state.userStore.userInfo);
+             router.push({name: "Home"});
+
+          }
         }
+        return {loginForm, state, clickLogin}
+
+      },
     }
+
 </script>
