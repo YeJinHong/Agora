@@ -96,6 +96,22 @@ public class CallHandler extends TextWebSocketHandler {
             case "shareScreen":
                 shareScreen(jsonMessage, session);
                 break;
+            case "receiveSystemComment":
+                final String comment =  "아고라는 과연 완성될 수 있을까요? 지금 바로 토론 시작합니다!";
+                debateId = jsonMessage.get("debateId").getAsString();
+                room = roomManager.getRoom(debateId);
+
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.addProperty("id", "receiveSystemComment");
+                jsonObject.addProperty("comment", comment);
+
+                room.getParticipants().forEach(participant -> {
+                    try {
+                        participant.sendMessage(jsonObject);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
             default:
                 break;
         }

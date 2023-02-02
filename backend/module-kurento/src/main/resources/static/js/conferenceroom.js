@@ -61,6 +61,9 @@ ws.onmessage = function (message) {
             var time = parsedMessage.time;
             document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
             break
+        case 'receiveSystemComment':
+            alert(parsedMessage.comment)
+            break;
         default:
             console.error('Unrecognized message', parsedMessage);
     }
@@ -332,4 +335,13 @@ function audioOnOff() {
         document.getElementById("audOn").style.display = "none";
         document.getElementById("audOff").style.display = "";
     }
+}
+
+function sendSystemComment() {
+    var room = document.getElementById('roomName').value;
+
+    sendMessage({
+        id: 'receiveSystemComment',
+        debateId: room
+    })
 }
