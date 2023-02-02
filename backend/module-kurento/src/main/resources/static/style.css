@@ -227,11 +227,11 @@ input[type=button]:active, input[type=submit]:active {
 }
 
 #screen {
-	height: 200px;
-	width: 500px;
+	height: 50%;
+	width: 100%;
 }
 
-#screen > . {
+#screen > video {
 	height: 100%;
 	width: 100%;
 }
@@ -261,19 +261,20 @@ input[type=button]:active, input[type=submit]:active {
 /*}*/
 
 #participants > .participant {
+	float: left;
 	background: royalblue;
 }
 
 #participants-opp > .participant {
+	float: right;
 	background: lightcoral;
 }
 
 .participant {
 	border-radius: 4px;
 	/* border: 2px groove; */
-	margin-left: 5;
-	margin-right: 5;
-	width: 250;
+	margin: 5;
+	width: 300;
 	text-align: center;
 	overflow: hide;
 	float: left;
@@ -292,7 +293,6 @@ input[type=button]:active, input[type=submit]:active {
 
 .participant:before {
 	content: '';
-	position: absolute;
 	top: -8px;
 	right: -8px;
 	bottom: -8px;

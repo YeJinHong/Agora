@@ -63,9 +63,12 @@ public class Room implements Closeable {
     this.close();
   }
 
-  public UserSession join(String userName, String position, WebSocketSession session) throws IOException {
+  public UserSession join(String userName, String position, WebSocketSession session, boolean isScreen) throws IOException {
     log.info("ROOM {}: adding participant {}", this.roomName, userName);
     final UserSession participant = new UserSession(userName, this.roomName, position, session, this.pipeline);
+    if (isScreen) {
+      participant.turnOnScreen();
+    }
     joinRoom(participant);
     participants.put(participant.getName(), participant);
     sendParticipantNames(participant);
@@ -83,15 +86,12 @@ public class Room implements Closeable {
     newParticipantMsg.addProperty("id", "newParticipantArrived");
     newParticipantMsg.addProperty("name", newParticipant.getName());
     newParticipantMsg.addProperty("position", newParticipant.getPosition());
+    newParticipantMsg.addProperty("isScreen", newParticipant.isScreen());
 
     final List<String> participantsList = new ArrayList<>(participants.values().size());
     log.info("ROOM {}: notifying other participants of new participant {}", roomName, newParticipant.getName());
 
     for (final UserSession participant : participants.values()) {
-      if (newParticipant.getName().startsWith("screen_") || participant.getName().startsWith("screen_")) {
-        continue;
-      }
-
       try {
         participant.sendMessage(newParticipantMsg);
       } catch (final IOException e) {
@@ -136,6 +136,7 @@ public class Room implements Closeable {
         final JsonObject participantInfo = new JsonObject();
         participantInfo.addProperty("name", participant.getName());
         participantInfo.addProperty("position", participant.getPosition());
+        participantInfo.addProperty("isScreen", participant.isScreen());
 
         participantsArray.add(participantInfo);
       }

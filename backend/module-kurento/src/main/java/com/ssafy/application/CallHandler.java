@@ -51,12 +51,14 @@ public class CallHandler extends TextWebSocketHandler {
     @Override
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         final JsonObject jsonMessage = gson.fromJson(message.getPayload(), JsonObject.class);
+        System.out.println("handleTextMessage jsonMessage : " + jsonMessage);
         final UserSession user = registry.getBySession(session);
+        System.out.println("handleTextMessage user : " + user);
 
         if (user != null) {
-            log.debug("Incoming message from user '{}': {}", user.getName(), jsonMessage);
+            log.info("Incoming message from user '{}': {}", user.getName(), jsonMessage);
         } else {
-            log.debug("Incoming message from new user: {}", jsonMessage);
+            log.info("Incoming message from new user: {}", jsonMessage);
         }
 
         switch (jsonMessage.get("id").getAsString()) {
@@ -101,14 +103,14 @@ public class CallHandler extends TextWebSocketHandler {
 
     private void shareScreen(JsonObject params, WebSocketSession session) throws IOException {
         final String debateId = params.get("debateId").getAsString();
-        final String userName = "screen_" + params.get("userName").getAsString();
+        final String userName = params.get("userName").getAsString();
         final String roomName = params.get("roomName").getAsString();
         final String position = params.get("position").getAsString();
 
         log.info("PARTICIPANT {}: trying to join room {}", userName, roomName);
 
         Room room = roomManager.getRoom(debateId, roomName);
-        final UserSession user = room.join(userName, position, session);
+        final UserSession user = room.join(userName, position, session, true);
         registry.register(user);
     }
 
@@ -127,7 +129,7 @@ public class CallHandler extends TextWebSocketHandler {
         log.info("PARTICIPANT {}: trying to join room {}", userName, debateId);
 
         Room room = roomManager.getRoom(debateId, roomName);
-        final UserSession user = room.join(userName, position, session);
+        final UserSession user = room.join(userName, position, session, false);
         registry.register(user);
     }
 

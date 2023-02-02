@@ -19,6 +19,7 @@ var ws = new WebSocket('wss://' + location.host + '/groupcall');
 var participants = {};
 var name;
 var position;
+var isScreen = false;
 
 window.onbeforeunload = function () {
     ws.close();
@@ -85,7 +86,7 @@ function register() {
 }
 
 function onNewParticipant(request) {
-    receiveVideo(request.name, request.position);
+    receiveVideo(request.name, request.position, request.isScreen);
 }
 
 function receiveVideoResponse(result) {
@@ -118,10 +119,9 @@ function onExistingParticipants(msg) {
         }
     };
 
-    if (position === 'screen') {
-        name = 'screen_' + name
+    if (isScreen) {
         console.log('share screen:', name, position)
-        var participant = new Participant(name, position);
+        var participant = new Participant(name, position, true);
         participants[name] = participant;
         var video = participant.getVideoElement();
 
@@ -152,7 +152,7 @@ function onExistingParticipants(msg) {
 
     } else {
         console.log(name + " registered in room " + room);
-        var participant = new Participant(name, position);
+        var participant = new Participant(name, position, msg.isScreen);
         participants[name] = participant;
         var video = participant.getVideoElement();
 
@@ -169,7 +169,7 @@ function onExistingParticipants(msg) {
                 this.generateOffer(participant.offerToReceiveVideo.bind(participant));
             });
 
-        msg.data.forEach(m => (receiveVideo(m.name, m.position)));
+        msg.data.forEach(m => (receiveVideo(m.name, m.position, m.isScreen)));
     }
 
 }
@@ -195,7 +195,20 @@ function stop() {
 function shareScreen() {
     name = document.getElementById('name').value;
     var room = document.getElementById('roomName').value;
-    position = 'screen'
+    isScreen = true;
+
+    sendMessage({
+        id: 'leaveRoom'
+    });
+    for (var key in participants) {
+        if (participants[key].name !== name) {
+            var partVideo = document.getElementById("video-" + participants[key].name);
+            console.log('leave', participants[key].name);
+            partVideo.parentElement.remove();
+        }
+    }
+    delete participants[name];
+    document.getElementById("video-" + name).parentElement.remove();
 
     var message = {
         id: 'shareScreen',
@@ -204,7 +217,45 @@ function shareScreen() {
         roomName: room,
         position: position,
     }
+    // name = 'screen_' + name;
     sendMessage(message);
+    document.getElementById("button-share-on").style.display = "none";
+    document.getElementById("button-share-off").style.display = "";
+}
+
+function stopShareScreen() {
+    name = document.getElementById('name').value;
+    var room = document.getElementById('roomName').value;
+    isScreen = false;
+
+    sendMessage({
+        id: 'leaveRoom'
+    });
+    for (var key in participants) {
+        if (participants[key].name !== name) {
+            var partVideo = document.getElementById("video-" + participants[key].name);
+            console.log('leave', participants[key].name);
+            partVideo.parentElement.remove();
+        }
+    }
+    delete participants[name];
+    document.getElementById(name).remove();
+    let video = document.getElementById("video-" + name);
+    video.srcObject.getTracks().forEach(track => track.stop());
+    video.remove();
+
+
+    var message = {
+        id: 'joinRoom',
+        userName: name,
+        debateId: room,
+        roomName: room,
+        position: position,
+    }
+    // name = 'screen_' + name;
+    sendMessage(message);
+    document.getElementById("button-share-on").style.display = "";
+    document.getElementById("button-share-off").style.display = "none";
 }
 
 function leaveRoom() {
@@ -222,13 +273,10 @@ function leaveRoom() {
     ws.close();
 }
 
-function receiveVideo(name, position) {
+function receiveVideo(name, position, isScreen) {
     console.log(name, position)
-    if (position === 'screen') {
-        return;
-    }
     var sender = name;
-    var participant = new Participant(sender, position);
+    var participant = new Participant(sender, position, isScreen);
     participants[sender] = participant;
     var video = participant.getVideoElement();
 
@@ -251,6 +299,7 @@ function onParticipantLeft(request) {
     console.log('Participant ' + request.name + ' left');
     var participant = participants[request.name];
     participant.dispose();
+    document.getElementById('video-' + request.name).remove();
     delete participants[request.name];
 }
 

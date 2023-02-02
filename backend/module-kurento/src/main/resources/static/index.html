@@ -6,6 +6,7 @@
     <script src="/webjars/webrtc-adapter/release/adapter.js"></script>
     <script src="./js/conferenceroom.js"></script>
     <script src="./js/participant.js"></script>
+<!--    <script src="./js/debateRoom.js"></script>-->
     <script src="./js/kurento-utils.js"></script>
 </head>
 <body>
@@ -42,8 +43,10 @@
                        value="start">
                 <input type="button" id="button-stop" onmouseup="stop();"
                        value="stop">
-                <input type="button" id="button-share" onmouseup="shareScreen()"
-                       value="share screen">
+                <input type="button" id="button-share-on" onmouseup="shareScreen()"
+                       value="share screen on">
+                <input type="button" id="button-share-off" onmouseup="stopShareScreen()" style="display: none"
+                       value="share screen off">
                 <input type="button" id="vidOn" onmouseup="videoOnOff()" style="display: none"
                        value="video On">
                 <input type="button" id="vidOff" onmouseup="videoOnOff()"
