@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.UserModifyPasswordReq;
 import com.ssafy.api.request.UserModifyPatchReq;
 import com.ssafy.api.request.UserReissuePostReq;
 import com.ssafy.api.response.UserAuthPostRes;
@@ -92,10 +93,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String userEmail, UserModifyPatchReq req) {
         User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        user.builder()
+                .name(req.getName())
+                .department(req.getDepartment())
+                .grade(req.getGrade())
+                .classNum(req.getClassNum())
+                .build();
+        userRepository.save(user);
+    }
 
-        user.setName(req.getName());
-        user.setDepartment(req.getDepartment());
-        user.setPosition(req.getPosition());
+    @Override
+    public void modifyUserPassword(String userEmail, UserModifyPasswordReq req) {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        if(!passwordEncoder.matches(req.getNowPassword(), user.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
         userRepository.save(user);
     }
 

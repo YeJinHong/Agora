@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.UserModifyPasswordReq;
 import com.ssafy.api.request.UserModifyPatchReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.request.UserReissuePostReq;
@@ -14,6 +15,7 @@ public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
 	User getUserByUserEmail(String userEmail);
 	void updateUser(String userEmail, UserModifyPatchReq req);
+	void modifyUserPassword(String userEmail, UserModifyPasswordReq req);
 	void deleteUser(String userEmail);
 	boolean checkExist(String userEmail);
 	ResponseEntity<?> reissue(UserReissuePostReq userReissuePostReq);
