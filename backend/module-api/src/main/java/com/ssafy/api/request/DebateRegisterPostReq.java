@@ -19,11 +19,13 @@ public class DebateRegisterPostReq {
 	Long ownerId;
 
 	@ApiModelProperty(name="토론 카테고리 ID")
-	Long debateCategory;
+	Long category;
+
+	@ApiModelProperty(name="토론 생성시간", example="2022-01-11 13:00:00")
+	LocalDateTime insertedTime;
 
 	@ApiModelProperty(name="토론 시작시간", example="2022-01-11 13:00:00")
 	LocalDateTime callStartTime;
-
 
 	@ApiModelProperty(name="토론 종료시간", example="2022-01-11 14:00:00")
 	LocalDateTime callEndTime;
@@ -38,5 +40,14 @@ public class DebateRegisterPostReq {
 	String description;
 
 	@ApiModelProperty(name="토론 활성화 상태")
-	Boolean isActive;
+	String state;
+
+	@ApiModelProperty(name="토론 모드")
+	String debateMode;
+
+	@ApiModelProperty(name="사회자 참여 여부")
+	Boolean moderatorOnOff;
+
+	@ApiModelProperty(name="")
+
 }

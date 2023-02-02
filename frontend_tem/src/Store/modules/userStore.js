@@ -1,6 +1,6 @@
 import jwtDecode from "jwt-decode";
 import {router} from "../../router";
-import { login, findById, tokenRegeneration, logout } from "../../api/User";
+import {login, findById, tokenRegeneration, logout} from "../../api/User";
 
 const userStore = {
     namespaced: true,
@@ -34,8 +34,8 @@ const userStore = {
         },
     },
     actions: {
-        async userConfirm({ commit }, user) {
-            await login(user, ({ data }) => {
+        userConfirm({commit, dispatch}, user) {
+            login(user, ({data}) => {
                     if (data.message === "Success") {
                         let accessToken = data["tokenInfo"].authorization;
                         let refreshToken = data["tokenInfo"].refreshToken;
@@ -45,6 +45,18 @@ const userStore = {
                         commit("SET_IS_VALID_TOKEN", true);
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
+                        findById(accessToken.userId, ({data}) => {
+                            if (data.message === "Success") {
+                                commit("SET_USER_INFO", data.userInfo);
+                                // console.log("3. getUserInfo data >> ", data);
+                            } else {
+                                console.log("유저 정보 없음!!!!");
+                            }
+                        }, async (error) => {
+                            console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
+                            commit("SET_IS_VALID_TOKEN", false);
+                            await dispatch("tokenRegeneration");
+                        });
                     } else {
                         commit("SET_IS_LOGIN", false);
                         commit("SET_IS_LOGIN_ERROR", true);
@@ -56,32 +68,32 @@ const userStore = {
                 }
             );
         },
-        async getUserInfo({ commit, dispatch }, token) {
-            let decodeToken = jwtDecode(token);
-            // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
-            await findById(
-                decodeToken.userId,
-                ({ data }) => {
-                    if (data.message === "success") {
-                        commit("SET_USER_INFO", data.userInfo);
-                        // console.log("3. getUserInfo data >> ", data);
-                    } else {
-                        console.log("유저 정보 없음!!!!");
-                    }
-                },
-                async (error) => {
-                    console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
-                    commit("SET_IS_VALID_TOKEN", false);
-                    await dispatch("tokenRegeneration");
-                }
-            );
-        },
-        async tokenRegeneration({ commit, state }) {
+        //  getUserInfo({ commit, dispatch }, token) {
+        //     let decodeToken = jwtDecode(token);
+        //     // console.log("2. getUserInfo() decodeToken :: ", decodeToken);
+        //      findById(
+        //         decodeToken.userId,
+        //         ({ data }) => {
+        //             if (data.message === "Success") {
+        //                 commit("SET_USER_INFO", data.userInfo);
+        //                 // console.log("3. getUserInfo data >> ", data);
+        //             } else {
+        //                 console.log("유저 정보 없음!!!!");
+        //             }
+        //         },
+        //         async (error) => {
+        //             console.log("getUserInfo() error code [토큰 만료되어 사용 불가능.] ::: ", error.response.status);
+        //             commit("SET_IS_VALID_TOKEN", false);
+        //             await dispatch("tokenRegeneration");
+        //         }
+        //     );
+        // },
+        async tokenRegeneration({commit, state}) {
             console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("access-token"));
             await tokenRegeneration(
                 JSON.stringify(state.userInfo),
-                ({ data }) => {
-                    if (data.message === "success") {
+                ({data}) => {
+                    if (data.message === "Success") {
                         let accessToken = data["access-token"];
                         console.log("재발급 완료 >> 새로운 토큰 : {}", accessToken);
                         sessionStorage.setItem("access-token", accessToken);
@@ -95,8 +107,8 @@ const userStore = {
                         // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
                         await logout(
                             state.userInfo.userid,
-                            ({ data }) => {
-                                if (data.message === "success") {
+                            ({data}) => {
+                                if (data.message === "Success") {
                                     console.log("리프레시 토큰 제거 성공");
                                 } else {
                                     console.log("리프레시 토큰 제거 실패");
@@ -105,7 +117,7 @@ const userStore = {
                                 commit("SET_IS_LOGIN", false);
                                 commit("SET_USER_INFO", null);
                                 commit("SET_IS_VALID_TOKEN", false);
-                                router.push({ name: "login" });
+                                router.push({name: "login"});
                             },
                             (error) => {
                                 console.log(error);
@@ -117,11 +129,11 @@ const userStore = {
                 }
             );
         },
-        async userLogout({ commit }, userid) {
-             await logout(
+        async userLogout({commit}, userid) {
+            await logout(
                 userid,
-                ({ data }) => {
-                    if (data.message === "success") {
+                ({data}) => {
+                    if (data.message === "Success") {
                         commit("SET_IS_LOGIN", false);
                         commit("SET_USER_INFO", null);
                         commit("SET_IS_VALID_TOKEN", false);

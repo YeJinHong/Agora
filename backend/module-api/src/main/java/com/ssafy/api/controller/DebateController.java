@@ -25,8 +25,11 @@ public class DebateController {
 	@PostMapping()
 	@ApiOperation(value = "토론 생성")
 	public ResponseEntity<? extends BaseResponseBody> register(
+			@ApiIgnore Authentication authentication,
 			@RequestBody @ApiParam(value="회원가입 정보", required = true) DebateRegisterPostReq debateRegisterPostReq) {
-
+		if(authentication == null){
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, "Invalid token access"));
+		}
 		Debate debate = debateService.createDebate(debateRegisterPostReq);
 		return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
 	}

@@ -18,6 +18,5 @@ import javax.persistence.Enumerated;
 public class FileManager extends BaseEntity{
 
     @Column
-    @Enumerated(EnumType.STRING)
-    private FileOrigin fileOrigin;
+    private String fileOrigin;
 }
