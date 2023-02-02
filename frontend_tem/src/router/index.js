@@ -93,7 +93,7 @@ import verificationcode from '../views/pages/pages/verification-code.vue'
 import viewinvoice from '../views/pages/student/view-invoice.vue'
 import wishlist from '../views/pages/pages/wishlist.vue'
 import withdrawalinstructor from '../views/pages/instructor/withdrawal-instructor.vue'
-import debate from "../views/pages/blog/debate.vue"
+import debate from '../views/pages/blog/debate.vue'
 
 const routes = [
   {
@@ -573,7 +573,7 @@ const routes = [
   },
 ];
 export const router = createRouter({
-    history: createWebHistory('vuejs'),
+    history: createWebHistory(),
     linkActiveClass: 'active',
     routes
 });
