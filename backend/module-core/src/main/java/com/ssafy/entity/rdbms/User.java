@@ -15,9 +15,9 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User extends BaseEntity {
 
     @Column(unique = true)
