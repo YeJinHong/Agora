@@ -22,8 +22,8 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.ssafy.application.room.RoomManager;
 import com.ssafy.application.user.UserRegistry;
+import com.ssafy.domain.Participant;
 import com.ssafy.domain.Room;
-import com.ssafy.domain.UserSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kurento.client.IceCandidate;
@@ -52,7 +52,7 @@ public class CallHandler extends TextWebSocketHandler {
     public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         final JsonObject jsonMessage = gson.fromJson(message.getPayload(), JsonObject.class);
         System.out.println("handleTextMessage jsonMessage : " + jsonMessage);
-        final UserSession user = registry.getBySession(session);
+        final Participant user = registry.getBySession(session);
         System.out.println("handleTextMessage user : " + user);
 
         if (user != null) {
@@ -62,12 +62,14 @@ public class CallHandler extends TextWebSocketHandler {
         }
 
         switch (jsonMessage.get("id").getAsString()) {
+            case "createRoom":
+                createRoom(jsonMessage);
             case "joinRoom":
                 joinRoom(jsonMessage, session);
                 break;
             case "receiveVideoFrom":
                 final String senderName = jsonMessage.get("sender").getAsString();
-                final UserSession sender = registry.getByName(senderName);
+                final Participant sender = registry.getByName(senderName);
                 final String sdpOffer = jsonMessage.get("sdpOffer").getAsString();
                 user.receiveVideoFrom(sender, sdpOffer);
                 break;
@@ -97,7 +99,7 @@ public class CallHandler extends TextWebSocketHandler {
                 shareScreen(jsonMessage, session);
                 break;
             case "receiveSystemComment":
-                final String comment =  "아고라는 과연 완성될 수 있을까요? 지금 바로 토론 시작합니다!";
+                final String comment = "아고라는 과연 완성될 수 있을까요? 지금 바로 토론 시작합니다!";
                 debateId = jsonMessage.get("debateId").getAsString();
                 room = roomManager.getRoom(debateId);
 
@@ -117,6 +119,15 @@ public class CallHandler extends TextWebSocketHandler {
         }
     }
 
+    private void createRoom(JsonObject params) {
+        final String debateId = params.get("debateId").getAsString();
+        final String roomName = params.get("roomName").getAsString();
+        final String roomType = params.get("roomType").getAsString();
+        final long time = params.get("time").getAsLong();
+
+        roomManager.createRoom(roomType, debateId, roomName, time);
+    }
+
     private void shareScreen(JsonObject params, WebSocketSession session) throws IOException {
         final String debateId = params.get("debateId").getAsString();
         final String userName = params.get("userName").getAsString();
@@ -125,14 +136,14 @@ public class CallHandler extends TextWebSocketHandler {
 
         log.info("PARTICIPANT {}: trying to join room {}", userName, roomName);
 
-        Room room = roomManager.getRoom(debateId, roomName);
-        final UserSession user = room.join(userName, position, session, true);
+        Room room = roomManager.getRoom(debateId);
+        final Participant user = room.join(userName, position, session, true);
         registry.register(user);
     }
 
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
-        UserSession user = registry.removeBySession(session);
+        Participant user = registry.removeBySession(session);
         roomManager.getRoom(user.getRoomName()).leave(user);
     }
 
@@ -144,12 +155,12 @@ public class CallHandler extends TextWebSocketHandler {
 
         log.info("PARTICIPANT {}: trying to join room {}", userName, debateId);
 
-        Room room = roomManager.getRoom(debateId, roomName);
-        final UserSession user = room.join(userName, position, session, false);
+        Room room = roomManager.getRoom(debateId);
+        final Participant user = room.join(userName, position, session, false);
         registry.register(user);
     }
 
-    private void leaveRoom(UserSession user) throws IOException {
+    private void leaveRoom(Participant user) throws IOException {
         final Room room = roomManager.getRoom(user.getRoomName());
         room.leave(user);
 
