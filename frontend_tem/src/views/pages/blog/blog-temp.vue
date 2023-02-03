@@ -71,6 +71,7 @@
                                 <div class="all-btn all-category d-flex align-items-center">
                                     <div class="btn btn-primary" @click="this.getEval"> Get My Evaluations Button </div>
                                 </div>
+                                <br/>
                                 <div class="all-btn all-category d-flex align-items-center" >
                                     <div class="btn btn-primary" @click="this.sendVote"> Send Vote Button </div>
                                 </div>
@@ -78,6 +79,12 @@
                                 <div class="all-btn all-category d-flex align-items-center">
                                     <div class="btn btn-primary" @click="this.getVoteResult(`${this.debate_id}`)"> Get Debate Vote Result Button </div>
                                 </div>
+                                <br/>
+                                <br/>
+
+                                <div class="ticket-btn-grp">
+									<a href="javascript:;" data-bs-toggle="modal" data-bs-target="#depositMethod">Deposit Money</a>
+								</div>
                             </div>
                         </div>
                         <!-- /Blog Post -->
@@ -95,6 +102,7 @@
        
     </div>
     <!-- /Main Wrapper -->
+    <blogtempmodal></blogtempmodal>
 </template>
 
 
