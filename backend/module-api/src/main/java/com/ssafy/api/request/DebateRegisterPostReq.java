@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-
+import java.util.ArrayList;
 /**
  * 토론 생성 API ([POST] /api/v1/debates) 요청에 필요한 리퀘스트 바디 정의.
  */
@@ -48,6 +48,12 @@ public class DebateRegisterPostReq {
 	@ApiModelProperty(name="사회자 참여 여부")
 	Boolean moderatorOnOff;
 
-	@ApiModelProperty(name="")
+	@ApiModelProperty(name="토론 발표 순서")
+	ArrayList<DebateOrderBase> debateOrderList;
 
+	@ApiModelProperty(name="토론 시간 설정")
+	ArrayList<DebateTimeSettingBase> debateTimeSettingList;
+
+	@ApiModelProperty(name="관점 리스트")
+	ArrayList<PerspectiveBase> PerspectiveList;
 }

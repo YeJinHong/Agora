@@ -1,13 +1,16 @@
 package com.ssafy.api.service;
 
 import com.ssafy.api.request.DebateRegisterPostReq;
+import com.ssafy.api.request.PerspectiveBase;
 import com.ssafy.entity.rdbms.Debate;
+import com.ssafy.entity.rdbms.Perspective;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import com.ssafy.repository.DebateRepository;
 import com.ssafy.repository.DebateResultRepository;
 import com.ssafy.repository.UserRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 /**
@@ -34,6 +37,14 @@ public class DebateServiceImpl implements DebateService {
 		debate.setDescription(debateRegisterPostReq.getDescription());
 		return debateRepository.save(debate);
 	}
+
+	@Override
+	public Perspective createPerspective(List<PerspectiveBase> perspectiveBaseList) {
+		Perspective perspective = new Perspective();
+		perspective.setDebate();
+	}
+
+
 
 	@Override
 	public void deleteDebate(Long id) {

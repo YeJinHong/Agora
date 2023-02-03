@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -44,7 +45,10 @@ public class Debate extends BaseEntity {
     private LocalDateTime insertedTime;
 
     @Column
-    private LocalDateTime callStartTime;
+    private String order;
+
+    @Column
+    private String debateModeOption;
 
     @Column
     private LocalDateTime callEndTime;
