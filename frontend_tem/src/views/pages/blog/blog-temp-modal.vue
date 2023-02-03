@@ -67,57 +67,6 @@
     <!-- Deposit Modal -->
 </template>
 
-<script>
-import { ref } from "vue";
-import { useStore } from "vuex";
-
-export default {
-    setup(){
-        // TODO : debateStore에서 가져와야한다. 이 참여자 정보는 토론 방 입장 시 가져온다.
-        // GET /debate/{:debateId}
-        // mutation - debateStore에서 나의 팀정보(perspective_id)와 다른 나머지 팀의 정보만을 받아온다.
-        const debateInfo = {
-            debate_id : "2",
-            debate_title : "려동물 보유세 필요한가?",
-            pannel : [
-                {
-                    perspective_id : 1,
-                    prespective_name : "반려동물 보유세는 필요하다.",
-                    memberList : [
-                        {user_email : "ssafy@naver.com", userName : "김싸피"},
-                        {user_email : "human@naver.com", userName : "박사람"},
-                        {user_email : "puppy@naver.com", userName : "김뽀삐"},
-                    ]
-                },
-                {
-                    perspective_id : 2,
-                    prespective_name : "반려동물 보유세는 필요하지 않다.",
-                    memberList : [
-                        {user_email : "debate@naver.com", userName : "김토론"},
-                        {user_email : "news@naver.com", userName : "신 문"},
-                        {user_email : "student@naver.com", userName : "나학생"},
-                    ]
-                },
-            ],
-        };
-        // GET /evaluations/questions
-        const question_list = [
-                {parent_id : 4, id : 10, question : "자신의 주장에 대해 실질적인 자료와 데이터를 제시하였는가?"},
-                {parent_id : 5, id : 11, question : "상대방의 의견을 비판할때 적절한 근거를 들어 명확하게 설명하였는가?"},
-                {parent_id : 6, id : 12, question : "자신의 주장을 발표할 때 적절한 언어적 요소를 활용하였는가?"},
-                {parent_id : 7, id : 13, question : "자신의 주장을 발표할 때 적절한 비언어적 요소를 활용하였는가?"},
-                {parent_id : 8, id : 14, question : "정해진 주제에 벗어난 발언을 하지 않았는가?"},
-                {parent_id : 9, id : 15, question : "발언시간을 잘 관리하고 토론 규칙을 준수하여 발언하였는가?"},
-        ];
-        const evaluation_data = {
-            debate_id : ref(this.debateInfo.debate_id),
-            evaluated_id : ref(0),
-            content : ref([]),
-        };
-    }
-}
-</script>
-
 <style>
 body {
     margin : 0
@@ -137,3 +86,4 @@ div {
     margin-top: 200px;
 }
 </style>
+
