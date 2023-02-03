@@ -51,6 +51,9 @@ public class Debate extends BaseEntity {
     private String debateModeOption;
 
     @Column
+    private LocalDateTime callStartTime;
+
+    @Column
     private LocalDateTime callEndTime;
 
     @OneToOne(mappedBy = "debate")

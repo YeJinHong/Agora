@@ -41,10 +41,8 @@ public class DebateServiceImpl implements DebateService {
 	@Override
 	public Perspective createPerspective(List<PerspectiveBase> perspectiveBaseList) {
 		Perspective perspective = new Perspective();
-		perspective.setDebate();
+		return null;
 	}
-
-
 
 	@Override
 	public void deleteDebate(Long id) {
