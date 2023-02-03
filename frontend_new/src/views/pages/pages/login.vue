@@ -15,33 +15,33 @@
                             <div class="img-logo">
                                 <img src="../../../assets/img/logo.svg" class="img-fluid" alt="Logo">
                                 <div class="back-home">
-                                    <router-link to="/">Back to Home</router-link>
+                                    <router-link to="/">홈으로</router-link>
                                 </div>
                             </div>
-                            <h1>Sign into Your Account</h1>
+                            <h1>로그인하세요</h1>
                             <form action="instructor-dashboard">
                                 <div class="form-group">
                                     <label class="form-control-label">Email</label>
-                                    <input type="email" class="form-control" placeholder="Enter your email address">
+                                    <input type="email" class="form-control" placeholder="이메일을 입력하세요">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-control-label">Password</label>
                                     <div class="pass-group">
-                                        <input type="password" class="form-control pass-input" placeholder="Enter your password">
+                                        <input type="password" class="form-control pass-input" placeholder="비밀번호를 입력하세요">
                                         <span class="feather-eye toggle-password"></span>
                                     </div>
                                 </div>
                                 <div class="forgot">
-                                    <span><router-link class="forgot-link" to="forgot-password">Forgot Password ?</router-link></span>
+                                    <span><router-link class="forgot-link" to="forgot-password">비밀번호를 잊어버렸어요</router-link></span>
                                 </div>
                                 <div class="remember-me">
-                                    <label class="custom_check mr-2 mb-0 d-inline-flex remember-me"> Remember me  
+                                    <label class="custom_check mr-2 mb-0 d-inline-flex remember-me"> 기억해두기
                                         <input type="checkbox" name="radio">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
                                 <div class="d-grid">
-                                    <button class="btn btn-primary btn-start" type="submit">Sign In</button>
+                                    <button class="btn btn-primary btn-start" type="submit">로그인</button>
                                 </div>
                             </form>
                         </div>
