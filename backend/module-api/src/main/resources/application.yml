@@ -13,7 +13,7 @@ spring:
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -22,10 +22,23 @@ spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
-      password: 'ssafy'
+      password: '12341234'
       username: root
-    url: jdbc:mysql://i8c205.p.ssafy.io:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
-
+      #i8c205.p.ssafy.io
+    url: jdbc:mysql://localhost:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    properties:
+      mail:
+        debug: true
+        smtp:
+          connectiontimeout: 5000
+          auth: true
+          starttls:
+            enable: true
+          ssl:
+            enable: true
 jwt:
   accessTokenExpiration: '1800000'
   refreshTokenExpiration: '604800000'
@@ -48,3 +61,5 @@ server:
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
 spa:
   default-file: /dist/index.html
+file:
+  path: /Users/muntaeho/Desktop/SSAFY/pj2/backend/module-api/src/main/resources/static/profile
