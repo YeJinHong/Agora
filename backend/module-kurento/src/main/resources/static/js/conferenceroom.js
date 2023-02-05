@@ -341,7 +341,8 @@ function sendSystemComment() {
     var room = document.getElementById('roomName').value;
 
     sendMessage({
-        id: 'receiveSystemComment',
-        debateId: room
+        id: 'sendSystemComment',
+        debateId: room,
+        comment: 'test',
     })
 }

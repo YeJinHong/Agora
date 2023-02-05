@@ -241,4 +241,8 @@ public class Participant implements Closeable {
     public String getPositionName() {
         return this.position.getPositionName();
     }
+
+    public boolean isModerator() {
+        return this.getPositionName().equals("사회자");
+    }
 }

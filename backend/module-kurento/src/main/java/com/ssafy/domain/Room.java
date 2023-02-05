@@ -8,9 +8,9 @@ import java.util.Collection;
 public interface Room {
     String getRoomName();
 
-    void startCountDown(Participant user);
+    void allowSpeaking(Participant user);
 
-    void pauseCountDown(Participant user);
+    void terminateSpeaking(Participant user);
 
     Collection<Participant> getParticipants();
 
@@ -19,4 +19,6 @@ public interface Room {
     void close();
 
     Participant join(String userName, String position, WebSocketSession session, boolean isScreen) throws IOException;
+
+    void sendComment(Participant user, String comment);
 }

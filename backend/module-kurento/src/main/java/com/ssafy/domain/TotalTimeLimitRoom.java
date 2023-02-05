@@ -35,7 +35,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         this.positions = new ConcurrentHashMap<>();
 
         if (positionNames == null) {
-            positionNames = new String[] {"찬성", "반대"};
+            positionNames = new String[] {"찬성", "반대", "사회자"};
         }
 
         Arrays.stream(positionNames).forEach(position -> positions.put(position, new Position(position, totalTime)));
@@ -172,14 +172,17 @@ public class TotalTimeLimitRoom implements Closeable, Room {
     }
 
     @Override
-    public void startCountDown(Participant user) {
+    public void allowSpeaking(Participant user) {
         String positionName = user.getPositionName();
 
+        this.audioOn(user);
+
         TimerTask task = new TimerTask() {
+            long time = positions.get(positionName).getLastSeconds();
+
             @SneakyThrows
             @Override
             public void run() {
-                long time = positions.get(positionName).getLastSeconds();
                 if (time > 0) {
                     JsonObject jsonObject = new JsonObject();
                     jsonObject.addProperty("id", "timeRemaining");
@@ -194,7 +197,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
                     }
                 } else {
                     positions.get(positionName).updateLastSecond(time);
-                    pauseCountDown(user);
+                    terminateSpeaking(user);
                 }
             }
         };
@@ -203,9 +206,11 @@ public class TotalTimeLimitRoom implements Closeable, Room {
     }
 
     @Override
-    public void pauseCountDown(Participant user) {
+    public void terminateSpeaking(Participant user) {
         String positionName = getRoomName();
         this.timer.cancel();
+
+        this.audioOff(user);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", "pauseSpeaking");
@@ -220,11 +225,34 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         }
     }
 
-    public void audioOn(Participant user) {
-
+    private void audioOn(Participant user) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", "audioOn");
+        jsonObject.addProperty("name", user.getName());
     }
 
-    public void audioOff() {
+    private void audioOff(Participant user) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", "audioOff");
+        jsonObject.addProperty("name", user.getName());
+    }
 
+    @Override
+    public void sendComment(Participant user, String comment) {
+        if (user.isModerator()) {
+            return;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", "receiveSystemComment");
+        jsonObject.addProperty("name", comment);
+
+        this.getParticipants().forEach(participant -> {
+            try {
+                participant.sendMessage(jsonObject);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

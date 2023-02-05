@@ -33,6 +33,7 @@ import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @author Ivan Gracia (izanmail@gmail.com)
@@ -88,32 +89,21 @@ public class CallHandler extends TextWebSocketHandler {
             case "startSpeaking":
                 String debateId = jsonMessage.get("debateId").getAsString();
                 Room room = roomManager.getRoom(debateId);
-                room.startCountDown(user);
+                room.allowSpeaking(user);
                 break;
             case "pauseSpeaking":
                 debateId = jsonMessage.get("debateId").getAsString();
                 room = roomManager.getRoom(debateId);
-                room.pauseCountDown(user);
+                room.terminateSpeaking(user);
                 break;
             case "shareScreen":
                 shareScreen(jsonMessage, session);
                 break;
-            case "receiveSystemComment":
-                final String comment = "아고라는 과연 완성될 수 있을까요? 지금 바로 토론 시작합니다!";
+            case "sendSystemComment":
+                String comment = Optional.of(jsonMessage.get("comment").getAsString()).orElse("아고라는 과연 완성될 수 있을까요? 지금 바로 토론 시작합니다!");
                 debateId = jsonMessage.get("debateId").getAsString();
                 room = roomManager.getRoom(debateId);
-
-                JsonObject jsonObject = new JsonObject();
-                jsonObject.addProperty("id", "receiveSystemComment");
-                jsonObject.addProperty("comment", comment);
-
-                room.getParticipants().forEach(participant -> {
-                    try {
-                        participant.sendMessage(jsonObject);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+                room.sendComment(user, comment);
             default:
                 break;
         }
