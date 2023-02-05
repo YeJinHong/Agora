@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DebateResult extends BaseEntity {
+public class DebaseResult extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "debate_id")

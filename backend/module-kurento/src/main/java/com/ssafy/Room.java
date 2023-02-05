@@ -15,12 +15,12 @@
  *
  */
 
-package com.ssafy.domain;
+package com.ssafy;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import lombok.Getter;
-import lombok.SneakyThrows;
+import com.google.gson.JsonPrimitive;
 import org.kurento.client.Continuation;
 import org.kurento.client.MediaPipeline;
 import org.slf4j.Logger;
@@ -30,7 +30,9 @@ import org.springframework.web.socket.WebSocketSession;
 import javax.annotation.PreDestroy;
 import java.io.Closeable;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
@@ -38,22 +40,19 @@ import java.util.concurrent.ConcurrentMap;
  * @author Ivan Gracia (izanmail@gmail.com)
  * @since 4.3.1
  */
-@Getter
 public class Room implements Closeable {
   private final Logger log = LoggerFactory.getLogger(Room.class);
 
   private final ConcurrentMap<String, UserSession> participants = new ConcurrentHashMap<>();
   private final MediaPipeline pipeline;
-  private final String roomName;
+  private final String name;
 
-  private final String debateId;
+  public String getName() {
+    return name;
+  }
 
-  private long time = 10 * 60;
-  private Timer timer;
-
-  public Room(String roomName, String debateId, MediaPipeline pipeline) {
-    this.roomName = roomName;
-    this.debateId = debateId;
+  public Room(String roomName, MediaPipeline pipeline) {
+    this.name = roomName;
     this.pipeline = pipeline;
     log.info("ROOM {} has been created", roomName);
   }
@@ -63,9 +62,9 @@ public class Room implements Closeable {
     this.close();
   }
 
-  public UserSession join(String userName, String position, WebSocketSession session) throws IOException {
-    log.info("ROOM {}: adding participant {}", this.roomName, userName);
-    final UserSession participant = new UserSession(userName, this.roomName, position, session, this.pipeline);
+  public UserSession join(String userName, WebSocketSession session) throws IOException {
+    log.info("ROOM {}: adding participant {}", this.name, userName);
+    final UserSession participant = new UserSession(userName, this.name, session, this.pipeline);
     joinRoom(participant);
     participants.put(participant.getName(), participant);
     sendParticipantNames(participant);
@@ -73,7 +72,7 @@ public class Room implements Closeable {
   }
 
   public void leave(UserSession user) throws IOException {
-    log.debug("PARTICIPANT {}: Leaving room {}", user.getName(), this.roomName);
+    log.debug("PARTICIPANT {}: Leaving room {}", user.getName(), this.name);
     this.removeParticipant(user.getName());
     user.close();
   }
@@ -82,20 +81,16 @@ public class Room implements Closeable {
     final JsonObject newParticipantMsg = new JsonObject();
     newParticipantMsg.addProperty("id", "newParticipantArrived");
     newParticipantMsg.addProperty("name", newParticipant.getName());
-    newParticipantMsg.addProperty("position", newParticipant.getPosition());
 
     final List<String> participantsList = new ArrayList<>(participants.values().size());
-    log.info("ROOM {}: notifying other participants of new participant {}", roomName, newParticipant.getName());
+    log.debug("ROOM {}: notifying other participants of new participant {}", name,
+        newParticipant.getName());
 
     for (final UserSession participant : participants.values()) {
-      if (newParticipant.getName().startsWith("screen_") || participant.getName().startsWith("screen_")) {
-        continue;
-      }
-
       try {
         participant.sendMessage(newParticipantMsg);
       } catch (final IOException e) {
-        log.debug("ROOM {}: participant {} could not be notified", roomName, participant.getName(), e);
+        log.debug("ROOM {}: participant {} could not be notified", name, participant.getName(), e);
       }
       participantsList.add(participant.getName());
     }
@@ -106,7 +101,7 @@ public class Room implements Closeable {
   private void removeParticipant(String name) throws IOException {
     participants.remove(name);
 
-    log.debug("ROOM {}: notifying all users that {} is leaving the room", this.roomName, name);
+    log.debug("ROOM {}: notifying all users that {} is leaving the room", this.name, name);
 
     final List<String> unnotifiedParticipants = new ArrayList<>();
     final JsonObject participantLeftJson = new JsonObject();
@@ -122,7 +117,7 @@ public class Room implements Closeable {
     }
 
     if (!unnotifiedParticipants.isEmpty()) {
-      log.debug("ROOM {}: The users {} could not be notified that {} left the room", this.roomName,
+      log.debug("ROOM {}: The users {} could not be notified that {} left the room", this.name,
           unnotifiedParticipants, name);
     }
 
@@ -133,11 +128,8 @@ public class Room implements Closeable {
     final JsonArray participantsArray = new JsonArray();
     for (final UserSession participant : this.getParticipants()) {
       if (!participant.equals(user)) {
-        final JsonObject participantInfo = new JsonObject();
-        participantInfo.addProperty("name", participant.getName());
-        participantInfo.addProperty("position", participant.getPosition());
-
-        participantsArray.add(participantInfo);
+        final JsonElement participantName = new JsonPrimitive(participant.getName());
+        participantsArray.add(participantName);
       }
     }
 
@@ -163,7 +155,7 @@ public class Room implements Closeable {
       try {
         user.close();
       } catch (IOException e) {
-        log.debug("ROOM {}: Could not invoke close on participant {}", this.roomName, user.getName(),
+        log.debug("ROOM {}: Could not invoke close on participant {}", this.name, user.getName(),
             e);
       }
     }
@@ -174,54 +166,16 @@ public class Room implements Closeable {
 
       @Override
       public void onSuccess(Void result) throws Exception {
-        log.trace("ROOM {}: Released Pipeline", Room.this.roomName);
+        log.trace("ROOM {}: Released Pipeline", Room.this.name);
       }
 
       @Override
       public void onError(Throwable cause) throws Exception {
-        log.warn("PARTICIPANT {}: Could not release Pipeline", Room.this.roomName);
+        log.warn("PARTICIPANT {}: Could not release Pipeline", Room.this.name);
       }
     });
 
-    log.debug("Room {} closed", this.roomName);
+    log.debug("Room {} closed", this.name);
   }
 
-  public void startCountDown(UserSession user) {
-    TimerTask task = new TimerTask() {
-      @SneakyThrows
-      @Override
-      public void run() {
-        if (time > 0) {
-          JsonObject jsonObject = new JsonObject();
-          jsonObject.addProperty("id", "timeRemaining");
-          jsonObject.addProperty("time", time--);
-          for (final UserSession participant : participants.values()) {
-            try {
-              participant.sendMessage(jsonObject);
-            } catch (final IOException e) {
-              log.debug("ROOM {}: participant {} could not be notified", user.getName(), participant.getName(), e);
-            }
-          }
-        } else {
-          timer.cancel();
-        }
-      }
-    };
-    this.timer = new Timer();
-    this.timer.schedule(task, 1000, 1000);
-  }
-
-  public void pauseCountDown(UserSession user) throws IOException {
-    this.timer.cancel();
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.addProperty("id", "pauseSpeaking");
-    jsonObject.addProperty("time", time);
-    for (final UserSession participant : participants.values()) {
-      try {
-        participant.sendMessage(jsonObject);
-      } catch (final IOException e) {
-        log.debug("ROOM {}: participant {} could not be notified", user.getName(), participant.getName(), e);
-      }
-    }
-  }
 }
