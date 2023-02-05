@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.DebateGetDebatesGetReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.api.request.PerspectiveBase;
 import com.ssafy.entity.rdbms.Debate;
@@ -13,7 +14,7 @@ import java.util.List;
 public interface DebateService {
 	Debate createDebate(DebateRegisterPostReq debateRegisterPostReq);
 
-	Perspective createPerspective(List<PerspectiveBase> perspectiveBaseList);
+	List<Debate> getDebates(DebateGetDebatesGetReq debateReq);
 
 	void deleteDebate(Long id);
 }

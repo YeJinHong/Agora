@@ -44,8 +44,6 @@ public class Debate extends BaseEntity {
     @Column
     private LocalDateTime insertedTime;
 
-    @Column
-    private String order;
 
     @Column
     private String debateModeOption;
@@ -61,5 +59,4 @@ public class Debate extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private FileManager fileManager;
-
 }

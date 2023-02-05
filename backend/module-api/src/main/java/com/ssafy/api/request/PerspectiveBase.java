@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PerspectiveBase {
-    Long debateId;
+    private long debateId;
 
-    String name;
+    private String name;
 }
