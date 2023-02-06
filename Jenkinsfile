@@ -23,7 +23,7 @@ pipeline
       }      
     }
     stage('Build') {             
-      parallel {                 
+      stages {                 
         stage('build-module-api') {                     
           when {                        
             anyOf {                            
@@ -32,8 +32,8 @@ pipeline
             }                     
           } steps { 
             echo 'Build Start "${APP_API}"' 
-                        sh 'backend/gradlew ${APP_API}:build -x test' 
-                        echo 'Build End "${APP_API}"'   
+            sh 'backend/gradlew ${APP_API}:build -x test' 
+            echo 'Build End "${APP_API}"'   
           }                 
         } 
         stage('build-module-chat') {                     
@@ -63,7 +63,7 @@ pipeline
       }
     }
     stage('Deploy') {  
-      parallel {     
+      stages {     
         stage('deploy-module-api') {   
           when {           
             anyOf {                                   
