@@ -35,7 +35,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         this.positions = new ConcurrentHashMap<>();
 
         if (positionNames.length == 0) {
-            positionNames = new String[] {"찬성", "반대", "사회자"};
+            positionNames = new String[] {"찬성", "반대", "사회자", "청중"};
         }
 
         Arrays.stream(positionNames).forEach(position -> positions.put(position, new Position(position, totalTime)));

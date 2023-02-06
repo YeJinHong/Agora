@@ -183,13 +183,24 @@ function onExistingParticipants(msg) {
             mediaConstraints: constraints,
             onicecandidate: participant.onIceCandidate.bind(participant)
         }
-        participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
-            function (error) {
-                if (error) {
-                    return console.error(error);
-                }
-                this.generateOffer(participant.offerToReceiveVideo.bind(participant));
-            });
+
+        if (position === '청중') {
+            participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+                function (error) {
+                    if (error) {
+                        return console.error(error);
+                    }
+                    this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+                });
+        } else {
+            participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
+                function (error) {
+                    if (error) {
+                        return console.error(error);
+                    }
+                    this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+                });
+        }
 
         msg.data.forEach(m => (receiveVideo(m.name, m.position, m.isScreen)));
     }

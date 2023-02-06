@@ -65,6 +65,9 @@ public class CallHandler extends TextWebSocketHandler {
             case "joinRoom":
                 joinRoom(jsonMessage, session);
                 break;
+            case "joinRoomAsAudience":
+                joinRoomAsAudience(jsonMessage, session);
+                break;
             case "receiveVideoFrom":
                 final String senderName = jsonMessage.get("sender").getAsString();
                 final Participant sender = registry.getByName(senderName);
@@ -112,6 +115,7 @@ public class CallHandler extends TextWebSocketHandler {
         }
     }
 
+
     private void createRoom(JsonObject params) {
         final String debateId = params.get("debateId").getAsString();
         final String title = params.get("title").getAsString();
@@ -143,13 +147,21 @@ public class CallHandler extends TextWebSocketHandler {
     private void joinRoom(JsonObject params, WebSocketSession session) throws IOException {
         final String debateId = params.get("debateId").getAsString();
         final String userName = params.get("userName").getAsString();
-        final String title = params.get("title").getAsString();
         final String position = params.get("position").getAsString();
 
         log.info("PARTICIPANT {}: trying to join room {}", userName, debateId);
 
         Room room = roomManager.getRoom(debateId);
         final Participant user = room.join(userName, position, session, false);
+        registry.register(user);
+    }
+
+    private void joinRoomAsAudience(JsonObject params, WebSocketSession session) throws IOException {
+        final String debateId = params.get("debateId").getAsString();
+        final String userName = params.get("userName").getAsString();
+
+        Room room = roomManager.getRoom(debateId);
+        final Participant user = room.join(userName, "청중", session, false);
         registry.register(user);
     }
 
