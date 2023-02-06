@@ -2,7 +2,7 @@ pipeline
 {
   agent any 
   tools {         
-    gradle 'gradle-6.8'     
+    gradle 'gradle 6.8'     
   } 
   environment {         
     BUILD_TARGET_HOME = '${BUILD_HOME}'
