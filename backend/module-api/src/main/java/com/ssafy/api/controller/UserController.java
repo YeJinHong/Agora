@@ -1,19 +1,16 @@
 package com.ssafy.api.controller;
 
-<<<<<<< HEAD
 import com.ssafy.api.request.*;
 import com.ssafy.api.service.FileService;
 import com.ssafy.api.service.MailService;
 import com.ssafy.api.service.UserFileManagerService;
-=======
-import com.ssafy.api.request.UserModifyPatchReq;
->>>>>>> parent of 0b4a320 (Merge remote-tracking branch 'origin/main')
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.FileManager;
 import com.ssafy.entity.rdbms.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import com.ssafy.api.response.UserRes;
@@ -25,7 +22,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.io.IOException;
+import java.util.NoSuchElementException;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -38,13 +39,10 @@ public class UserController {
 	
 
 	private final UserService userService;
-<<<<<<< HEAD
 	private final UserFileManagerService userFileManagerService;
 
 	private final MailService mailService;
 	private final FileService fileService;
-=======
->>>>>>> parent of 0b4a320 (Merge remote-tracking branch 'origin/main')
 	
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.") 
@@ -103,7 +101,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PatchMapping("/{userEmail}")
+	@PatchMapping("/info")
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -111,21 +109,22 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<?> modifyUserInfo(@ApiIgnore Authentication authentication,
-			@PathVariable String userEmail,
-			@RequestBody UserModifyPatchReq req) {
+	public ResponseEntity<?> modifyUserInfo(@ApiIgnore Authentication authentication, @RequestBody UserModifyPatchReq req) {
 
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		if (!userEmail.equals(userDetails.getUsername())) {
-			return ResponseEntity.badRequest().build();
+		if (!req.getUserEmail().equals(userDetails.getUsername())) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409,"인증에 실패하셨습니다."));
 		}
-
-		userService.updateUser(userEmail, req);
-
+		try {
+			userService.updateUser(userDetails.getUsername(), req);
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(404).body(BaseResponseBody.of(404,"사용자가 존재하지 않습니다."));
+		}catch (Exception e){
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"서버에 문제가 발생했습니다."));
+		}
 		return ResponseEntity.status(409).body(BaseResponseBody.of(200,"Success"));
 	}
 
-<<<<<<< HEAD
 	@PatchMapping("/profile")
 	@ApiOperation(value = "회원 본인 프로필 수정", notes = "로그인한 회원 본인의 프로필 이미지를 수정한다.")
 	@ApiResponses({
@@ -196,8 +195,6 @@ public class UserController {
 		return ResponseEntity.status(404).body(BaseResponseBody.of(401,"메일전송에 실패"));
 	}
 
-=======
->>>>>>> parent of 0b4a320 (Merge remote-tracking branch 'origin/main')
 	@DeleteMapping("/{userId}")
 	@ApiOperation(value = "회원 본인 탈퇴", notes = "로그인한 회원 본인을 탈퇴한다.")
 	@ApiResponses({
