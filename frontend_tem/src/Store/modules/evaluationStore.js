@@ -1,4 +1,3 @@
-import { createStore } from 'vuex';
 import { registerEvaluation, getEvaluations } from '/api/evaluation';
 
 // [evaluationStore 데이터 설정 실시]

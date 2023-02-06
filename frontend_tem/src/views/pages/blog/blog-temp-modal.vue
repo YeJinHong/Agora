@@ -30,7 +30,7 @@
                                             </label>
                                         </p>
                                         <p class="radio-deposit-item">
-                                            <input type="radio" name="evaluated_id" id="deposit-type-three" :value="this.debate_info.pannel[0].memberList[2].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id">
+                                            <input type="radio" name="evaluated_id" id="deposit-type-three" :value="this.debate_info.pannel[0].memberList[2].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id" >
                                             <label for="deposit-type-three">
                                               <img src="../../../assets/img/deposit-03.jpg" alt="" class="img-fluid" >
                                               {{ this.debate_info.pannel[0].memberList[2].user_name }}
@@ -165,7 +165,7 @@ export default {
             .then((response) => {
                 console.log(response);
                 alert("유저 평가 생성 완료");
-                $('input[name="evaluated_id"]:checked').attr("disabled"); // 안통함.
+                // $('input[name="evaluated_id"]:checked').prop('checked', false); // 전송이끝나면 평가가 끝난 대상을 비활성화 시킨다.
                 // $('input[name="evaluated_id"]:checked').removeAttr("checked");  // 전송이 끝나면 자동으로 unchecked가 된다.
                 this.evaluated_id = '';
             })
