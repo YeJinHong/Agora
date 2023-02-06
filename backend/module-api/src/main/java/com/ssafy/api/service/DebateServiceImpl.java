@@ -1,17 +1,14 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.DebateGetDebatesGetReq;
+import com.ssafy.api.request.DebateSearchAllGetReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
-import com.ssafy.api.request.PerspectiveBase;
-import com.ssafy.api.service.converter.DebateConverter;
 import com.ssafy.entity.rdbms.Debate;
 import com.ssafy.entity.rdbms.Perspective;
 import com.ssafy.entity.rdbms.User;
-import com.ssafy.repository.DebateRepository;
-import com.ssafy.repository.DebateResultRepository;
-import com.ssafy.repository.PerspectiveRepository;
-import com.ssafy.repository.UserRepository;
+import com.ssafy.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +29,7 @@ public class DebateServiceImpl implements DebateService {
 
     private final DebateResultRepository debateResultRepository;
 
+    private final DebateRepositoryCustomImpl debateRepositoryCustom;
     private final PerspectiveRepository perspectiveRepository;
 
     @Override
@@ -56,9 +54,8 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public List<Debate> getDebates(DebateGetDebatesGetReq debateReq) {
-//        debateRepository.getUser
-        return null;
+    public Page<Debate> searchAll(DebateSearchAllGetReq debateReq, Pageable pageable) {
+        return debateRepositoryCustom.findDebateBySearchCondition(debateReq.getKeyword(), debateReq.getCondition(), pageable);
     }
 
     private Debate makeDebate(DebateRegisterPostReq debateRegisterPostReq, User owner) {

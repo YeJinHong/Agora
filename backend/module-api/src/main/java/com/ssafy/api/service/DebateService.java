@@ -1,10 +1,9 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.DebateGetDebatesGetReq;
+import com.ssafy.api.request.DebateSearchAllGetReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
-import com.ssafy.api.request.PerspectiveBase;
 import com.ssafy.entity.rdbms.Debate;
-import com.ssafy.entity.rdbms.Perspective;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public interface DebateService {
 	Debate createDebate(DebateRegisterPostReq debateRegisterPostReq);
 
-	List<Debate> getDebates(DebateGetDebatesGetReq debateReq);
+	Page<Debate> searchAll(DebateSearchAllGetReq debateReq);
 
 	void deleteDebate(Long id);
 }
