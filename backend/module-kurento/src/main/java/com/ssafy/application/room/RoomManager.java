@@ -41,7 +41,11 @@ public class RoomManager {
     }
 
     public Room createRoom(String roomType, String debateId, String title, long time) {
-        Room room;
+        Room room = rooms.get(debateId);
+
+        if (room != null) {
+            return room;
+        }
 
         if (roomType.equals("시간총량제")) {
             room = new TotalTimeLimitRoom(title, debateId, kurento.createMediaPipeline(), time);

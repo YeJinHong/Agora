@@ -34,7 +34,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         this.participants = new ConcurrentHashMap<>();
         this.positions = new ConcurrentHashMap<>();
 
-        if (positionNames == null) {
+        if (positionNames.length == 0) {
             positionNames = new String[] {"찬성", "반대", "사회자"};
         }
 
@@ -192,7 +192,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
                     sendToParticipants(jsonObject);
                 } else {
                     positions.get(positionName).updateLastSecond(time);
-                    terminateSpeaking(user);
+                    pauseSpeaking(user);
                 }
             }
         };
@@ -201,7 +201,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
     }
 
     @Override
-    public void terminateSpeaking(Participant user) {
+    public void pauseSpeaking(Participant user) {
         String positionName = user.getPositionName();
 
         this.timer.cancel();
@@ -235,6 +235,18 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", "receiveSystemComment");
         jsonObject.addProperty("name", comment);
+
+        sendToParticipants(jsonObject);
+    }
+
+    @Override
+    public void terminateDebate(Participant user) {
+        if (user.isModerator()) {
+            return;
+        }
+
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.addProperty("id", "terminateDebate");
 
         sendToParticipants(jsonObject);
     }

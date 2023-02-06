@@ -35,10 +35,6 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.util.Optional;
 
-/**
- * @author Ivan Gracia (izanmail@gmail.com)
- * @since 4.3.1
- */
 @Slf4j
 @RequiredArgsConstructor
 public class CallHandler extends TextWebSocketHandler {
@@ -65,6 +61,7 @@ public class CallHandler extends TextWebSocketHandler {
         switch (jsonMessage.get("id").getAsString()) {
             case "createRoom":
                 createRoom(jsonMessage);
+                break;
             case "joinRoom":
                 joinRoom(jsonMessage, session);
                 break;
@@ -94,7 +91,7 @@ public class CallHandler extends TextWebSocketHandler {
             case "pauseSpeaking":
                 debateId = jsonMessage.get("debateId").getAsString();
                 room = roomManager.getRoom(debateId);
-                room.terminateSpeaking(user);
+                room.pauseSpeaking(user);
                 break;
             case "shareScreen":
                 shareScreen(jsonMessage, session);
@@ -104,6 +101,12 @@ public class CallHandler extends TextWebSocketHandler {
                 debateId = jsonMessage.get("debateId").getAsString();
                 room = roomManager.getRoom(debateId);
                 room.sendComment(user, comment);
+                break;
+            case "terminateDebate":
+                debateId = jsonMessage.get("debateId").getAsString();
+                room = roomManager.getRoom(debateId);
+                room.terminateDebate(user);
+                break;
             default:
                 break;
         }

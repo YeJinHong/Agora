@@ -64,6 +64,10 @@ ws.onmessage = function (message) {
         case 'receiveSystemComment':
             alert(parsedMessage.comment)
             break;
+        case 'terminateDebate':
+            alert('토론이 종료되었습니다.');
+            leaveRoom();
+            break
         default:
             console.error('Unrecognized message', parsedMessage);
     }
@@ -71,18 +75,33 @@ ws.onmessage = function (message) {
 
 function register() {
     name = document.getElementById('name').value;
-    var room = document.getElementById('roomName').value;
+    let title = document.getElementById('title').value;
+    let debateId = document.getElementById('debateId').value;
     position = document.getElementById('position').value;
+    let roomType = document.getElementById('roomType').value;
+    let time = document.getElementById('time').value;
 
-    document.getElementById('room-header').innerText = 'ROOM ' + room;
+    if (this.position === '사회자') {
+        document.getElementById("buttons").style.display = '';
+    }
+
+    sendMessage({
+        id: 'createRoom',
+        debateId: debateId,
+        title: title,
+        roomType: roomType,
+        time: time
+    })
+
+    document.getElementById('room-header').innerText = title;
     document.getElementById('join').style.display = 'none';
     document.getElementById('room').style.display = 'block';
 
     var message = {
         id: 'joinRoom',
         userName: name,
-        debateId: room,
-        title: room,
+        debateId: debateId,
+        title: title,
         position: position,
     }
     sendMessage(message);
@@ -178,26 +197,27 @@ function onExistingParticipants(msg) {
 }
 
 function start() {
-    var room = document.getElementById('roomName').value;
+    let debateId = document.getElementById('debateId').value;
 
     sendMessage({
         id: 'startSpeaking',
-        debateId: room
+        debateId: debateId
     });
 }
 
 function stop() {
-    var room = document.getElementById('roomName').value;
+    let debateId = document.getElementById('debateId').value;
 
     sendMessage({
         id: 'pauseSpeaking',
-        debateId: room
+        debateId: debateId
     });
 }
 
 function shareScreen() {
     name = document.getElementById('name').value;
-    var room = document.getElementById('roomName').value;
+    let debateId = document.getElementById('debateId').value;
+    let title = document.getElementById('title').value;
     isScreen = true;
 
     sendMessage({
@@ -216,8 +236,8 @@ function shareScreen() {
     var message = {
         id: 'shareScreen',
         userName: name,
-        debateId: room,
-        roomName: room,
+        debateId: debateId,
+        title: title,
         position: position,
     }
     // name = 'screen_' + name;
@@ -228,15 +248,16 @@ function shareScreen() {
 
 function stopShareScreen() {
     name = document.getElementById('name').value;
-    var room = document.getElementById('roomName').value;
+    let debateId = document.getElementById('debateId').value;
+    let title = document.getElementById('title').value;
     isScreen = false;
 
     sendMessage({
         id: 'leaveRoom'
     });
-    for (var key in participants) {
+    for (let key in participants) {
         if (participants[key].name !== name) {
-            var partVideo = document.getElementById("video-" + participants[key].name);
+            let partVideo = document.getElementById("video-" + participants[key].name);
             console.log('leave', participants[key].name);
             partVideo.parentElement.remove();
         }
@@ -251,8 +272,8 @@ function stopShareScreen() {
     var message = {
         id: 'joinRoom',
         userName: name,
-        debateId: room,
-        title: room,
+        debateId: debateId,
+        title: title,
         position: position,
     }
     // name = 'screen_' + name;
@@ -295,7 +316,6 @@ function receiveVideo(name, position, isScreen) {
             }
             this.generateOffer(participant.offerToReceiveVideo.bind(participant));
         });
-    ;
 }
 
 function onParticipantLeft(request) {
@@ -338,11 +358,20 @@ function audioOnOff() {
 }
 
 function sendSystemComment() {
-    var room = document.getElementById('roomName').value;
+    let debateId = document.getElementById('debateId').value;
 
     sendMessage({
         id: 'sendSystemComment',
-        debateId: room,
+        debateId: debateId,
         comment: 'test',
+    })
+}
+
+function terminateDebate() {
+    let debateId = document.getElementById('debateId').value;
+
+    sendMessage({
+        id: 'terminateDebate',
+        debateId: debateId
     })
 }

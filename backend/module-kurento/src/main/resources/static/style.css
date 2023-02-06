@@ -19,7 +19,11 @@
 body {
 	font: 13px/20px "Lucida Grande", Tahoma, Verdana, sans-serif;
 	color: #404040;
-	background: #0ca3d2;
+	background-image: url("./images/background.png");
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
+	min-height: 1000px;
 }
 
 input[type=checkbox], input[type=radio] {
@@ -260,14 +264,23 @@ input[type=button]:active, input[type=submit]:active {
 /*	bottom: 10px;*/
 /*}*/
 
-#participants > .participant {
+#participants {
 	float: left;
-	background: royalblue;
+}
+
+#participants-agree > .participant {
+	float: left;
+	background: #392C7D;
 }
 
 #participants-opp > .participant {
 	float: right;
-	background: lightcoral;
+	background: #FF4667;
+}
+
+#moderator > .participant {
+	float: left;
+	background: mediumpurple;
 }
 
 .participant {
@@ -311,9 +324,10 @@ input[type=button]:active, input[type=submit]:active {
 
 .participant video, .participant.main video {
 	width: 100%; ! important;
-	height: auto;
-	!
-	important;
+	height: auto; !important;
+	transform: rotateY(180deg);
+	-webkit-transform: rotateY(180deg);
+	-moz-transform: rotateY(180deg);
 }
 
 .participant span {

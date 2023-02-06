@@ -14,13 +14,27 @@
         <div id="join" class="animate join">
             <h1>Join a Room</h1>
             <form onsubmit="register(); return false;" accept-charset="UTF-8">
+                <h4>방 생성 정보</h4>
+                <p>
+                    <input type="text" name="title" value="" id="title"
+                           placeholder="Debate Title" required>
+                </p>
+                <p>
+                    <input type="text" name="roomType" value="" id="roomType"
+                           placeholder="Room Type" required>
+                </p>
+                <p>
+                    <input type="number" name="time" value="" id="time"
+                           placeholder="time" required>
+                </p>
+                <h4>방 입장 정보</h4>
+                <p>
+                    <input type="text" name="room" value="" id="debateId"
+                           placeholder="DebateId" required>
+                </p>
                 <p>
                     <input type="text" name="name" value="" id="name"
                            placeholder="Username" required>
-                </p>
-                <p>
-                    <input type="text" name="room" value="" id="roomName"
-                           placeholder="Room" required>
                 </p>
                 <p>
                     <input type="text" name="postion" value="" id="position"
@@ -33,11 +47,14 @@
         </div>
         <div id="room" style="display: none;">
             <h2 id="room-header"></h2>
-            <div id="participants"></div>
-            <div id="participants-opp" style="float: right;"></div>
+            <div id="participants">
+                <div id="participants-agree"></div>
+                <div id="moderator"></div>
+                <div id="participants-opp" style="float: right;"></div>
+            </div>
             <div id="timer" style="font-size: 20px"></div>
             <div id="screen"></div>
-            <div id="buttons">
+            <div id="buttons" style="display: none">
                 <input type="button" id="button-start" onmouseup="start();"
                        value="start">
                 <input type="button" id="button-stop" onmouseup="stop();"

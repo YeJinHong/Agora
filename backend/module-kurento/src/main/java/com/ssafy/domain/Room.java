@@ -10,7 +10,7 @@ public interface Room {
 
     void allowSpeaking(Participant user);
 
-    void terminateSpeaking(Participant user);
+    void pauseSpeaking(Participant user);
 
     Collection<Participant> getParticipants();
 
@@ -23,4 +23,6 @@ public interface Room {
     void sendComment(Participant user, String comment);
 
     String getDebateId();
+
+    void terminateDebate(Participant user);
 }
