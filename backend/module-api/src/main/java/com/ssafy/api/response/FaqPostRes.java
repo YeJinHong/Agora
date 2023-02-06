@@ -15,7 +15,7 @@ public class FaqPostRes {
 
     private Long id;
     private String userId;
-    private String title;
+    private String category;
     private String content;
     private LocalDateTime registTime;
     private LocalDateTime updateTime;

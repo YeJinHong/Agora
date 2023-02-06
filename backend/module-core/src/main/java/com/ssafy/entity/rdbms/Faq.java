@@ -16,7 +16,7 @@ public class Faq extends BaseEntity{
     private User user;
 
     @Column
-    private String title;
+    private String category;
 
     @Column
     private String content;
@@ -32,8 +32,7 @@ public class Faq extends BaseEntity{
     private LocalDateTime updateTime;
 
 
-    public void updateFaqPost(String title, String content){
-        this.title = title;
+    public void updateFaqPost(String content){
         this.content = content;
     }
     public void updateFaqComment(String comment){

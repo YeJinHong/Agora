@@ -14,13 +14,13 @@ public class FaqListRes {
 
     private String userId;
 
-    private String title;
+    private String category;
 
     public FaqListRes of(Faq faq) {
         return  FaqListRes.builder()
                 .id(faq.getId())
                 .userId(faq.getUser().getUserEmail())
-                .title(faq.getTitle())
+                .category(faq.getCategory())
                 .build();
     }
 }

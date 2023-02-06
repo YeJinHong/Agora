@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface FaqService {
 
-    List<FaqListRes> selectAllFaq(Pageable pageable);
-    FaqPostRes selectFaqById(String faqId);
+    List<FaqListRes> selectAllFaq(Pageable pageable,String category);
+    FaqPostRes selectFaqById(Long faqId);
     void createFaq(FaqPostReq faqPostReq);
     void updateFaqPost(FaqPostReq faqPostReq);
 

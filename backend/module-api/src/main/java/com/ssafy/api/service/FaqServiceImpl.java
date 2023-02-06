@@ -30,8 +30,8 @@ public class FaqServiceImpl implements FaqService{
 
 
     @Override
-    public List<FaqListRes> selectAllFaq(Pageable pageable) {
-        List<Faq> faqList = faqRepository.findAllByPage(pageable);
+    public List<FaqListRes> selectAllFaq(Pageable pageable,String category) {
+        List<Faq> faqList = faqRepository.findAllByCategory(category,pageable);
         List<FaqListRes> faqListResList = new ArrayList<>();
         for(int i = 0; i<faqList.size(); i++) {
             faqListResList.add(new FaqListRes().of(faqList.get(i)));
@@ -40,11 +40,11 @@ public class FaqServiceImpl implements FaqService{
     }
 
     @Override
-    public FaqPostRes selectFaqById(String faqId) {
-        Faq faq = faqRepository.findById(Long.getLong(faqId)).orElseThrow(NoSuchElementException::new);
+    public FaqPostRes selectFaqById(Long faqId) {
+        Faq faq = faqRepository.findById(faqId).orElseThrow(NoSuchElementException::new);
         return FaqPostRes.builder()
                 .userId(faq.getUser().getUserEmail())
-                .title(faq.getTitle())
+                .category(faq.getCategory())
                 .content(faq.getContent())
                 .comment(faq.getComment())
                 .registTime(faq.getRegistTime())
@@ -58,7 +58,7 @@ public class FaqServiceImpl implements FaqService{
         User user = userRepository.findByUserEmail(faqPostReq.getUserId()).orElseThrow(NoSuchElementException::new);
 
         Faq faq = Faq.builder()
-                .title(faqPostReq.getTitle())
+                .category(faqPostReq.getCategory())
                 .content(faqPostReq.getContent())
                 .user(user)
                 .registTime(LocalDateTime.now())
@@ -71,7 +71,7 @@ public class FaqServiceImpl implements FaqService{
     @Override
     public void updateFaqPost(FaqPostReq faqPostReq) {
         Faq faq = faqRepository.findById(faqPostReq.getId()).orElseThrow(NoSuchElementException::new);
-        faq.updateFaqPost(faqPostReq.getTitle(),faqPostReq.getContent());
+        faq.updateFaqPost(faqPostReq.getContent());
         faqRepository.save(faq);
 
     }

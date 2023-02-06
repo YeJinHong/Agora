@@ -13,7 +13,7 @@ public class FaqPostReq {
     private Long id;
 
     private String userId;
-    private String title;
+    private String category;
     private String content;
 
     private Date registTime;
