@@ -7,7 +7,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 const { VueLoaderPlugin } = require('vue-loader');
 
-const publicPath = '';
+const publicPath = '/';
 
 module.exports = (env = {}) => ({
   context: path.resolve(__dirname, 'src'),
