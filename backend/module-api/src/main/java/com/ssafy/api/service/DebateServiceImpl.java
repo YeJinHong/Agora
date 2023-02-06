@@ -52,10 +52,10 @@ public class DebateServiceImpl implements DebateService {
         perspectiveRepository.saveAll(perspectives);
         return savedDebate;
     }
-
     @Override
     public Page<Debate> searchAll(DebateSearchAllGetReq debateReq, Pageable pageable) {
-        return debateRepositoryCustom.findDebateBySearchCondition(debateReq.getKeyword(), debateReq.getCondition(), pageable);
+//        return debateRepositoryCustom.findDebateBySearchCondition(debateReq.getKeyword(), debateReq.getCondition(), pageable);
+        return null;
     }
 
     private Debate makeDebate(DebateRegisterPostReq debateRegisterPostReq, User owner) {
@@ -80,5 +80,4 @@ public class DebateServiceImpl implements DebateService {
         Debate debate = debateRepository.findById(id).orElseThrow(NoSuchElementException::new);
         debateRepository.delete(debate);
     }
-
 }

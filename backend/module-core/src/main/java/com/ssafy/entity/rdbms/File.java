@@ -1,15 +1,13 @@
 package com.ssafy.entity.rdbms;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class File extends BaseEntity{
@@ -28,8 +26,14 @@ public class File extends BaseEntity{
     private String savedPath;
 
     @Column
-    private Float size;
+    private long size;
 
     @Column
     private String extension;
+
+    @Column
+    private boolean deleted;
+
+    @Column
+    private String source;
 }

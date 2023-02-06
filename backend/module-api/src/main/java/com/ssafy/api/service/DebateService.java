@@ -4,6 +4,7 @@ import com.ssafy.api.request.DebateSearchAllGetReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Debate;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ import java.util.List;
 public interface DebateService {
 	Debate createDebate(DebateRegisterPostReq debateRegisterPostReq);
 
-	Page<Debate> searchAll(DebateSearchAllGetReq debateReq);
+	Page<Debate> searchAll(DebateSearchAllGetReq debateReq, Pageable pageable);
 
 	void deleteDebate(Long id);
 }

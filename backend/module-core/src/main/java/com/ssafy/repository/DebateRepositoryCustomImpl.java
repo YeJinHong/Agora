@@ -11,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import static com.ssafy.entity.rdbms.QDebate.debate;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -20,8 +22,6 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
     @Autowired
     private JPAQueryFactory jpaQueryFactory;
 
-//    QDebate qDebate= QDebate.debate;
-
     /**
      * Creates a new {@link QuerydslRepositorySupport} instance for the given domain type.
      *
@@ -30,27 +30,27 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
         super(Debate.class);
     }
 
-//    @Override
-//    public Page<Debate> findDebateBySearchCondition(String keyword, String condition, Pageable pageable) {
-//        JPAQuery<Debate> query = (JPAQuery<Debate>) jpaQueryFactory.selectFrom(qDebate)
-//                .where(eqKeyword(keyword, condition));
-//
-//        List<Object> debates = Objects.requireNonNull(this.getQuerydsl())
-//                .applyPagination(pageable, query)
-//                .fetch();
-//
-//        return new PageImpl<Object>(debates, pageable, query.fetchCount());
-//    }
+    @Override
+    public Page<Debate> findDebateBySearchCondition(String keyword, String condition, Pageable pageable) {
+        JPAQuery<Debate> query = jpaQueryFactory.selectFrom(debate)
+                .where(eqKeyword(keyword, condition));
+
+        List<Debate> debates = Objects.requireNonNull(this.getQuerydsl())
+                .applyPagination(pageable, query)
+                .fetch();
+
+        return new PageImpl<Debate>(debates, pageable, query.fetch().size());
+    }
 
 
-//    private BooleanExpression eqKeyword(String keyword, String condition){
-//        if(keyword == null || keyword.isEmpty() || condition == null || condition.isEmpty()){
-//            return null;
-//        }
-//        if(condition.equals("owner")){
-//            return qDebate.owner.userEmail.eq(keyword);
-//        }else{
-//            return qDebate.title.containsIgnoreCase("keyword");
-//        }
-//    }
+    private BooleanExpression eqKeyword(String keyword, String condition){
+        if(keyword == null || keyword.isEmpty() || condition == null || condition.isEmpty()){
+            return null;
+        }
+        if(condition.equals("owner")){
+            return debate.owner.userEmail.eq(keyword);
+        }else{
+            return debate.title.containsIgnoreCase("keyword");
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.UserModifyPasswordReq;
 import com.ssafy.api.request.UserModifyPatchReq;
 import com.ssafy.api.request.UserReissuePostReq;
 import com.ssafy.api.response.UserAuthPostRes;
@@ -40,14 +41,14 @@ public class UserServiceImpl implements UserService {
     public User createUser(UserRegisterPostReq userRegisterInfo) {
         User user = User.builder()
                 .userEmail(userRegisterInfo.getEmail())
+                // 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
                 .password(passwordEncoder.encode(userRegisterInfo.getPassword()))
-                .department(userRegisterInfo.getDepartment())
-                .grade(userRegisterInfo.getGrade())
-                .classNum(userRegisterInfo.getClassNum())
                 .name(userRegisterInfo.getName())
-                .role(Role.ROLE_USER)
                 .position(userRegisterInfo.getPosition())
+                .department(userRegisterInfo.getDepartment())
+                .role(Role.ROLE_USER)
                 .build();
+
         return userRepository.save(user);
     }
 
@@ -92,10 +93,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String userEmail, UserModifyPatchReq req) {
         User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        user.builder()
+                .name(req.getName())
+                .department(req.getDepartment())
+                .grade(req.getGrade())
+                .classNum(req.getClassNum())
+                .build();
+        userRepository.save(user);
+    }
 
-        user.setName(req.getName());
-        user.setDepartment(req.getDepartment());
-        user.setPosition(req.getPosition());
+    @Override
+    public void modifyUserPassword(String userEmail, UserModifyPasswordReq req) {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        if(!passwordEncoder.matches(req.getNowPassword(), user.getPassword())){
+            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+        }
+        user.setPassword(passwordEncoder.encode(req.getNewPassword()));
         userRepository.save(user);
     }
 

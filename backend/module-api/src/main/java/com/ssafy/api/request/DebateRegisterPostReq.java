@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,10 +17,10 @@ import java.util.List;
 public class DebateRegisterPostReq {
 
 	@ApiModelProperty(name="방장의 고유 ID")
-	Long ownerId;
+	long ownerId;
 
 	@ApiModelProperty(name="토론 카테고리 ID")
-	Long category;
+	long category;
 
 	@ApiModelProperty(name="토론 생성시간", example="2022-01-11 13:00:00")
 	LocalDateTime insertedTime;

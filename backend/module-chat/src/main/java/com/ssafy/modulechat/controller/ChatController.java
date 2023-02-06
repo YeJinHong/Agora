@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Slf4j
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/chat")
+@RequestMapping(value = "/kafka")
 public class ChatController {
 
     @Autowired
@@ -29,11 +29,4 @@ public class ChatController {
             throw new RuntimeException(e);
         }
     }
-
-//    @MessageMapping("/sendMessage")
-//    @SendTo("/topic/group")
-//    public Message broadcastGroupMessage(@Payload Message message) {
-//        return message;
-//    }
-
 }
