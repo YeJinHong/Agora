@@ -82,7 +82,7 @@ function register() {
         id: 'joinRoom',
         userName: name,
         debateId: room,
-        roomName: room,
+        title: room,
         position: position,
     }
     sendMessage(message);
@@ -252,7 +252,7 @@ function stopShareScreen() {
         id: 'joinRoom',
         userName: name,
         debateId: room,
-        roomName: room,
+        title: room,
         position: position,
     }
     // name = 'screen_' + name;

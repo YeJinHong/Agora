@@ -19,15 +19,15 @@ import java.util.concurrent.ConcurrentMap;
 @Slf4j
 @Getter
 public class TotalTimeLimitRoom implements Closeable, Room {
-    private final String roomName;
+    private final String title;
     private final String debateId;
     private final MediaPipeline pipeline;
     private final ConcurrentMap<String, Participant> participants;
     private final ConcurrentMap<String, Position> positions;
     private Timer timer;
 
-    public TotalTimeLimitRoom(String roomName, String debateId, MediaPipeline pipeline, long totalTime, String... positionNames) {
-        this.roomName = roomName;
+    public TotalTimeLimitRoom(String title, String debateId, MediaPipeline pipeline, long totalTime, String... positionNames) {
+        this.title = title;
         this.debateId = debateId;
         this.pipeline = pipeline;
 
@@ -48,8 +48,8 @@ public class TotalTimeLimitRoom implements Closeable, Room {
     }
 
     public Participant join(String userName, String positionName, WebSocketSession session, boolean isScreen) throws IOException {
-        log.info("ROOM {}: adding participant {}", this.roomName, userName);
-        final Participant participant = new Participant(userName, this.roomName, positions.get(positionName), session, this.pipeline);
+        log.info("ROOM {}: adding participant {}", this.title, userName);
+        final Participant participant = new Participant(userName, this.debateId, positions.get(positionName), session, this.pipeline);
         if (isScreen) {
             participant.turnOnScreen();
         }
@@ -60,7 +60,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
     }
 
     public void leave(Participant user) throws IOException {
-        log.debug("PARTICIPANT {}: Leaving room {}", user.getName(), this.roomName);
+        log.debug("PARTICIPANT {}: Leaving room {}", user.getName(), this.title);
         this.removeParticipant(user.getName());
         user.close();
     }
@@ -73,13 +73,13 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         newParticipantMsg.addProperty("isScreen", newParticipant.isScreen());
 
         final List<String> participantsList = new ArrayList<>(participants.values().size());
-        log.info("ROOM {}: notifying other participants of new participant {}", roomName, newParticipant.getName());
+        log.info("ROOM {}: notifying other participants of new participant {}", title, newParticipant.getName());
 
         for (final Participant participant : participants.values()) {
             try {
                 participant.sendMessage(newParticipantMsg);
             } catch (final IOException e) {
-                log.debug("ROOM {}: participant {} could not be notified", roomName, participant.getName(), e);
+                log.debug("ROOM {}: participant {} could not be notified", title, participant.getName(), e);
             }
             participantsList.add(participant.getName());
         }
@@ -90,7 +90,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
     private void removeParticipant(String name) throws IOException {
         participants.remove(name);
 
-        log.debug("ROOM {}: notifying all users that {} is leaving the room", this.roomName, name);
+        log.debug("ROOM {}: notifying all users that {} is leaving the room", this.title, name);
 
         final List<String> unnotifiedParticipants = new ArrayList<>();
         final JsonObject participantLeftJson = new JsonObject();
@@ -106,15 +106,15 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         }
 
         if (!unnotifiedParticipants.isEmpty()) {
-            log.debug("ROOM {}: The users {} could not be notified that {} left the room", this.roomName,
+            log.debug("ROOM {}: The users {} could not be notified that {} left the room", this.title,
                     unnotifiedParticipants, name);
         }
 
     }
 
     public void sendParticipantNames(Participant user) throws IOException {
-
         final JsonArray participantsArray = new JsonArray();
+
         for (final Participant participant : this.getParticipants()) {
             if (!participant.equals(user)) {
                 final JsonObject participantInfo = new JsonObject();
@@ -148,7 +148,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
             try {
                 user.close();
             } catch (IOException e) {
-                log.debug("ROOM {}: Could not invoke close on participant {}", this.roomName, user.getName(),
+                log.debug("ROOM {}: Could not invoke close on participant {}", this.title, user.getName(),
                         e);
             }
         }
@@ -159,16 +159,16 @@ public class TotalTimeLimitRoom implements Closeable, Room {
 
             @Override
             public void onSuccess(Void result) throws Exception {
-                log.trace("ROOM {}: Released Pipeline", TotalTimeLimitRoom.this.roomName);
+                log.trace("ROOM {}: Released Pipeline", TotalTimeLimitRoom.this.title);
             }
 
             @Override
             public void onError(Throwable cause) throws Exception {
-                log.warn("PARTICIPANT {}: Could not release Pipeline", TotalTimeLimitRoom.this.roomName);
+                log.warn("PARTICIPANT {}: Could not release Pipeline", TotalTimeLimitRoom.this.title);
             }
         });
 
-        log.debug("Room {} closed", this.roomName);
+        log.debug("Room {} closed", this.title);
     }
 
     @Override
@@ -188,13 +188,8 @@ public class TotalTimeLimitRoom implements Closeable, Room {
                     jsonObject.addProperty("id", "timeRemaining");
                     jsonObject.addProperty("position", positionName);
                     jsonObject.addProperty("time", time--);
-                    for (final Participant participant : participants.values()) {
-                        try {
-                            participant.sendMessage(jsonObject);
-                        } catch (final IOException e) {
-                            log.debug("ROOM {}: participant {} could not be notified", user.getName(), participant.getName(), e);
-                        }
-                    }
+
+                    sendToParticipants(jsonObject);
                 } else {
                     positions.get(positionName).updateLastSecond(time);
                     terminateSpeaking(user);
@@ -207,22 +202,16 @@ public class TotalTimeLimitRoom implements Closeable, Room {
 
     @Override
     public void terminateSpeaking(Participant user) {
-        String positionName = getRoomName();
-        this.timer.cancel();
+        String positionName = user.getPositionName();
 
+        this.timer.cancel();
         this.audioOff(user);
 
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("id", "pauseSpeaking");
         jsonObject.addProperty("time", positions.get(positionName).getLastSeconds());
 
-        for (final Participant participant : participants.values()) {
-            try {
-                participant.sendMessage(jsonObject);
-            } catch (final IOException e) {
-                log.debug("ROOM {}: participant {} could not be notified", user.getName(), participant.getName(), e);
-            }
-        }
+        sendToParticipants(jsonObject);
     }
 
     private void audioOn(Participant user) {
@@ -247,9 +236,13 @@ public class TotalTimeLimitRoom implements Closeable, Room {
         jsonObject.addProperty("id", "receiveSystemComment");
         jsonObject.addProperty("name", comment);
 
+        sendToParticipants(jsonObject);
+    }
+
+    private void sendToParticipants(JsonObject message) {
         this.getParticipants().forEach(participant -> {
             try {
-                participant.sendMessage(jsonObject);
+                participant.sendMessage(message);
             } catch (IOException e) {
                 e.printStackTrace();
             }

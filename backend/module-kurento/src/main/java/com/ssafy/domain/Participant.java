@@ -25,17 +25,17 @@ public class Participant implements Closeable {
 
     private final MediaPipeline pipeline;
 
-    private final String roomName;
+    private final String debateId;
     private final Position position;
     private boolean screen;
     private final WebRtcEndpoint outgoingMedia;
     private final ConcurrentMap<String, WebRtcEndpoint> incomingMedia = new ConcurrentHashMap<>();
 
-    public Participant(final String name, String roomName, Position position, final WebSocketSession session, MediaPipeline pipeline) {
+    public Participant(final String name, String debateId, Position position, final WebSocketSession session, MediaPipeline pipeline) {
         this.pipeline = pipeline;
         this.name = name;
         this.session = session;
-        this.roomName = roomName;
+        this.debateId = debateId;
         this.position = position;
         this.screen = false;
         this.outgoingMedia = new WebRtcEndpoint.Builder(pipeline).build();
@@ -64,7 +64,7 @@ public class Participant implements Closeable {
     }
 
     public void receiveVideoFrom(Participant sender, String sdpOffer) throws IOException {
-        log.info("USER {}: connecting with {} in room {}", this.name, sender.getName(), this.roomName);
+        log.info("USER {}: connecting with {} in room {}", this.name, sender.getName(), this.debateId);
 
         log.trace("USER {}: SdpOffer for {} is {}", this.name, sender.getName(), sdpOffer);
 
@@ -213,7 +213,7 @@ public class Participant implements Closeable {
         }
         Participant other = (Participant) obj;
         boolean eq = name.equals(other.name);
-        eq &= roomName.equals(other.roomName);
+        eq &= debateId.equals(other.debateId);
         return eq;
     }
 
@@ -226,7 +226,7 @@ public class Participant implements Closeable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + name.hashCode();
-        result = 31 * result + roomName.hashCode();
+        result = 31 * result + debateId.hashCode();
         return result;
     }
 

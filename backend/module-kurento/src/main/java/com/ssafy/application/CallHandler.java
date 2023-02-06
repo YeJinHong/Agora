@@ -111,20 +111,20 @@ public class CallHandler extends TextWebSocketHandler {
 
     private void createRoom(JsonObject params) {
         final String debateId = params.get("debateId").getAsString();
-        final String roomName = params.get("roomName").getAsString();
+        final String title = params.get("title").getAsString();
         final String roomType = params.get("roomType").getAsString();
         final long time = params.get("time").getAsLong();
 
-        roomManager.createRoom(roomType, debateId, roomName, time);
+        roomManager.createRoom(roomType, debateId, title, time);
     }
 
     private void shareScreen(JsonObject params, WebSocketSession session) throws IOException {
         final String debateId = params.get("debateId").getAsString();
         final String userName = params.get("userName").getAsString();
-        final String roomName = params.get("roomName").getAsString();
+        final String title = params.get("title").getAsString();
         final String position = params.get("position").getAsString();
 
-        log.info("PARTICIPANT {}: trying to join room {}", userName, roomName);
+        log.info("PARTICIPANT {}: trying to join room {}", userName, title);
 
         Room room = roomManager.getRoom(debateId);
         final Participant user = room.join(userName, position, session, true);
@@ -134,13 +134,13 @@ public class CallHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         Participant user = registry.removeBySession(session);
-        roomManager.getRoom(user.getRoomName()).leave(user);
+        roomManager.getRoom(user.getDebateId()).leave(user);
     }
 
     private void joinRoom(JsonObject params, WebSocketSession session) throws IOException {
         final String debateId = params.get("debateId").getAsString();
         final String userName = params.get("userName").getAsString();
-        final String roomName = params.get("roomName").getAsString();
+        final String title = params.get("title").getAsString();
         final String position = params.get("position").getAsString();
 
         log.info("PARTICIPANT {}: trying to join room {}", userName, debateId);
@@ -151,7 +151,7 @@ public class CallHandler extends TextWebSocketHandler {
     }
 
     private void leaveRoom(Participant user) throws IOException {
-        final Room room = roomManager.getRoom(user.getRoomName());
+        final Room room = roomManager.getRoom(user.getDebateId());
         room.leave(user);
 
         if (room.getParticipants().isEmpty()) {

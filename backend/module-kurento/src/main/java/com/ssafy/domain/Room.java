@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.util.Collection;
 
 public interface Room {
-    String getRoomName();
+    String getTitle();
 
     void allowSpeaking(Participant user);
 
@@ -21,4 +21,6 @@ public interface Room {
     Participant join(String userName, String position, WebSocketSession session, boolean isScreen) throws IOException;
 
     void sendComment(Participant user, String comment);
+
+    String getDebateId();
 }

@@ -40,14 +40,14 @@ public class RoomManager {
         return room;
     }
 
-    public Room createRoom(String roomType, String debateId, String roomName, long time) {
+    public Room createRoom(String roomType, String debateId, String title, long time) {
         Room room;
 
         if (roomType.equals("시간총량제")) {
-            room = new TotalTimeLimitRoom(roomName, debateId, kurento.createMediaPipeline(), time);
+            room = new TotalTimeLimitRoom(title, debateId, kurento.createMediaPipeline(), time);
         } else {
             // TODO: ceda 토론방 구현
-            room = new TotalTimeLimitRoom(roomName, debateId, kurento.createMediaPipeline(), time);
+            room = new TotalTimeLimitRoom(title, debateId, kurento.createMediaPipeline(), time);
         }
 
         rooms.add(debateId, room);
@@ -55,9 +55,9 @@ public class RoomManager {
     }
 
     public void removeRoom(Room room) {
-        this.rooms.remove(room.getRoomName());
+        this.rooms.remove(room.getDebateId());
         room.close();
-        log.info("Room {} removed and closed", room.getRoomName());
+        log.info("Room {} removed and closed", room.getTitle());
     }
 
 }
