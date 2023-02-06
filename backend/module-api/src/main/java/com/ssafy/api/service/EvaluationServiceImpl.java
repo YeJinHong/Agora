@@ -4,6 +4,7 @@ import com.ssafy.api.request.EvaluationBase;
 import com.ssafy.api.request.EvaluationDeleteReq;
 import com.ssafy.api.request.EvaluationRegisterPostReq;
 import com.ssafy.entity.rdbms.Evaluation;
+import com.ssafy.entity.rdbms.User;
 import com.ssafy.repository.DebateRepository;
 import com.ssafy.repository.EvaluationRepository;
 import com.ssafy.repository.UserRepository;
@@ -55,7 +56,8 @@ public class EvaluationServiceImpl implements EvaluationService {
     }
 
     @Override
-    public List<Evaluation> getEvaluationList(Long id) {
-        return Optional.ofNullable(evaluationRepository.findByEvaluatedId(id)).orElse(Collections.emptyList());
+    public List<Evaluation> getEvaluationList(String userId) {
+        Long evaluatedId = userRepository.findByUserEmail(userId).orElseThrow().getId();
+        return Optional.ofNullable(evaluationRepository.findByEvaluatedId(evaluatedId)).orElse(Collections.emptyList());
     }
 }

@@ -17,11 +17,11 @@ import java.util.*;
 @ApiModel("EvaluationResponse")
 public class EvaluationRes {
     @ApiModelProperty(name="피평가자 Id")
-    Long evaluatedId;
+    String evaluatedId;
     @ApiModelProperty(name="전체 평가 내용 취합 결과", example="[1:[{2:5.0}, {3:4.5}], 4:[5:2.2,6:4.2], 7:[8:3.0,9:2.0]]")
     ArrayList<EvaluationBase> contentTotal;
 
-    public static EvaluationRes of(List<Evaluation> evaluationList, Long evaluatedId){
+    public static EvaluationRes of(List<Evaluation> evaluationList, String evaluatedId){
         EvaluationRes res = new EvaluationRes();
         res.setEvaluatedId(evaluatedId);
         // 평균 계산을 위한 항목(id)별 평가 수를 기억하기 위한 자료구조.
