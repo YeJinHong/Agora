@@ -17,11 +17,11 @@ import java.util.Map;
 @ApiModel("EvaluationRegisterPostRequest")
 public class EvaluationRegisterPostReq {
     @ApiModelProperty(name="토론 ID", example="1")
+    @JsonProperty("debate_id")
     Long debateId;
-    @ApiModelProperty(name="평가자 ID", example="130")
-    Long evaluatorId;
-    @ApiModelProperty(name="피평가자 ID", example="90")
-    Long evaluatedId;
+    @ApiModelProperty(name="피평가자 ID", example="ssafy@naver.com")
+    @JsonProperty("evaluated_id")
+    String evaluatedId;
     @ApiModelProperty(name="평가 내용", example="")
     ArrayList<EvaluationBase> content;
 }

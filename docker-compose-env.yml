@@ -43,6 +43,8 @@ services:
     image: instrumentisto/coturn
     container_name: agora-coturn
     network_mode: "host"
+    ports:
+      - 33478:3478
     command:
       --user kurento:ssafy
 
@@ -50,7 +52,7 @@ services:
     image: kurento/kurento-media-server
     container_name: agora-kurento
     ports:
-      - 8888:8888
-      - 5000-5050:5000-5050/udp
+      - 38888:8888
+      - 35000-35050:35000-35050/udp
     environment:
-      KMS_TURN_URL: kurento:ssafy@172.26.13.226:3478?trasport=udp
+      KMS_TURN_URL: kurento:ssafy@172.26.13.229:33478?transport=udp
