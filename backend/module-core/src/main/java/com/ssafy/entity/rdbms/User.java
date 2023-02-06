@@ -2,7 +2,9 @@ package com.ssafy.entity.rdbms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,9 +17,6 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 public class User extends BaseEntity {
 
     @Column(unique = true,

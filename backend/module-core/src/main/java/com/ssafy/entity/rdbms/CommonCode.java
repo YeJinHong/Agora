@@ -11,7 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @ToString
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode
 public class CommonCode extends BaseEntity{
 
     @Column
