@@ -28,7 +28,7 @@ public class FaqServiceImpl implements FaqService{
     @Override
     public FaqPostRes selectFaqById(String faqId) {
         Faq faq = faqRepository.findById(Long.getLong(faqId)).orElseThrow(NoSuchElementException::new);
-        return faq.toFaqPostRes();
+        return null;
     }
 
     @Override

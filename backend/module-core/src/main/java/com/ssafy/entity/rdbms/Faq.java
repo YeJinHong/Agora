@@ -1,6 +1,5 @@
 package com.ssafy.entity.rdbms;
 
-import com.ssafy.api.response.FaqPostRes;
 import lombok.*;
 
 import javax.persistence.*;
@@ -39,15 +38,5 @@ public class Faq extends BaseEntity{
     private void updateFaqComment(String comment){
         this.comment = comment;
     }
-    public FaqPostRes toFaqPostRes(){
-        return FaqPostRes.builder()
-                .id(this.getId())
-                .title(this.title)
-                .content(this.content)
-                .userId(this.user.getUserEmail())
-                .comment(this.comment)
-                .registTime(this.registTime)
-                .updateTime(this.updateTime)
-                .build();
-    }
+
 }
