@@ -10,10 +10,14 @@ import java.util.Date;
 @Getter
 @Builder
 public class FaqPostReq {
-    private String id;
+    private Long id;
 
     private String userId;
     private String title;
     private String content;
+
+    private Date registTime;
+
+    private Date updateTime;
 
 }

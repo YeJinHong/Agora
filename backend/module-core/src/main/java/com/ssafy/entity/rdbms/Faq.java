@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Faq extends BaseEntity{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -31,11 +31,12 @@ public class Faq extends BaseEntity{
     @Column
     private LocalDateTime updateTime;
 
-    private void updateFaqPost(String title, String content){
+
+    public void updateFaqPost(String title, String content){
         this.title = title;
         this.content = content;
     }
-    private void updateFaqComment(String comment){
+    public void updateFaqComment(String comment){
         this.comment = comment;
     }
 
