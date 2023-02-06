@@ -30,10 +30,13 @@ public class EvaluationController {
 
     @PostMapping()
     @ApiOperation(value = "토론 상호 평가 생성")
-    public ResponseEntity<? extends BaseResponseBody> register(
+    public ResponseEntity<? extends BaseResponseBody> register(@ApiIgnore Authentication authentication,
             @RequestBody @ApiParam(value="상호 평가 정보", required = true) EvaluationRegisterPostReq evaluationRegisterPostReq) {
 
-        Evaluation evaluation = evaluationService.createEvaluation(evaluationRegisterPostReq);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        Evaluation evaluation = evaluationService.createEvaluation(evaluationRegisterPostReq, userId);
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
@@ -46,18 +49,17 @@ public class EvaluationController {
         return ResponseEntity.status(204).body(BaseResponseBody.of(204, "Success"));
     }
 
-    @GetMapping("/users/{:userId}")
+    @GetMapping("")
     @ApiOperation(value="토론 상호 평가 조회", notes="")
-    public ResponseEntity<EvaluationRes> getEvaluations(@ApiIgnore Authentication authentication,
-                                                        @PathVariable String userId)
-    {
-        CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
-        if (!userId.equals(userDetails.getUsername())) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> getEvaluations(@ApiIgnore Authentication authentication) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
 
         List<Evaluation> evaluationList = evaluationService.getEvaluationList(userId);
+        if(evaluationList.isEmpty())
+            return ResponseEntity.status(204).body(BaseResponseBody.of(204, "Success"));
 
-        return ResponseEntity.status(200).body(EvaluationRes.of(evaluationList));
+        return ResponseEntity.status(200).body(EvaluationRes.of(evaluationList, userId));
     }
 }

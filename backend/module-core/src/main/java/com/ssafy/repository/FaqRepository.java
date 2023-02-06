@@ -11,5 +11,5 @@ import java.util.List;
 @Repository
 public interface FaqRepository extends JpaRepository<Faq, Long> {
 
-    List<Faq> findAllByCategory(String category,Pageable pageable);
+    Page<Faq> findAllByCategory(String category,Pageable pageable);
 }

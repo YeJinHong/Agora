@@ -5,6 +5,5 @@ import lombok.Getter;
 @Getter
 public class FaqCommentReq {
 
-    private Long id;
     private String comment;
 }

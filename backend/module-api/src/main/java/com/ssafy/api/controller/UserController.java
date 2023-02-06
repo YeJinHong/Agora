@@ -181,18 +181,20 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<BaseResponseBody> checkEmail(@RequestBody UserEmailReq userEmailReq) {
+public ResponseEntity<BaseResponseBody> checkEmail(@RequestBody UserEmailReq userEmailReq) {
 
-		if(userEmailReq.getUserEmail() != null){
-			try{
-				MailDto mailDto = mailService.makeLinkMail(userEmailReq);
-				mailService.sendMail(mailDto);
-			}catch (Exception e){
-				return ResponseEntity.status(404).body(BaseResponseBody.of(401,"메일전송에 실패"));
-			}
-			return ResponseEntity.status(204).body(BaseResponseBody.of(204,"메일전송에 성공하셨습니다."));
+		if(userEmailReq.getUserEmail() == null){
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401,"잘못된 요청입니다."));
 		}
-		return ResponseEntity.status(404).body(BaseResponseBody.of(401,"메일전송에 실패"));
+		try{
+			MailDto mailDto = mailService.makeLinkMail(userEmailReq);
+			mailService.sendMail(mailDto);
+		}catch (NoSuchElementException e){
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401,"해당 메일을 가진 사용자가 존재하지 않습니다."));
+		}catch (Exception e){
+			return ResponseEntity.status(404).body(BaseResponseBody.of(404,"메일전송에 실패"));
+		}
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200,"메일전송에 성공하셨습니다."));
 	}
 
 	@DeleteMapping("/{userId}")
