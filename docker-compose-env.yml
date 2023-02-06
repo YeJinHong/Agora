@@ -30,7 +30,7 @@ services:
     image: mysql
     container_name: agora-mysql
     ports:
-      -"3306:3306"
+      - 3306:3306
     environment:
       LC_ALL: C.UTF-8
       MYSQL_ROOT_PASSWORD: ssafy
@@ -51,6 +51,6 @@ services:
     container_name: agora-kurento
     ports:
       - 8888:8888
-      - 5000-5000:5000-5050/udp
+      - 5000-5050:5000-5050/udp
     environment:
       KMS_TURN_URL: kurento:ssafy@172.26.13.226:3478?trasport=udp
