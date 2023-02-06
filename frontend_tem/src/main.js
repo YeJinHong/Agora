@@ -92,6 +92,8 @@ import BlogMasonry from './views/pages/blog/blog-masonry.vue'
 import BlogMasonryBreadcrumb from './components/breadcrumb/blogmasonry.vue'
 import BlogModern from './views/pages/blog/blog-modern.vue'
 import BlogModernBreadcrumb from './components/breadcrumb/blogmodern.vue'
+import BlogTemp from './views/pages/blog/blog-temp.vue'
+import BlogTempModal from './views/pages/blog/blog-temp-modal.vue'
 
 /*********Student**********/
 import CourseMessage from './views/pages/student/course-message.vue'
@@ -285,6 +287,9 @@ app.component('blog-masonry', BlogMasonry);
 app.component('blogmasonry', BlogMasonryBreadcrumb);
 app.component('blog-modern', BlogModern);
 app.component('blogmodern', BlogModernBreadcrumb);
+app.component('blogtemp', BlogTemp);
+app.component('blogtempmodal', BlogTempModal)
+
 /*********Student**********/
 app.component('course-message', CourseMessage);
 app.component('course-student', CourseStudent);
