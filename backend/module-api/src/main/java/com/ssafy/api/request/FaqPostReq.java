@@ -11,9 +11,10 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class FaqPostReq {
-    private String userEmail;
     private String category;
     private String content;
+
+    private String comment;
 
 
 }

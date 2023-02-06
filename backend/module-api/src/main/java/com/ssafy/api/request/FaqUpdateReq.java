@@ -8,4 +8,6 @@ import lombok.Setter;
 public class FaqUpdateReq {
 
     private String content;
+
+    private String comment;
 }
