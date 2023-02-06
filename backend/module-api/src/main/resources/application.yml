@@ -6,14 +6,14 @@ spring:
       static-locations: classpath:/dist/
       add-mappings: 'false'
   redis:
-    port: 6379
+    port: 36379
     host: i8c205.p.ssafy.io
   jpa:
     hibernate:
       naming:
         implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
         physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
@@ -24,7 +24,7 @@ spring:
     hikari:
       password: ssafy
       username: root
-    url: jdbc:mysql://i8c205.p.ssafy.io:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: jdbc:mysql://i8c205.p.ssafy.io:33306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
   mail:
     host: smtp.gmail.com
     port: 587

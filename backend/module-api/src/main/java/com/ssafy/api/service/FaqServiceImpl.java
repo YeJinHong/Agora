@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.FaqCommentReq;
 import com.ssafy.api.request.FaqPostReq;
+import com.ssafy.api.request.FaqUpdateReq;
 import com.ssafy.api.response.FaqListRes;
 import com.ssafy.api.response.FaqPostRes;
 import com.ssafy.entity.rdbms.Faq;
@@ -9,6 +10,7 @@ import com.ssafy.entity.rdbms.User;
 import com.ssafy.repository.FaqRepository;
 import com.ssafy.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
@@ -30,19 +32,17 @@ public class FaqServiceImpl implements FaqService{
 
 
     @Override
-    public List<FaqListRes> selectAllFaq(Pageable pageable,String category) {
-        List<Faq> faqList = faqRepository.findAllByCategory(category,pageable);
-        List<FaqListRes> faqListResList = new ArrayList<>();
-        for(int i = 0; i<faqList.size(); i++) {
-            faqListResList.add(new FaqListRes().of(faqList.get(i)));
-        }
-        return faqListResList;
+    public Page<FaqListRes> selectAllFaq(Pageable pageable,String category) {
+        Page<Faq> faqList = faqRepository.findAllByCategory(category,pageable);
+        Page<FaqListRes> faqListRes = new FaqListRes().toDtoList(faqList);
+        return faqListRes;
     }
 
     @Override
     public FaqPostRes selectFaqById(Long faqId) {
         Faq faq = faqRepository.findById(faqId).orElseThrow(NoSuchElementException::new);
         return FaqPostRes.builder()
+                .id(faq.getId())
                 .userId(faq.getUser().getUserEmail())
                 .category(faq.getCategory())
                 .content(faq.getContent())
@@ -55,7 +55,7 @@ public class FaqServiceImpl implements FaqService{
     @Override
     public void createFaq(FaqPostReq faqPostReq) {
 
-        User user = userRepository.findByUserEmail(faqPostReq.getUserId()).orElseThrow(NoSuchElementException::new);
+        User user = userRepository.findByUserEmail(faqPostReq.getUserEmail()).orElseThrow(NoSuchElementException::new);
 
         Faq faq = Faq.builder()
                 .category(faqPostReq.getCategory())
@@ -69,16 +69,16 @@ public class FaqServiceImpl implements FaqService{
     }
 
     @Override
-    public void updateFaqPost(FaqPostReq faqPostReq) {
-        Faq faq = faqRepository.findById(faqPostReq.getId()).orElseThrow(NoSuchElementException::new);
-        faq.updateFaqPost(faqPostReq.getContent());
+    public void updateFaqPost(FaqUpdateReq faqUpdateReq, Long id) {
+        Faq faq = faqRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        faq.updateFaqPost(faqUpdateReq.getContent());
         faqRepository.save(faq);
 
     }
 
     @Override
-    public void updateComment(FaqCommentReq faqCommentReq) {
-        Faq faq = faqRepository.findById(faqCommentReq.getId()).orElseThrow(NoSuchElementException::new);
+    public void updateComment(FaqCommentReq faqCommentReq, Long id) {
+        Faq faq = faqRepository.findById(id).orElseThrow(NoSuchElementException::new);
 
         faq.updateFaqComment(faqCommentReq.getComment());
 

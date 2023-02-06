@@ -1,8 +1,6 @@
 package com.ssafy.api.response;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
@@ -11,6 +9,8 @@ import java.util.Date;
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class FaqPostRes {
 
     private Long id;
