@@ -1,6 +1,6 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.DebateSearchAllGetReq;
+import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Debate;
 import com.ssafy.entity.rdbms.Perspective;
@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -53,9 +54,20 @@ public class DebateServiceImpl implements DebateService {
         return savedDebate;
     }
     @Override
-    public Page<Debate> searchAll(DebateSearchAllGetReq debateReq, Pageable pageable) {
-//        return debateRepositoryCustom.findDebateBySearchCondition(debateReq.getKeyword(), debateReq.getCondition(), pageable);
-        return null;
+    public Page<Debate> searchAll(String keyword, String condition, Pageable pageable) {
+        return debateRepository.findDebateBySearchCondition(keyword, condition, pageable);
+    }
+
+    @Override
+    public Debate search(long debateId) {
+        return debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public void updateDebateState(long debateId, DebateModifyStatePatchReq debateModifyStateReq) {
+        Debate debate = debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+        debate.setState(debateModifyStateReq.getState());
+        debateRepository.save(debate);
     }
 
     private Debate makeDebate(DebateRegisterPostReq debateRegisterPostReq, User owner) {
