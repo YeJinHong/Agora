@@ -1,14 +1,18 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.request.UserModifyPatchReq;
+import com.ssafy.api.request.*;
+import com.ssafy.api.service.FileService;
+import com.ssafy.api.service.MailService;
+import com.ssafy.api.service.UserFileManagerService;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.entity.rdbms.FileManager;
 import com.ssafy.entity.rdbms.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.CustomUserDetails;
@@ -18,7 +22,11 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
+
+import java.io.IOException;
+import java.util.NoSuchElementException;
 
 /**
  * 유저 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -31,6 +39,10 @@ public class UserController {
 	
 
 	private final UserService userService;
+	private final UserFileManagerService userFileManagerService;
+
+	private final MailService mailService;
+	private final FileService fileService;
 	
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.") 
@@ -44,8 +56,12 @@ public class UserController {
 			@RequestBody @ApiParam(value="회원가입 정보", required = true) UserRegisterPostReq registerInfo) {
 		
 		//임의로 리턴된 User 인스턴스. 현재 코드는 회원 가입 성공 여부만 판단하기 때문에 굳이 Insert 된 유저 정보를 응답하지 않음.
-		User user = userService.createUser(registerInfo);
 
+		try {
+			User user = userService.createUser(registerInfo);
+		}catch (Exception e) {
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"회원가입에 실패하셨습니다."));
+		}
 		return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
 	}
 	
@@ -85,7 +101,7 @@ public class UserController {
 		return ResponseEntity.ok().build();
 	}
 
-	@PatchMapping("/{userEmail}")
+	@PatchMapping("/info")
 	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인한 회원 본인의 정보를 수정한다.")
 	@ApiResponses({
 			@ApiResponse(code = 200, message = "성공"),
@@ -93,18 +109,90 @@ public class UserController {
 			@ApiResponse(code = 404, message = "사용자 없음"),
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
-	public ResponseEntity<?> modifyUserInfo(@ApiIgnore Authentication authentication,
-			@PathVariable String userEmail,
-			@RequestBody UserModifyPatchReq req) {
+	public ResponseEntity<?> modifyUserInfo(@ApiIgnore Authentication authentication, @RequestBody UserModifyPatchReq req) {
 
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		if (!userEmail.equals(userDetails.getUsername())) {
-			return ResponseEntity.badRequest().build();
+		if (!req.getUserEmail().equals(userDetails.getUsername())) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409,"인증에 실패하셨습니다."));
+		}
+		try {
+			userService.updateUser(userDetails.getUsername(), req);
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(404).body(BaseResponseBody.of(404,"사용자가 존재하지 않습니다."));
+		}catch (Exception e){
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"서버에 문제가 발생했습니다."));
+		}
+		return ResponseEntity.status(409).body(BaseResponseBody.of(200,"Success"));
+	}
+
+	@PatchMapping("/profile")
+	@ApiOperation(value = "회원 본인 프로필 수정", notes = "로그인한 회원 본인의 프로필 이미지를 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<?> modifyUserProfile(@ApiIgnore Authentication authentication, MultipartFile file) {
+
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		try {
+			Long fileManagerId = userFileManagerService.getFileManager(userDetails.getUsername());
+			fileService.saveFile(file, fileManagerId);
+		} catch (NoSuchElementException e) {
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401,"인증에 실패하셨습니다."));
+		}catch (IOException e){
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"파일 저장에 실패하셨습니다."));
+		}
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200,"파일 저장에 성공하셨습니다."));
+	}
+
+	@PatchMapping("/password")
+	@ApiOperation(value = "회원 비밀번호 수정", notes = "로그인한 회원의 비밀번호 정보를 수정한다.")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<?> modifyUserPassword(@ApiIgnore Authentication authentication,
+											@RequestBody UserModifyPasswordReq req) {
+
+		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+		try{
+			userService.modifyUserPassword(userDetails.getUsername(), req);
+		}catch (IllegalArgumentException e) {
+			return ResponseEntity.status(409).body(BaseResponseBody.of(409,"비밀번호 인증에 실패하셨습니다."));
+		}catch (NoSuchElementException e){
+			return ResponseEntity.status(404).body(BaseResponseBody.of(404,"사용자가 존재하지 않습니다."));
+		}catch (Exception e) {
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"서버에 문제가 발생했습니다."));
 		}
 
-		userService.updateUser(userEmail, req);
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200,"비밀번호 변경에 성공하셨습니다."));
+	}
 
-		return ResponseEntity.status(409).body(BaseResponseBody.of(200,"Success"));
+
+	@PostMapping("/email")
+	@ApiOperation(value = "이메일 인증", notes = "이메일 인증")
+	@ApiResponses({
+			@ApiResponse(code = 200, message = "성공"),
+			@ApiResponse(code = 401, message = "인증 실패"),
+			@ApiResponse(code = 404, message = "사용자 없음"),
+			@ApiResponse(code = 500, message = "서버 오류")
+	})
+	public ResponseEntity<BaseResponseBody> checkEmail(@RequestBody UserEmailReq userEmailReq) {
+
+		if(userEmailReq.getUserEmail() != null){
+			try{
+				MailDto mailDto = mailService.makeLinkMail(userEmailReq);
+				mailService.sendMail(mailDto);
+			}catch (Exception e){
+				return ResponseEntity.status(404).body(BaseResponseBody.of(401,"메일전송에 실패"));
+			}
+			return ResponseEntity.status(204).body(BaseResponseBody.of(204,"메일전송에 성공하셨습니다."));
+		}
+		return ResponseEntity.status(404).body(BaseResponseBody.of(401,"메일전송에 실패"));
 	}
 
 	@DeleteMapping("/{userId}")
@@ -116,7 +204,7 @@ public class UserController {
 			@ApiResponse(code = 500, message = "서버 오류")
 	})
 	public ResponseEntity<BaseResponseBody> deleteUser(@ApiIgnore Authentication authentication,
-			@PathVariable String userId) {
+													   @PathVariable String userId) {
 
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		if (!userId.equals(userDetails.getUsername())) {
@@ -126,6 +214,8 @@ public class UserController {
 		userService.deleteUser(userId);
 		return ResponseEntity.status(204).body(BaseResponseBody.of(204,"Success"));
 	}
+
+
 
 
 }

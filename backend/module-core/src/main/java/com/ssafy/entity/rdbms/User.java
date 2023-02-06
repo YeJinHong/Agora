@@ -2,9 +2,7 @@ package com.ssafy.entity.rdbms;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -17,9 +15,13 @@ import java.util.List;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User extends BaseEntity {
 
-    @Column(unique = true)
+    @Column(unique = true,
+            name = "user_email")
     private String userEmail;
 
     @ToString.Exclude
@@ -27,7 +29,7 @@ public class User extends BaseEntity {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Column(name = "userName")
+    @Column(name = "username")
     private String name;
 
     @Column
@@ -54,4 +56,14 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserDebate> userDebates = new ArrayList<>();
+
+    @OneToOne
+    @JoinColumn(name = "file_manager_id")
+    private FileManager fileManager;
+
+
+    public void createFileManager(FileManager fileManager){
+        this.fileManager = fileManager;
+
+    }
 }
