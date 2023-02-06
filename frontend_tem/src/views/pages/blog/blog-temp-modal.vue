@@ -128,13 +128,8 @@ export default {
             };
 
             let formData = new FormData($("#evaluation_modal_form")[0]);
-            // console.log(formData.getAll('parent_id'));
-            // console.log(formData.getAll('debate_id'));
             console.log(formData.getAll('evaluated_id'));
             console.log(this.evaluated_id);
-            // console.log(formData.get('evaluated_id'));
-            // console.log(formData.getAll('id'));
-            // console.log(formData.getAll('point'));
 
             // formData 보내는 방법(그대로, serialize, stringify 등)이 안통함. 기존의 객체 양식과 전송시 형태가 다름. 아래는 임시 방편.
             form.debate_id = this.debate_info.debate_id;
@@ -160,7 +155,7 @@ export default {
 
             const api = apiInstance();
 
-            api.defaults.headers["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzc2FmeUBuYXZlci5jb20iLCJpc3MiOiJSZXNldENvbnRlbnQiLCJleHAiOjE2NzU2MjYwODMsImlhdCI6MTY3NTYyNDI4M30.TY8PKS99W_9Qw6QUKiUmVEFRTsJGffK5ZhhhhgWTGA5fDO0EfH2JAZ2ONNV2uzvSS1a8UZBkq5MSWWnXzOQ9kQ";
+            api.defaults.headers["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzc2FmeUBuYXZlci5jb20iLCJpc3MiOiJSZXNldENvbnRlbnQiLCJleHAiOjE2NzU2NjY5MDYsImlhdCI6MTY3NTY2NTEwNn0.VHxt1andLAnGlmnNMa7Y-SKzCZazDMa_yxYmgLoGGhTrFJsNFhmcGHJzcJIkG3i_VdGna9wBWZLq1XfOBlReKQ";
             await api.post(`/evaluations`, form)
             .then((response) => {
                 console.log(response);
