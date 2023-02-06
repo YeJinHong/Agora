@@ -15,25 +15,11 @@
                                 
                                     <!-- Deposit Method -->
                                     <div class="radio-with-img">
-                                        <p class="radio-deposit-item">
-                                            <input type="radio" name="evaluated_id" id="deposit-type-one" :value="this.debate_info.pannel[0].memberList[0].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id">
+                                        <p class="radio-deposit-item" v-for="member in debate_info.pannel[0].memberList" :key="index">
+                                            <input type="radio" name="evaluated_id" id="deposit-type-one" :value="member.user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id">
                                             <label for="deposit-type-one">
-                                              <img src="../../../assets/img/deposit-01.jpg" alt="" class="img-fluid" >
-                                              {{ this.debate_info.pannel[0].memberList[0].user_name }}
-                                            </label>
-                                        </p>
-                                        <p class="radio-deposit-item">
-                                            <input type="radio" name="evaluated_id" id="deposit-type-two" :value="this.debate_info.pannel[0].memberList[1].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id">
-                                            <label for="deposit-type-two">
-                                              <img src="../../../assets/img/deposit-02.jpg" alt="" class="img-fluid" >
-                                              {{ this.debate_info.pannel[0].memberList[1].user_name }}
-                                            </label>
-                                        </p>
-                                        <p class="radio-deposit-item">
-                                            <input type="radio" name="evaluated_id" id="deposit-type-three" :value="this.debate_info.pannel[0].memberList[2].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id" >
-                                            <label for="deposit-type-three">
-                                              <img src="../../../assets/img/deposit-03.jpg" alt="" class="img-fluid" >
-                                              {{ this.debate_info.pannel[0].memberList[2].user_name }}
+                                              <img src="../../../assets/img/profile-01.jpg" alt="" class="img-fluid" >
+                                              {{ member.user_name }}
                                             </label>
                                         </p>
                                     </div>
