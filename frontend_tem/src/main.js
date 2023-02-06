@@ -208,6 +208,8 @@ import'./assets/plugins/aos/aos.js';
 
 import './assets/css/style.css';
 
+/********* async/await를 위한 babel runtime 설정**********/
+import 'regenerator-runtime/runtime'
 
 
 const app = createApp(App)

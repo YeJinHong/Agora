@@ -26,7 +26,7 @@
                 <option value="5">5</option>
             </select>
         </div>
-        <button @click="evaluated_selected = false">평가 제출</button>
+        <button @click="register">평가 제출</button>
     </div>
 
     <!-- Main Wrapper -->
@@ -69,7 +69,14 @@
                                 </div>
                                 <br/>
                                 <div class="all-btn all-category d-flex align-items-center">
-                                    <div class="btn btn-primary" @click="alert('살려주세요')"> Open Evaluation Modal Button </div>
+                                    <div class="btn btn-primary" @click="this.getEval"> Get My Evaluations Button </div>
+                                </div>
+                                <div class="all-btn all-category d-flex align-items-center" >
+                                    <div class="btn btn-primary" @click="this.sendVote"> Send Vote Button </div>
+                                </div>
+                                <br/>
+                                <div class="all-btn all-category d-flex align-items-center">
+                                    <div class="btn btn-primary" @click="this.getVoteResult(`${this.debate_id}`)"> Get Debate Vote Result Button </div>
                                 </div>
                             </div>
                         </div>
@@ -77,7 +84,7 @@
                         
                     </div>
                     
-                    <blogsidebar></blogsidebar>
+                    <!-- <blogsidebar></blogsidebar> -->
                     
                 </div>
             </div>
@@ -92,7 +99,33 @@
 
 
 <script>
+import { computed } from "vue";
+import { useStore } from "vuex";
+
+
 export default {
+    setup(){
+        const debate_id = 2;
+        const store = useStore();
+        const registerEvaluation = (evaluation) => store.dispatch("registerEval", evaluation);
+        const getEvaluations = () => store.dispatch("getEval")
+        const data2 = {
+                debate_id : "2",
+                evaluated_id : "kim@naver.com",
+                content : [
+                    {parentId : 1, id : 4, point : 1},
+                    {parentId : 1, id : 5, point : 1},
+                    {parentId : 2, id : 6, point : 1},
+                    {parentId : 3, id : 7, point : 1},
+                    {parentId : 3, id : 8, point : 1} 
+                ]
+        };
+        const sendVote = (vote) => store.dispatch("sendVote", vote);
+        const getVote = (debate_id) => store.dispatch("getVote", debate_id);
+
+        const userEvaluations = computed( () => store.state.userEvaluations);
+        return {registerEvaluation, data2, getEvaluations, userEvaluations, sendVote, getVote, debate_id};
+    },
     data() {
         return {
             evaluated_selected : false,
@@ -125,7 +158,35 @@ export default {
         closeEvaluation(){
             this.evaluated_selected = false;
             this.evaluation_open = false;
+        },
+        async register(){
+            this.alert('register');
+            console.log('상호평가 데이터 생성 메소드 실행');
+            this.evaluated_selected = false;
+            await this.registerEvaluation(this.data2);
+        },
+        async getEval(){
+            await this.getEvaluations()
+            .then((response) => {
+                console.log(response);
+                console.log(response.status);
+            })
+            .catch((error) => {
+                console.log(error);
+                console.log(error.status);
+            });
+            this.alert(this.userEvaluations);
+        },
+        async getVoteResult(debate_id){
+            await this.getVote(debate_id)
+            .then((response) => {
+                console.log(response);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         }
+
     }
 }
 </script>
