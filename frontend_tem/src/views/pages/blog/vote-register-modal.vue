@@ -5,53 +5,59 @@
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="addpaymentMethod">{{ this.debate_info.debate_title }} 투표 상호평가</h5>
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-regular fa-circle-xmark"></i></button>
-                </div>
-                <div class="modal-body">
-                    <div class="addpaymethod-form add-course-info">
-                        <form action="#">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                
-                                    <!-- Deposit Method -->
-                                    <div class="radio-with-img">
-                                        <h4> 찬성하는 의견을 클릭해주세요 </h4>
-                                        <p class="radio-deposit-item me-0" v-for="(pannel, index) in debate_info.pannel" :key="index">
-                                            <input type="radio" name="perspective_id" :id="'perspective-id-'+index" :value="pannel.perspective_id" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="perspective_id">
-                                            <label :for="'perspective-id-'+index">
-                                              <img src="../../../assets/img/deposit-04.jpg" alt="" class="img-fluid" >
-                                              {{pannel.prespective_name}}
-                                            </label>
-                                        </p>
-                                    </div>
-                                    <!-- /Deposit Method -->
-                                    
-                                </div>
-                                <div class="col-lg-12">
-
-                                    <div class="radio-with-img">
-                                        <h4> 이 토론의 MVP를 선택해주세요. </h4>
-                                        <p class="radio-deposit-item me-0" v-for="(pannel, p_index) in debate_info.pannel" :key="p_index">
-                                            <p v-for="(member, m_index) in pannel.memberList" :key="m_index">
-                                                <input type="radio" name="mvp_id" :id="'p'+p_index+'_mvp-index-'+m_index" :value="member.user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="mvp_id">
-                                                <label :for="'p'+p_index+'_mvp-index-'+m_index">
-                                                <img src="../../../assets/img/deposit-03.jpg" alt="" class="img-fluid" >
-                                                {{member.user_name}}
-                                                </label>
-                                            </p>
-                                        </p>
-                                    </div>
-                                    <!-- /Deposit Method -->
-
-                                </div>
-                            </div>
-                        </form>
+                <!-- <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i class="fa-regular fa-circle-xmark"></i></button>     -->
+            </div>
+                <div class="modal-body-wrapper text-center" v-if="isVoteSubmitted">
+                    <h4 class="p-5"> 청중 투표를 종료합니다. </h4>
+                    <div class="modal-footer me-auto text-center">
+                        <button type="button" class="btn btn-modal-style btn-cancel" data-bs-dismiss="modal">Cancel</button>
                     </div>
                 </div>
-                <div class="modal-footer me-auto">
-                    <button type="button" class="btn btn-modal-style btn-theme" @click ="registerVote()" >Submit</button>
-                    <button type="button" class="btn btn-modal-style btn-cancel" data-bs-dismiss="modal">Cancel</button>
-                </div>
+                <div class="modal-body-wrapper" v-else>
+                    <div class="modal-body">
+                        <div class="addpaymethod-form add-course-info">
+                            <form action="#">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                    
+                                        <!-- Deposit Method -->
+                                        <div class="radio-with-img">
+                                            <h4 class="modal-title"> 찬성하는 의견을 선택해주세요 </h4>
+                                            <div class="radio-deposit-item " v-for="(pannel, index) in debate_info.pannel" :key="index">
+                                                <input type="radio" name="perspective_id" :id="'perspective-id-'+index" :value="pannel.perspective_id" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="perspective_id">
+                                                <label :for="'perspective-id-'+index">
+                                                {{pannel.prespective_name}}
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <!-- /Deposit Method -->
+                                        
+                                    </div>
+                                    <div class="form-group mb-0">
+
+                                        <div class=" radio-with-img">
+                                            <h4 class="modal-title"> 이 토론의 MVP를 선택해주세요. </h4>
+                                            <div class="radio-deposit-item" v-for="(pannel, p_index) in debate_info.pannel" :key="p_index">
+                                                <div v-for="(member, m_index) in pannel.memberList" :key="m_index">
+                                                    <input type="radio" name="mvp_id" :id="'p'+p_index+'_mvp-index-'+m_index" :value="member.user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="mvp_id">
+                                                    <label :for="'p'+p_index+'_mvp-index-'+m_index">
+                                                    <img src="../../../assets/img/deposit-03.jpg" alt="" class="img-fluid" >
+                                                    {{member.user_name}}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- /Deposit Method -->
+
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="modal-footer me-auto  text-center">
+                        <button type="button" class="btn btn-modal-style btn-theme" @click ="registerVote()" >Submit</button>
+                    </div>
+            </div>
             </div>
         </div>
     </div>	   
@@ -97,12 +103,25 @@ export default {
         return {
             mvp_id : '',
             perspective_id : '',
+            isVoteSubmitted : false,
         }
     },
     methods: {
         async registerVote() {
             const api = apiInstance();
-            api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+            // api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+            api.defaults.headers["Authorization"] = "Bearer " +"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsaXN0ZW5AbmF2ZXIuY29tIiwiaXNzIjoiUmVzZXRDb250ZW50IiwiZXhwIjoxNjc1NzU2MjgzLCJpYXQiOjE2NzU3NTQ0ODN9.XELlqiUxtZ4kmoz12VStgr02waDPZOB2Hv3c5pgj6XxLQscwAQenyq61EyixPtkJnHebMYQVL0Md28OtTeywEw"
+            
+            if(this.perspective_id == ''){ 
+                alert('찬성 의견을 선택해주세요')
+                return;
+            }
+            if(this.mvp_id == '') {
+                alert("mvp를 선택해주세요")
+                return;    
+            }
+            
+            
             await api.post(`/vote`, {
                 debate_id : this.debate_info.debate_id,
                 mvp_id : this.mvp_id,
@@ -111,11 +130,14 @@ export default {
             .then((response) => {
                 console.log(response);
                 alert("청중 투표 완료");
+                this.isVoteSubmitted = true;
                 // TODO : 투표 완료 후 창 닫기
                 // $('#voteRegisterMethod').modal("hide"); //닫기 
             })
             .catch((error)=>{
                 console.log(error);
+                // 사용자를 선택하지 않거나, 없는 사용자를 선택하거나 등.
+                alert("입력값을 확인해주세요")
             });
 
         }
