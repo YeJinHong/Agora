@@ -1,15 +1,15 @@
 <template>
     <!-- Main Wrapper -->
     <div class="main-wrapper">
-        
-        <layoutsinstructor></layoutsinstructor>
+
+      <layouts></layouts>
        
             <!-- Page Wrapper -->
 			<div class="page-content">
 				<div class="container">
 					<div class="row">
-						
-						<instructorsidebar></instructorsidebar>
+
+            <studentsidebar></studentsidebar>
 						
 						<!-- Instructor Dashboard -->
 						<div class="col-xl-9 col-lg-8 col-md-12">	
@@ -18,8 +18,8 @@
 									<div class="settings-widget">
 										<div class="settings-inner-blk p-0">
 											<div class="sell-course-head comman-space">
-												<h3>Courses</h3>
-												<p>Manage your courses and its update like live, draft and insight.</p>
+												<h3>나의 토론 목록</h3>
+												<p>나의 지난 토론 목록들을 확인해보세요</p>
 											</div>
 											<div class="comman-space pb-0">
 												<div class="instruct-search-blk">
@@ -36,7 +36,7 @@
 																	<div class="form-group select-form mb-0">
                                                                         <vue-select :options="Choose" placeholder="Choose" name="sellist1" />
 																	</div>
-																</div>						
+																</div>
 															</div>
 														</form>
 													</div>
@@ -47,9 +47,9 @@
 													<table class="table table-nowrap mb-2">
 														<thead>
 														  <tr>
-															<th>COURSES</th>
+															<th>토론 제목</th>
 															<th>STUDENTS</th>
-															<th>STATUS</th>
+															<th>상태</th>
 														  </tr>
 														</thead>
 														<tbody>
@@ -57,9 +57,9 @@
 																<td>
 																	<div class="sell-table-group d-flex align-items-center">
 																		<div class="sell-group-img">
-																			<router-link to="course-details">
+<!--																			<router-link to="course-details">-->
 																				<img src="../../../assets/img/course/course-10.jpg" class="img-fluid " alt="">
-                                                                            </router-link>
+<!--                                                                            </router-link>-->
 																		</div>
 																		<div class="sell-tabel-info">
 																			<p><router-link to="course-details">Information About UI/UX Design Degree</router-link></p>

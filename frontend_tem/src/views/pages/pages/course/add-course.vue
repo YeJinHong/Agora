@@ -10,14 +10,14 @@
             <div class="row align-items-center">
                 <div class="col-md-12">
                     <div class="add-course-header">
-                        <h2>Add New Course</h2>
+                        <h2>토론 생성하기</h2>
                         <div class="add-course-btns">
                             <ul class="nav">
                                 <li>
                                     <router-link to="dashboard-instructor" class="btn btn-black">Back to Course</router-link>
                                 </li>
                                 <li>
-                                    <a href="javascript:void(0);" class="btn btn-success-dark">Save</a>
+                                    <a href="javascript:void(0);" class="btn btn-success-dark">저장</a>
                                 </li>
                             </ul>
                         </div>
@@ -33,7 +33,7 @@
                             <div class="widget-setcount">
                                 <ul id="progressbar">
                                     <li class="progress-active">
-                                        <p><span></span> Basic Information</p>											
+                                        <p><span></span> 기본 정보</p>											
                                     </li>
                                     <li>
                                         <p><span></span> Courses Media</p>
@@ -50,16 +50,16 @@
                                 <fieldset id="first">
                                     <div class="add-course-info">
                                         <div class="add-course-inner-header">
-                                            <h4>Basic Information</h4>
+                                            <h4>기본 정보</h4>
                                         </div>
                                         <div class="add-course-form">
                                             <form action="#">
                                                 <div class="form-group">
-                                                    <label class="add-course-label">Course Title</label>
-                                                    <input type="text" class="form-control" placeholder="Course Title">
+                                                    <label class="add-course-label">토론 주제</label>
+                                                    <input type="text" class="form-control" placeholder="토론 주제">
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="add-course-label">Courses Category</label>
+                                                    <label class="add-course-label">토론 카테고리</label>
                                                     <vue-select :options="Category" placeholder="Category 01" />
                                                 </div>
                                                 <div class="form-group">
@@ -67,7 +67,7 @@
                                                     <vue-select :options="Level" placeholder="Level 01" />
                                                 </div>
                                                 <div class="form-group mb-0">
-                                                    <label class="add-course-label">Course Description</label>
+                                                    <label class="add-course-label">세부 설명</label>
                                                     <SummernoteEditor
                                                     v-model="myValue"
                                                     @update:modelValue="summernoteChange($event)"
@@ -118,8 +118,8 @@
                                             </form>
                                         </div>
                                         <div class="widget-btn">
-                                            <a class="btn btn-black prev_btn">Previous</a>
-                                            <a class="btn btn-info-light next_btn">Continue</a>
+                                            <a class="btn btn-black prev_btn">이전</a>
+                                            <a class="btn btn-info-light next_btn">계속</a>
                                         </div>
                                     </div>
                                 </fieldset>
