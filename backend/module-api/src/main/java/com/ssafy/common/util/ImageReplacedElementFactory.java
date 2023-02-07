@@ -1,7 +1,6 @@
 package com.ssafy.common.util;
 
 import com.lowagie.text.Image;
-import org.springframework.core.io.ClassPathResource;
 import org.w3c.dom.Element;
 import org.xhtmlrenderer.extend.ReplacedElement;
 import org.xhtmlrenderer.extend.ReplacedElementFactory;
@@ -14,29 +13,32 @@ import org.xhtmlrenderer.simple.extend.FormSubmissionListener;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class ImageReplacedElementFactory implements ReplacedElementFactory {
 
-    private ReplacedElementFactory replacedElementFactory;
+    private final ReplacedElementFactory replacedElementFactory;
 
-    public ImageReplacedElementFactory(ReplacedElementFactory replacedElementFactory) {
+    private final String path;
+
+    public ImageReplacedElementFactory(ReplacedElementFactory replacedElementFactory, String path) {
         this.replacedElementFactory = replacedElementFactory;
+        this.path = path;
     }
 
     @Override
     public ReplacedElement createReplacedElement(LayoutContext layoutContext, BlockBox blockBox, UserAgentCallback callback, int cssWidth, int cssHeight) {
         Element element = blockBox.getElement();
         String nodeName = element.getNodeName();
-        String srcPath = element.getAttribute("src");
 
-        if (nodeName.equals("img") && srcPath.startsWith("/image")) {
-            ITextFSImage fsImage = null;
+        if (nodeName.equals("img")) {
+            ITextFSImage fsImage;
             try {
+                String imageFileName = element.getAttribute("src").split("/image/")[1];
                 fsImage = new ITextFSImage(
                         Image.getInstance(
                                 Files.readAllBytes(
-                                        Path.of(new ClassPathResource("static%s").getURL().toString())
+                                        Paths.get(path + "/static/image/" + imageFileName)
                                 )
                         )
                 );

@@ -2,7 +2,6 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.service.CertificateService;
 import com.ssafy.common.auth.CustomUserDetails;
-import com.ssafy.entity.rdbms.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -11,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -20,11 +20,12 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/")
 public class CertificateController {
 
     private final CertificateService certificateService;
 
-    @GetMapping("/downloadFile")
+    @GetMapping("/certification")
     public ResponseEntity<Resource> issueCertification(HttpServletRequest request, @ApiIgnore Authentication authentication){
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 

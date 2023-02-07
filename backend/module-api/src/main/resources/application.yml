@@ -62,4 +62,4 @@ spa:
   default-file: /dist/index.html
 file:
   path: /Users/muntaeho/Desktop/SSAFY/pj2/backend/module-api/src/main/resources/static/profile
-  path-certificate: /Users/multicampus/Desktop/ssafy/S08P12C205/backend/module-api/src/main/resources
+  path-certificate: /Users/bellroot/Documents/ssafy/S08P12C205/backend/module-api/src/main/resources
