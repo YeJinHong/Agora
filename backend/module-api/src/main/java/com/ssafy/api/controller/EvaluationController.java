@@ -2,9 +2,11 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.EvaluationRegisterPostReq;
 import com.ssafy.api.response.EvaluationRes;
+import com.ssafy.api.service.CommonCodeService;
 import com.ssafy.api.service.EvaluationService;
 import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.entity.rdbms.CommonCode;
 import com.ssafy.entity.rdbms.Evaluation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,8 @@ import java.util.List;
 public class EvaluationController {
 
     private final EvaluationService evaluationService;
+    
+    private final CommonCodeService commonCodeService;
 
     @PostMapping()
     @ApiOperation(value = "토론 상호 평가 생성")
@@ -61,5 +65,14 @@ public class EvaluationController {
             return ResponseEntity.status(204).body(BaseResponseBody.of(204, "Success"));
 
         return ResponseEntity.status(200).body(EvaluationRes.of(evaluationList, userId));
+    }
+
+
+    // 계층 구조를 유지한채 데이터를 보내는 방식.
+    @GetMapping("/questions")
+    @ApiOperation(value="토론 평가 문항 조회")
+    public ResponseEntity<CommonCode> getEvaluationQuestions(){
+        CommonCode questionList = commonCodeService.getQuestionList();
+        return ResponseEntity.status(200).body(questionList);
     }
 }

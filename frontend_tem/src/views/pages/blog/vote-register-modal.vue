@@ -101,19 +101,13 @@ export default {
     },
     methods: {
         async registerVote() {
-            let form = {
-                debate_id : '',
-                mvp_id : '',
-                perspective_id : '',
-            }
-            form.debate_id = this.debate_info.debate_id;
-            form.mvp_id = this.mvp_id;
-            form.perspective_id = this.perspective_id;
-
-            
             const api = apiInstance();
-            api.defaults.headers["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsaXN0ZW5AbmF2ZXIuY29tIiwiaXNzIjoiUmVzZXRDb250ZW50IiwiZXhwIjoxNjc1NjUyNzA1LCJpYXQiOjE2NzU2NTA5MDV9.S_hQBzlp5jBJN-cgHmbmnqi00_81sPi9DdXjAi0ShDvyIX3-fCJSqcIDTdQuJ_im-NK1OXWF1AUHwq5I6ceFTg";
-            await api.post(`/vote`, form)
+            api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+            await api.post(`/vote`, {
+                debate_id : this.debate_info.debate_id,
+                mvp_id : this.mvp_id,
+                perspective_id : this.perspective_id,
+            })
             .then((response) => {
                 console.log(response);
                 alert("청중 투표 완료");
