@@ -129,6 +129,8 @@ const userStore = {
                 }
             );
         },
+
+
         async userLogout({commit}, userid) {
             await logout(
                 userid,
