@@ -145,20 +145,20 @@ export default {
       }
     })
 
-    const clickLogin = () => {
-      console.log(loginForm.value);
-      store.dispatch("userStore/userConfirm", {
+    const clickLogin = async () => {
+      console.log('1');
+      const userConfirm = await store.dispatch("userStore/userConfirm", {
         user_email: state.form.userEmail,
         password: state.form.password
       })
-      moveHome();
+      console.log('2')
+      const moveHome = await router.push('/');
+      console.log('3')
     }
 
-    const moveHome = () => {
-      router.push('/');
-    }
 
-    return {loginForm, state, clickLogin, moveHome}
+
+    return {loginForm, state, clickLogin}
 
   }
   ,

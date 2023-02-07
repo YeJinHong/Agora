@@ -34,7 +34,7 @@ const userStore = {
         },
     },
     actions: {
-        userConfirm({commit, dispatch}, user) {
+         userConfirm({commit, dispatch}, user) {
             login(user, ({data}) => {
                     if (data.message === "Success") {
                         let accessToken = data["tokenInfo"].authorization;
@@ -47,7 +47,13 @@ const userStore = {
                         sessionStorage.setItem("refresh-token", refreshToken);
                         findById(accessToken.userId, ({data}) => {
                             if (data.message === "Success") {
-                                commit("SET_USER_INFO", data.userInfo);
+                                let userInfo = {
+                                    userEmail : data.userEmail,
+                                    name : data.name,
+                                    department : data.department,
+                                    position : data.position
+                                }
+                                commit("SET_USER_INFO", userInfo);
                                 // console.log("3. getUserInfo data >> ", data);
                             } else {
                                 console.log("유저 정보 없음!!!!");

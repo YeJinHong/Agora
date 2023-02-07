@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Debate;
@@ -17,6 +18,8 @@ public interface DebateService {
 	Page<Debate> searchAll(String keyword, String condition, Pageable pageable);
 
 	Debate search(long debateId);
+
+	void updateDebate(long debateId, DebateModifyPatchReq debateModifyReq);
 
 	void updateDebateState(long debateId, DebateModifyStatePatchReq debateModifyStateReq);
 
