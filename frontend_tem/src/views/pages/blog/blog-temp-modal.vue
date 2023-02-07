@@ -112,7 +112,7 @@ export default {
     },
     methods: {
         async getQuetions(){
-            api.get('/evaluations/questions')
+        api.get('/evaluations/questions')
         .then((response) => {
             if(response.status == 200){
                 console.log(response);
