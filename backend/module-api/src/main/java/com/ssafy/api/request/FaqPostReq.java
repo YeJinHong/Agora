@@ -1,23 +1,20 @@
 package com.ssafy.api.request;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.Date;
 
 @Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class FaqPostReq {
-    private Long id;
-
-    private String userId;
     private String category;
     private String content;
 
-    private Date registTime;
+    private String comment;
 
-    private Date updateTime;
 
 }

@@ -1,15 +1,15 @@
 <template>
     <!-- Main Wrapper -->
     <div class="main-wrapper">
-        
-        <layoutsinstructor></layoutsinstructor>
+
+      <layouts></layouts>
        
         <!-- Page Wrapper -->
 			<div class="page-content instructor-page-content">
 				<div class="container">
 					<div class="row">
-						
-						<instructorsidebar></instructorsidebar>
+
+            <studentsidebar></studentsidebar>
 						
 						<!-- Instructor Dashboard -->
 						<div class="col-xl-9 col-lg-8 col-md-12">	
