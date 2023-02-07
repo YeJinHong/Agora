@@ -15,17 +15,10 @@ pipeline
 
 	stages {
 		stage('Environment') {
-			when {
-				anyOf {
-					changeset "env-config/**/*"
-				}
-			} 
-			stage('Environment Settings') {
-				steps {
-					echo 'Environment Settings Start'
-					sh 'docker-compose -f env-config/docker-compose-env.yml up -d'
-					echo 'Environment Settings End'
-				}
+			steps {
+				echo 'Environment Settings Start'
+				sh 'docker-compose -f env-config/docker-compose-env.yml up -d'
+				echo 'Environment Settings End'
 			}
 		}
 	}
