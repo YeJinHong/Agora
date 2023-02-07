@@ -11,10 +11,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class Faq extends BaseEntity{
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
     @Column
     private String category;
 
@@ -28,15 +24,10 @@ public class Faq extends BaseEntity{
     @Column
     private LocalDateTime registTime;
 
-    @Column
-    private LocalDateTime updateTime;
 
 
-    public void updateFaqPost(String content){
+    public void updateFaqPost(String content, String comment){
         this.content = content;
-    }
-    public void updateFaqComment(String comment){
         this.comment = comment;
     }
-
 }

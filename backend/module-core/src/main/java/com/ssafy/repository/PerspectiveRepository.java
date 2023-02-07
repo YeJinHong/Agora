@@ -10,3 +10,4 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PerspectiveRepository extends JpaRepository<Perspective, Long>, PerspectiveRepositoryCustom {
 }
+
