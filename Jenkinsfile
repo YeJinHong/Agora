@@ -15,6 +15,9 @@ pipeline
 
 	stages {
 		stage('Environment') {
+			when {
+				changeset "env-config/**/*"
+			}
 			steps {
 				echo 'Environment Settings Start'
 				sh 'docker-compose -f env-config/docker-compose-env.yml up -d'
