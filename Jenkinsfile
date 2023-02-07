@@ -27,12 +27,7 @@ pipeline
 			}
 			parallel {
 				stage('build-module-api') {
-					when {
-						anyOf {
-							changeset "backend/module-core/**/*"
-							changeset "backend/module-api/**/*"
-						}
-					} steps {
+					steps {
 						echo 'Build Start "${APP_API}"'
 						sh 'backend/gradlew ${APP_API}:build -x test'
 						echo 'Build End "${APP_API}"'
