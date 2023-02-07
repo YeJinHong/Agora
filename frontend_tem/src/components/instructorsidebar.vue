@@ -5,7 +5,7 @@
         <div class="settings-widget dash-profile">
             <div class="settings-menu p-0">
                 <div class="profile-bg">
-                    <h5>Beginner</h5>
+                    <h5>직위 여기다</h5>
                     <img src="../assets/img/instructor-profile-bg.jpg" alt="">
                     <div class="profile-img">
                         <router-link to="instructor-profile"><img src="../assets/img/user/user15.jpg" alt=""></router-link>
@@ -13,11 +13,11 @@
                 </div>
                 <div class="profile-group">
                     <div class="profile-name text-center">
-                        <h4><router-link to="instructor-profile">Jenny Wilson</router-link></h4>
-                        <p>Instructor</p>
+                        <h4><router-link to="instructor-profile">학생 이름 여기다</router-link></h4>
+                        <p>직위 여기다</p>
                     </div>
                     <div class="go-dashboard text-center">
-                        <router-link to="add-course" class="btn btn-primary">Create New Course</router-link>
+                        <router-link to="add-course" class="btn btn-primary">토론 생성 하기</router-link>
                     </div>
                 </div>
             </div>

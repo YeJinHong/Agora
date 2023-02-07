@@ -11,8 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EvaluationBase {
-
-
     @JsonProperty("parent_id")
     Long parentId;
     Long id;

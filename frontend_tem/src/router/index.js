@@ -94,6 +94,7 @@ import verificationcode from '../views/pages/pages/verification-code.vue'
 import viewinvoice from '../views/pages/student/view-invoice.vue'
 import wishlist from '../views/pages/pages/wishlist.vue'
 import withdrawalinstructor from '../views/pages/instructor/withdrawal-instructor.vue'
+import changePasswordEmail from '../views/pages/pages/change-password-email.vue'
 // import devatemain from '../views/pages/debate/devatemain'
 
 const routes = [
@@ -572,6 +573,11 @@ const routes = [
     name: 'withdrawal-instructor',
     component: withdrawalinstructor
   },
+  {
+    path:'/change-password-email',
+    name: 'change-password-email',
+    component: changePasswordEmail
+  }
   // {
   //   path: '/devatemain',
   //   name: 'devatemain',

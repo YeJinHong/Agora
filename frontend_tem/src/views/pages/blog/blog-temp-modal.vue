@@ -15,25 +15,11 @@
                                 
                                     <!-- Deposit Method -->
                                     <div class="radio-with-img">
-                                        <p class="radio-deposit-item">
-                                            <input type="radio" name="evaluated_id" id="deposit-type-one" :value="this.debate_info.pannel[0].memberList[0].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id">
-                                            <label for="deposit-type-one">
-                                              <img src="../../../assets/img/deposit-01.jpg" alt="" class="img-fluid" >
-                                              {{ this.debate_info.pannel[0].memberList[0].user_name }}
-                                            </label>
-                                        </p>
-                                        <p class="radio-deposit-item">
-                                            <input type="radio" name="evaluated_id" id="deposit-type-two" :value="this.debate_info.pannel[0].memberList[1].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id">
-                                            <label for="deposit-type-two">
-                                              <img src="../../../assets/img/deposit-02.jpg" alt="" class="img-fluid" >
-                                              {{ this.debate_info.pannel[0].memberList[1].user_name }}
-                                            </label>
-                                        </p>
-                                        <p class="radio-deposit-item">
-                                            <input type="radio" name="evaluated_id" id="deposit-type-three" :value="this.debate_info.pannel[0].memberList[2].user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id" >
-                                            <label for="deposit-type-three">
-                                              <img src="../../../assets/img/deposit-03.jpg" alt="" class="img-fluid" >
-                                              {{ this.debate_info.pannel[0].memberList[2].user_name }}
+                                        <p class="radio-deposit-item" v-for= "(member, index) in debate_info.pannel[0].memberList" :key="index">
+                                            <input type="radio" name="evaluated_id" :id="'deposit-type-'+index" :value="member.user_email" class="ng-valid ng-dirty ng-touched ng-empty" aria-invalid="false" v-model="evaluated_id">
+                                            <label :for="'deposit-type-'+index">
+                                              <img src="../../../assets/img/profile-01.jpg" alt="" class="img-fluid" >
+                                              {{ member.user_name }}
                                             </label>
                                         </p>
                                     </div>
@@ -41,15 +27,25 @@
                                     
                                     <div class="form-group mb-0">
                                         <input type="hidden" name = "debate_id" :value="this.debate_info.debate_id">
-                                        <!-- <input type="hidden" name = "evaluated_id" :value="this.evaluated_id"> -->
                                         
-                                        <div class="from-group col-md-10" v-for="(question, index) in question_list" :key="index">
-                                            <input type="hidden" name = "parent_id" :value="question.parent_id" >
-                                            <input type="hidden" name = "id" :value="question.id" >
-                                            <label class="form-control-label" >{{ question.question }}</label> 
-                                            <div class="col-md-6 col-lg-6 col-item">
-                                                <vue-select :options="point" placeholder="Choose" name = "point"/>
+                                        <div class="from-group col-md-10" v-for="division1 in questions.children">
+                                            <!-- UI 통일성을 위해 setting-edit-profile에서 가져옴 -->
+                                            <div>
+                                                <h4>{{ division1.codeName }}</h4>
+                                                <div class="from-group" v-for="division2 in division1.children">
+                                                    <label class="form-control-label" >{{ division2.codeName }}</label>
+                                                    <div class="from-group row" v-for="division3 in division2.children">
+                                                        <input type="hidden" name = "parent_id" :value="division2.id" >
+                                                        <input type="hidden" name = "id" :value="division3.id">
+                                                        <label class="col-10 form-control-label" >{{ division3.codeName }}</label>
+                                                        <div class="col col-item">
+                                                            <vue-select :options="point" placeholder="Choose" name = "point"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <hr>
+
                                         </div>
                                     </div>
                                 </div>
@@ -59,8 +55,8 @@
                 </div>
                 <div class="modal-footer me-auto">
                     <!-- <button type="button" class="btn btn-modal-style btn-theme" @click ="handleClick()" >Submit</button> -->
-                    <button type="button" class="btn btn-modal-style btn-theme" @click ="handleClick()" >Submit</button>
-                    <button type="button" class="btn btn-modal-style btn-cancel" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-modal-style btn-theme" @click ="handleClick()" >평가 전송</button>
+                    <button type="button" class="btn btn-modal-style btn-cancel" data-bs-dismiss="modal">평가창 닫기</button>
                 </div>
             </div>
         </div>
@@ -71,6 +67,8 @@
 <script>    
 
 import { apiInstance } from "/api/index.js";      
+
+const api = apiInstance();
 
 export default {
     setup(){
@@ -99,26 +97,32 @@ export default {
                 },
             ],
         };
-        // 참여자의 역할에 따라 다른 문항 제공. 현재는 모든 사람이 동일하다. GET /evaluations/questions
-        const question_list = [
-                {parent_id : 4, id : 10, question : "자신의 주장에 대해 실질적인 자료와 데이터를 제시하였는가?"},
-                {parent_id : 5, id : 11, question : "상대방의 의견을 비판할때 적절한 근거를 들어 명확하게 설명하였는가?"},
-                {parent_id : 6, id : 12, question : "자신의 주장을 발표할 때 적절한 언어적 요소를 활용하였는가?"},
-                {parent_id : 7, id : 13, question : "자신의 주장을 발표할 때 적절한 비언어적 요소를 활용하였는가?"},
-                {parent_id : 8, id : 14, question : "정해진 주제에 벗어난 발언을 하지 않았는가?"},
-                {parent_id : 9, id : 15, question : "발언시간을 잘 관리하고 토론 규칙을 준수하여 발언하였는가?"},
-        ];
 
-
-        return {debate_info, question_list};
+        return {debate_info};
     },
     data(){
         return {
             point : [1, 2, 3, 4, 5],
             evaluated_id : '',
+            questions : {}, // 평가 문항.
         }
     },
+    mounted(){
+        this.getQuetions();
+    },
     methods: {
+        async getQuetions(){
+        api.get('/evaluations/questions')
+        .then((response) => {
+            if(response.status == 200){
+                console.log(response);
+                this.questions = response.data;
+                console.log('평가 문항 로드 완료');
+            }
+        }).catch((error)=>{
+            console.log(error);
+        });
+        },  
         async handleClick () {
             let form = {
                 debate_id : '',
@@ -128,8 +132,6 @@ export default {
             };
 
             let formData = new FormData($("#evaluation_modal_form")[0]);
-            console.log(formData.getAll('evaluated_id'));
-            console.log(this.evaluated_id);
 
             // formData 보내는 방법(그대로, serialize, stringify 등)이 안통함. 기존의 객체 양식과 전송시 형태가 다름. 아래는 임시 방편.
             form.debate_id = this.debate_info.debate_id;
@@ -144,6 +146,7 @@ export default {
                 alert('모든 평가 점수를 입력해야합니다.')
                 return;
             }
+
             for(var i = 0; i < parent_id_list.length; i++){
                 let parent_id = parent_id_list[i];
                 let id = id_list[i];
@@ -153,15 +156,16 @@ export default {
             console.log(form);
 
 
-            const api = apiInstance();
+            api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
+            console.log(sessionStorage.getItem("access-token"));
 
-            api.defaults.headers["Authorization"] = "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzc2FmeUBuYXZlci5jb20iLCJpc3MiOiJSZXNldENvbnRlbnQiLCJleHAiOjE2NzU2NjY5MDYsImlhdCI6MTY3NTY2NTEwNn0.VHxt1andLAnGlmnNMa7Y-SKzCZazDMa_yxYmgLoGGhTrFJsNFhmcGHJzcJIkG3i_VdGna9wBWZLq1XfOBlReKQ";
             await api.post(`/evaluations`, form)
             .then((response) => {
                 console.log(response);
                 alert("유저 평가 생성 완료");
                 // $('input[name="evaluated_id"]:checked').prop('checked', false); // 전송이끝나면 평가가 끝난 대상을 비활성화 시킨다.
                 // $('input[name="evaluated_id"]:checked').removeAttr("checked");  // 전송이 끝나면 자동으로 unchecked가 된다.
+                $('input[name="evaluated_id"]:checked').prop('disabled', true); // 라디오 버튼 비활성화
                 this.evaluated_id = '';
             })
             .catch((error)=>{
