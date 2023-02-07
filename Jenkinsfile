@@ -23,7 +23,7 @@ pipeline
       }      
     }
     stage('Build') {             
-      stages {                 
+      parallel {                 
         stage('build-module-api') {                     
           when {                        
             anyOf {                            
@@ -63,7 +63,7 @@ pipeline
       }
     }
     stage('Deploy') {  
-      stages {     
+      parallel {     
         stage('deploy-module-api') {   
           when {           
             anyOf {                                   
