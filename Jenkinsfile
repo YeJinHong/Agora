@@ -13,6 +13,7 @@ pipeline
 	stages {
 		stage('Environment') {
 			when {
+				branch 'main'
 				changeset "env-config/**/*"
 			} steps {
 				echo 'Environment Settings Start'
@@ -24,6 +25,7 @@ pipeline
 			parallel {
 				stage('build-module-api') {
 					when {
+						branch 'main'
 						anyOf {
 							changeset "backend/module-core/**/*"
 							changeset "backend/module-api/**/*"
@@ -36,6 +38,7 @@ pipeline
 				}
 				stage('build-module-chat') {
 					when {
+						branch 'main'
 						changeset "backend/module-chat/**/*"
 					}
 					steps {
@@ -46,6 +49,7 @@ pipeline
 				}
 				stage('build-module-kurento') {
 					when {
+						branch 'main'
 						changeset "backend/module-kurento/**/*"
 					}
 					steps {
@@ -60,6 +64,7 @@ pipeline
 			parallel {
 				stage('deploy-module-api') {
 					when {
+						branch 'main'
 						anyOf {
 							changeset "backend/module-core/**/*"
 							changeset "backend/module-api/**/*"
@@ -73,6 +78,7 @@ pipeline
 				}
 				stage('deploy-module-chat') {
 					when {
+						branch 'main'
 						changeset "backend/module-chat/**/*"
 					}
 					steps {
@@ -83,6 +89,7 @@ pipeline
 				}
 				stage('deploy-module-kurento') {
 					when {
+						branch 'main'
 						changeset "backend/module-kurento/**/*"
 					}
 					steps {
