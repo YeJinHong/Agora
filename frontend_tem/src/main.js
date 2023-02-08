@@ -97,6 +97,7 @@ import BlogTempModal from './views/pages/blog/blog-temp-modal.vue'
 import VoteRegisterModal from './views/pages/blog/vote-register-modal.vue'
 import EvaluationTotalResult from './views/pages/blog/evaluation-total-result.vue'
 import VoteResult from './views/pages/blog/vote-result.vue'
+import editProfileImg from "./views/pages/student/editProfileImg.vue";
 
 /*********Student**********/
 import CourseMessage from './views/pages/student/course-message.vue'
@@ -211,8 +212,7 @@ import'./assets/plugins/aos/aos.js';
 
 import './assets/css/style.css';
 
-/********* async/await를 위한 babel runtime 설정**********/
-import 'regenerator-runtime/runtime'
+
 
 
 const app = createApp(App)
@@ -292,8 +292,10 @@ app.component('blog-masonry', BlogMasonry);
 app.component('blogmasonry', BlogMasonryBreadcrumb);
 app.component('blog-modern', BlogModern);
 app.component('blogmodern', BlogModernBreadcrumb);
+
 app.component('blogtemp', BlogTemp);
 app.component('blogtempmodal', BlogTempModal);
+app.component('editProfileImg',editProfileImg);
 app.component('voteregistermodal', VoteRegisterModal)
 app.component('evaluationtotalresult', EvaluationTotalResult);
 app.component('voteresult', VoteResult);
@@ -413,5 +415,7 @@ app.use(router)
 
 app.use(global);
 app.use(store);
+
+
 
 
