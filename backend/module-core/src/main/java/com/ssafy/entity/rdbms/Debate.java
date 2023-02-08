@@ -45,6 +45,9 @@ public class Debate extends BaseEntity {
     private LocalDateTime callStartTime;
 
     @Column
+    private LocalDateTime callStartTime;
+
+    @Column
     private LocalDateTime callEndTime;
 
     @OneToOne(mappedBy = "debate")
