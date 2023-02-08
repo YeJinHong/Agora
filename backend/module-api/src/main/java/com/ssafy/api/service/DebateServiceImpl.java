@@ -1,19 +1,11 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.DebateSearchAllGetReq;
+import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Debate;
 import com.ssafy.entity.rdbms.Perspective;
 import com.ssafy.entity.rdbms.User;
-<<<<<<< HEAD
-
-import com.ssafy.repository.DebateRepository;
-import com.ssafy.repository.DebateResultRepository;
-import com.ssafy.repository.PerspectiveRepository;
-import com.ssafy.repository.UserRepository;
-=======
 import com.ssafy.repository.*;
->>>>>>> ae235b1 (Feat : querydsl 사용해 검색API 구현 중)
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -61,8 +54,20 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public Page<Debate> searchAll(DebateSearchAllGetReq debateReq, Pageable pageable) {
-        return debateRepositoryCustom.findDebateBySearchCondition(debateReq.getKeyword(), debateReq.getCondition(), pageable);
+    public Page<Debate> searchAll(String keyword, String condition, Pageable pageable) {
+        return debateRepository.findDebateBySearchCondition(keyword, condition, pageable);
+    }
+
+    @Override
+    public Debate search(long debateId) {
+        return debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public void updateDebateState(long debateId, DebateModifyStatePatchReq debateModifyStateReq) {
+        Debate debate = debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+        debate.setState(debateModifyStateReq.getState());
+        debateRepository.save(debate);
     }
 
     private Debate makeDebate(DebateRegisterPostReq debateRegisterPostReq, User owner) {

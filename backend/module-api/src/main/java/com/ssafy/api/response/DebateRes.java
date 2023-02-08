@@ -1,6 +1,5 @@
 package com.ssafy.api.response;
 
-import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.Debate;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,48 +11,46 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ApiModel("DebateResponse")
-public class DebateRes extends BaseResponseBody {
+public class DebateRes {
 
     @ApiModelProperty(name = "방장의 고유 ID")
-    long ownerId;
+    private long ownerId;
 
     @ApiModelProperty(name = "토론 카테고리 ID")
-    long category;
+    private long category;
 
     @ApiModelProperty(name = "토론 생성시간", example = "2022-01-11 13:00:00")
-    LocalDateTime insertedTime;
+    private LocalDateTime insertedTime;
 
     @ApiModelProperty(name = "토론 시작시간", example = "2022-01-11 13:00:00")
-    LocalDateTime callStartTime;
+    private LocalDateTime callStartTime;
 
     @ApiModelProperty(name = "토론 종료시간", example = "2022-01-11 14:00:00")
-    LocalDateTime callEndTime;
+    private LocalDateTime callEndTime;
 
     @ApiModelProperty(name = "썸네일 URL")
-    String thumbnailUrl;
+    private String thumbnailUrl;
 
     @ApiModelProperty(name = "토론 이름")
-    String title;
+    private String title;
 
     @ApiModelProperty(name = "토론 설명")
-    String description;
+    private String description;
 
     @ApiModelProperty(name = "토론 활성화 상태")
-    String state;
+    private String state;
 
     @ApiModelProperty(name = "토론 모드")
-    String debateMode;
+    private String debateMode;
 
     @ApiModelProperty(name = "사회자 참여 여부")
-    Boolean moderatorOnOff;
+    private Boolean moderatorOnOff;
 
     @ApiModelProperty(name = "토론 옵션")
-    String debateModeOption;
+    private String debateModeOption;
 
     public static DebateRes of(Debate debate) {
         DebateRes res = new DebateRes();
-        res.setStatusCode(200);
-        res.setMessage("Success");
         res.setOwnerId(debate.getOwner().getId());
         res.setCategory(debate.getCategory());
         res.setInsertedTime(debate.getInsertedTime());
@@ -68,4 +65,5 @@ public class DebateRes extends BaseResponseBody {
         res.setDebateModeOption(debate.getDebateModeOption());
         return res;
     }
+
 }

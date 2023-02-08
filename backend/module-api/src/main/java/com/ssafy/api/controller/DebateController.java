@@ -1,12 +1,14 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.request.DebateSearchAllGetReq;
+import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.api.service.DebateService;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.model.response.BaseResponseDataBody;
 import com.ssafy.entity.rdbms.Debate;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -15,7 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * 토론 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -40,11 +43,36 @@ public class DebateController {
 
 	@GetMapping()
 	@ApiOperation(value = "토론 조회")
-	public ResponseEntity<List<Debate>> searchAll(DebateSearchAllGetReq debateReq,
+	public ResponseEntity<BaseResponseDataBody<Page<Debate>>> searchAll(@RequestParam String keyword,
+												  @RequestParam String condition,
 												  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
-//		List<Debate> = debateService.g
-		return null;
+		Page<Debate> debates = debateService.searchAll(keyword, condition, pageable);
+		BaseResponseDataBody<Page<Debate>> response = BaseResponseDataBody.of("Success", 200, debates);
+		return ResponseEntity.status(201).body(response);
 	}
+
+	@GetMapping("/{debateId}")
+	@ApiOperation(value = "토론 아이디 조회")
+	public ResponseEntity<BaseResponseDataBody<Debate>> search(@PathVariable long debateId){
+		Debate debate = debateService.search(debateId);
+		BaseResponseDataBody<Debate> response = BaseResponseDataBody.of("Success", 200, debate);
+		return ResponseEntity.status(201).body(response);
+	}
+
+	@PatchMapping("/{debateId}")
+	@ApiOperation(value = "토론 상태 수정")
+	public ResponseEntity<?> modifyDebateState(@PathVariable long debateId ,@RequestBody DebateModifyStatePatchReq debateModifyReq){
+		try {
+			debateService.updateDebateState(debateId, debateModifyReq);
+		} catch (NoSuchElementException e){
+			return ResponseEntity.status(404).body(BaseResponseBody.of(404, "토론이 존재하지 않습니다"));
+		} catch (Exception e){
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류 발생"));
+		}
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+
 
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "토론 삭제")
