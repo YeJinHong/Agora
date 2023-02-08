@@ -13,7 +13,6 @@ pipeline
 	stages {
 		stage('environment') {
 			when {
-				branch 'main'
 				changeset "env-config/**/*"
 			} 
 			steps {
