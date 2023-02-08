@@ -1,5 +1,6 @@
 package com.ssafy.api.response;
 
+import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.User;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -12,7 +13,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("UserResponse")
-public class UserRes{
+public class UserRes extends BaseResponseBody {
 	@ApiModelProperty(name="User Email")
 	String userEmail;
 
@@ -27,6 +28,8 @@ public class UserRes{
 
 	public static UserRes of(User user) {
 		UserRes res = new UserRes();
+		res.setStatusCode(200);
+		res.setMessage("Success");
 		res.setUserEmail(user.getUserEmail());
 		res.setPosition(user.getPosition());
 		res.setDepartment(user.getDepartment());
