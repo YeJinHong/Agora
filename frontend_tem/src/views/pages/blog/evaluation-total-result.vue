@@ -12,8 +12,10 @@
                         <form action="#" id="evaluation_modal_form"  name = "content">
                             <div class="row">
                                 <div class="col-lg-12">
-                                    
-                                    <div class="form-group mb-0">
+                                    <div v-if="Object.keys(total_result).length === 0">
+                                        <h4> 현재 유저에 대한 평가 정보가 없습니다. </h4>
+                                    </div>
+                                    <div class="form-group mb-0" v-else>
                                         
                                         <div class="from-group col-md-10" v-for="division1 in questions.children">
                                             <div>
@@ -42,8 +44,7 @@
                 </div>
                 <div class="modal-footer me-auto">
                     <!-- <button type="button" class="btn btn-modal-style btn-theme" @click ="handleClick()" >Submit</button> -->
-                    <button type="button" class="btn btn-modal-style btn-theme" @click ="handleClick()" >평가 전송</button>
-                    <button type="button" class="btn btn-modal-style btn-cancel" data-bs-dismiss="modal">평가창 닫기</button>
+                    <button type="button" class="btn btn-modal-style btn-cancel" data-bs-dismiss="modal">평가 결과창 닫기</button>
                 </div>
             </div>
         </div>
@@ -53,7 +54,6 @@
 
 <script>    
 
-import { result } from "lodash";
 import { apiInstance } from "/api/index.js";      
 
 const api = apiInstance();
@@ -85,7 +85,6 @@ export default {
         },
         async getQuetions(){
         
-        // api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
         api.get('/evaluations/questions')
         .then((response) => {
             if(response.status == 200){
@@ -98,8 +97,7 @@ export default {
         });
         },
         async getTotalResult(){
-            api.defaults.headers["Authorization"] = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZ3JlZTFAbmF2ZXIuY29tIiwiaXNzIjoiUmVzZXRDb250ZW50IiwiZXhwIjoxNjc1ODIyMTY3LCJpYXQiOjE2NzU4MjAzNjd9.95HwSTcWwITXMJ_3-cFoOADC0Q-H580vsIIttJLGIiHc2leMz2cKzwphs27B_j5JdRV5IaEOFdL3XnBelM82Hw"
-        
+            api.defaults.headers["Authorization"] = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzc2FmeUBuYXZlci5jb20iLCJpc3MiOiJSZXNldENvbnRlbnQiLCJleHAiOjE2NzU4MzUxMDYsImlhdCI6MTY3NTgzMzMwNn0.f_QOypEqZZRizynZirOeKXDQFSq9mZvJi12OeEhWlHOeqQuoV2qLTowoxAnALaWiZrG8NxNwD82VrjsvU0S0gQ";
             api.get('/evaluations')
             .then((response) => {
                 if(response.status == 200){
@@ -107,9 +105,11 @@ export default {
                     this.total_result = response.data.contentTotal;
                     console.log('평가 결과 로드 완료');
                     
+                } else if(response.status == 204){
+                    console.log('현재 로그인 유저에 대한 평가 정보 없음.');
                 } else {
                     console.log(response);
-                    console.log('정상 조회 실패')
+                    console.log('정상 조회 실패');
                 }
             }).catch((error)=>{
                 console.log(error);

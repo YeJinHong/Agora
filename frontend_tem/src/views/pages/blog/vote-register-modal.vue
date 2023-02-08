@@ -103,7 +103,7 @@ export default {
         async registerVote() {
             const api = apiInstance();
             // api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
-            api.defaults.headers["Authorization"] = "Bearer " +"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsaXN0ZW5AbmF2ZXIuY29tIiwiaXNzIjoiUmVzZXRDb250ZW50IiwiZXhwIjoxNjc1NzU2MjgzLCJpYXQiOjE2NzU3NTQ0ODN9.XELlqiUxtZ4kmoz12VStgr02waDPZOB2Hv3c5pgj6XxLQscwAQenyq61EyixPtkJnHebMYQVL0Md28OtTeywEw"
+            api.defaults.headers["Authorization"] = "Bearer " +"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzc2FmeUBuYXZlci5jb20iLCJpc3MiOiJSZXNldENvbnRlbnQiLCJleHAiOjE2NzU4MzUxMDYsImlhdCI6MTY3NTgzMzMwNn0.f_QOypEqZZRizynZirOeKXDQFSq9mZvJi12OeEhWlHOeqQuoV2qLTowoxAnALaWiZrG8NxNwD82VrjsvU0S0gQ";
             
             if(this.perspective_id == ''){ 
                 alert('찬성 의견을 선택해주세요')
