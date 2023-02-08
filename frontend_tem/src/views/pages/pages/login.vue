@@ -1,69 +1,84 @@
 <template>
-    <!-- Main Wrapper -->
-    <div class="main-wrapper">
-       
-        <div class="row">
-			
-            <loginbanner></loginbanner>
-            
-            <div class="col-md-6 login-wrap-bg">		
-            
-                <!-- Login -->
-                <div class="login-wrapper">
-                    <div class="loginbox">
-                        <div class="w-100">
-                            <div class="img-logo">
-                                <img src="../../../assets/img/logo.svg" class="img-fluid" alt="Logo">
-                                <div class="back-home">
-                                    <router-link to="/">홈으로</router-link>
-                                </div>
-                            </div>
-                            <h1>로그인하세요</h1>
-                            <form action="instructor-dashboard">
-                                <div class="form-group">
-                                    <label class="form-control-label">Email</label>
-                                    <input type="email" class="form-control" placeholder="이메일을 입력하세요">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-control-label">Password</label>
-                                    <div class="pass-group">
-                                        <input type="password" class="form-control pass-input" placeholder="비밀번호를 입력하세요">
-                                        <span class="feather-eye toggle-password"></span>
-                                    </div>
-                                </div>
-                                <div class="forgot">
-                                    <span><router-link class="forgot-link" to="forgot-password">비밀번호를 잊어버렸어요</router-link></span>
-                                </div>
-                                <div class="remember-me">
-                                    <label class="custom_check mr-2 mb-0 d-inline-flex remember-me"> 기억해두기
-                                        <input type="checkbox" name="radio">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                <div class="d-grid">
-                                    <button class="btn btn-primary btn-start" type="submit">로그인</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <div class="google-bg text-center">
-                        <span><a href="javascript:void(0);">Or sign in with</a></span>
-                        <div class="sign-google">
-                            <ul>
-                                <li><a href="javascript:void(0);"><img src="../../../assets/img/net-icon-01.png" class="img-fluid" alt="Logo"> Sign In using Google</a></li>
-                                <li><a href="javascript:void(0);"><img src="../../../assets/img/net-icon-02.png" class="img-fluid" alt="Logo">Sign In using Facebook</a></li>
-                            </ul>
-                        </div>
-                        <p class="mb-0">New User ? <router-link to="register">Create an Account</router-link></p>
-                    </div>
+  <!-- Main Wrapper -->
+  <div class="main-wrapper">
+
+    <div class="row">
+
+      <loginbanner></loginbanner>
+
+      <div class="col-md-6 login-wrap-bg">
+
+        <!-- Login -->
+        <div class="login-wrapper">
+          <div class="loginbox">
+            <div class="w-100">
+              <div class="img-logo">
+                <img src="../../../assets/img/logo.svg" class="img-fluid" alt="Logo">
+                <div class="back-home">
+                  <router-link to="/">홈으로</router-link>
                 </div>
-                <!-- /Login -->
-                
+              </div>
+              <h1>로그인하세요</h1>
+              <form :model="state.form" :rules="state.rules" ref="loginForm" :label-position="state.form.align"
+                    @keyup="isValid">
+                <div class="form-group">
+                  <label class="input-title" :class="{ 'title-danger': state.emailHasError }">Email</label>
+                  <input type="email" class="form-control" v-model="state.form.userEmail"
+                         :class="{ 'input-danger': state.emailHasError }" placeholder="이메일을 입력하세요">
+                  <p v-show="state.valid.email" class="input-error">
+                    이메일 주소를 정확히 입력해주세요.
+                  </p>
+                </div>
+                <div class="form-group">
+                  <label class="form-control-label" :class="{ 'title-danger': state.passwordHasError }">Password</label>
+                  <div class="pass-group">
+                    <input type="password" v-model="state.form.password" class="form-control pass-input"
+                           :class="{ 'input-danger': state.emailHasError }" placeholder="비밀번호를 입력하세요">
+                    <span class="feather-eye toggle-password"></span>
+                    <p v-show="state.valid.password" class="input-error">
+                      비밀번호를 정확히 입력해주세요.
+                    </p>
+                  </div>
+                </div>
+                <div class="forgot">
+                  <span><router-link class="forgot-link" to="forgot-password">비밀번호를 잊어버렸어요</router-link></span>
+                </div>
+                <div class="remember-me">
+                  <label class="custom_check mr-2 mb-0 d-inline-flex remember-me"> 기억해두기
+                    <input type="checkbox" name="radio">
+                    <span class="checkmark"></span>
+                  </label>
+                </div>
+              </form>
+              <div class="d-grid">
+                <button class="btn btn-primary btn-start" type="primary" @click="clickLogin"
+                        :disabled="state.form.isFormValid">로그인
+                </button>
+              </div>
             </div>
-            
+          </div>
+          <div class="google-bg text-center">
+            <span><a href="javascript:void(0);">Or sign in with</a></span>
+            <div class="sign-google">
+              <ul>
+                <li><a href="javascript:void(0);"><img src="../../../assets/img/net-icon-01.png" class="img-fluid"
+                                                       alt="Logo"> Sign In using Google</a></li>
+                <li><a href="javascript:void(0);"><img src="../../../assets/img/net-icon-02.png" class="img-fluid"
+                                                       alt="Logo">Sign In using Facebook</a></li>
+              </ul>
+            </div>
+            <p class="mb-0">New User ?
+              <router-link to="register">Create an Account</router-link>
+            </p>
+          </div>
         </div>
+        <!-- /Login -->
+
+      </div>
+
     </div>
-    <!-- /Main Wrapper -->
+  </div>
+  <!-- /Main Wrapper -->
 </template>
 <script>
 import Vue, {reactive, computed, ref, onMounted, watch} from 'vue';
