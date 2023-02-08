@@ -6,11 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-<<<<<<< HEAD
-=======
-import java.util.ArrayList;
 import java.util.List;
->>>>>>> f31ebbb (Refatoring : 토론API 수정)
 
 /**
  * 토론 생성 API ([POST] /api/v1/debates) 요청에 필요한 리퀘스트 바디 정의.
@@ -43,9 +39,6 @@ public class DebateRegisterPostReq {
 	String description;
 
 	@ApiModelProperty(name="토론 활성화 상태")
-<<<<<<< HEAD
-	Boolean isActive;
-=======
 	String state;
 
 	@ApiModelProperty(name="토론 모드")
@@ -59,5 +52,4 @@ public class DebateRegisterPostReq {
 
 	@ApiModelProperty(name="관점 리스트")
 	List<String> perspectiveNames;
->>>>>>> f31ebbb (Refatoring : 토론API 수정)
 }

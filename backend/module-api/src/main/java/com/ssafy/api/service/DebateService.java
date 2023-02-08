@@ -1,8 +1,9 @@
 package com.ssafy.api.service;
 
-import com.ssafy.api.request.DebateGetDebatesGetReq;
+import com.ssafy.api.request.DebateSearchAllGetReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Debate;
+import org.springframework.data.domain.Page;
 
 /**
  *	토론 관련 비즈니스 로직 처리를 위한 서비스 인터페이스 정의.
@@ -10,10 +11,7 @@ import com.ssafy.entity.rdbms.Debate;
 public interface DebateService {
 	Debate createDebate(DebateRegisterPostReq debateRegisterPostReq);
 
-<<<<<<< HEAD
-=======
-	List<Debate> getDebates(DebateGetDebatesGetReq debateReq);
+	Page<Debate> searchAll(DebateSearchAllGetReq debateReq);
 
->>>>>>> f31ebbb (Refatoring : 토론API 수정)
 	void deleteDebate(Long id);
 }

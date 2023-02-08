@@ -1,13 +1,15 @@
 package com.ssafy.api.controller;
 
-import com.ssafy.api.request.DebateGetDebatesGetReq;
+import com.ssafy.api.request.DebateSearchAllGetReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
-import com.ssafy.api.response.DebateRes;
 import com.ssafy.api.service.DebateService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.Debate;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +40,8 @@ public class DebateController {
 
 	@GetMapping()
 	@ApiOperation(value = "토론 조회")
-	public ResponseEntity<List<Debate>> getDebateInfos(DebateGetDebatesGetReq debateReq){
+	public ResponseEntity<List<Debate>> searchAll(DebateSearchAllGetReq debateReq,
+												  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
 //		List<Debate> = debateService.g
 		return null;
 	}
