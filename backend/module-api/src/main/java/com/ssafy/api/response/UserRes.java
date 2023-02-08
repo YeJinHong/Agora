@@ -22,13 +22,24 @@ public class UserRes{
 	@ApiModelProperty(name="User 부서")
 	String department;
 
+	@ApiModelProperty(name="User 부서")
+	int grade;
+
+	@ApiModelProperty(name="User 부서")
+	int classNum;
 	@ApiModelProperty(name="User 이름")
 	String name;
+
+	@ApiModelProperty(name="User 이름")
+	String profileUrl;
+
 
 	public static UserRes of(User user) {
 		UserRes res = new UserRes();
 		res.setUserEmail(user.getUserEmail());
 		res.setPosition(user.getPosition());
+		res.setGrade(user.getGrade());
+		res.setClassNum(user.getClassNum());
 		res.setDepartment(user.getDepartment());
 		res.setName(user.getName());
 		return res;
