@@ -133,7 +133,6 @@
                 <li :class="currentPath == 'blog-masonry' ? 'active' : 'notactive'"><router-link to="blog-masonry">Blog Masonry</router-link></li>
                 <li :class="currentPath == 'blog-modern' ? 'active' : 'notactive'"><router-link to="blog-modern">Blog Modern</router-link></li>
                 <li :class="currentPath == 'blog-details' ? 'active' : 'notactive'"><router-link to="blog-details">Blog Details</router-link></li>
-                <li :class="currentPath == 'blog-temp' ? 'active' : 'notactive'"><router-link to="blog-temp">Blog Temp</router-link></li>
             </ul>
         </li>
 
