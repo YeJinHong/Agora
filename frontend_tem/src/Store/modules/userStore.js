@@ -45,7 +45,7 @@ const userStore = {
                         commit("SET_IS_VALID_TOKEN", true);
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
-                        findById(data["tokenInfo"].userId, ({data}) => {
+                        findById(({data}) => {
                             let userInfo = {
                                 userEmail : data.userEmail,
                                 name : data.name,
