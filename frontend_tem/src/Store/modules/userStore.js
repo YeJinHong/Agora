@@ -45,9 +45,18 @@ const userStore = {
                         commit("SET_IS_VALID_TOKEN", true);
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
-                        findById(accessToken.userId, ({data}) => {
+                        findById(data["tokenInfo"].userId, ({data}) => {
+                            let userInfo = {
+                                userEmail : data.userEmail,
+                                name : data.name,
+                                department : data.department,
+                                position : data.position,
+                                grade : data.grade,
+                                classNum : data.classNum,
+                                profile : data.profileUrl
+                            }
                             if (data.message === "Success") {
-                                commit("SET_USER_INFO", data.userInfo);
+                                commit("SET_USER_INFO", userInfo);
                                 // console.log("3. getUserInfo data >> ", data);
                             } else {
                                 console.log("유저 정보 없음!!!!");

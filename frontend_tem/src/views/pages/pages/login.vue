@@ -66,29 +66,86 @@
     <!-- /Main Wrapper -->
 </template>
 <script>
-    import Vue from 'vue'
-    export default {
-      computed:{
-           
-        },
-      data() {
-            return {
-                
-               
-            }
-        },
-        mounted() {
-            if($('.toggle-password').length > 0) {
-		$(document).on('click', '.toggle-password', function() {
-			$(this).toggleClass("feather-eye feather-eye-off");
-			var input = $(".pass-input");
-			if (input.attr("type") == "password") {
-				input.attr("type", "text");
-			} else {
-				input.attr("type", "password");
-			}
-		});
-	}
-        }
+import Vue, {reactive, computed, ref, onMounted, watch} from 'vue';
+import {useStore} from 'vuex';
+import {useRouter, useRoute} from 'vue-router';
+
+export default {
+  name: 'login',
+  components: {},
+  props: {},
+  setup(props) {
+    const store = useStore();
+    const loginForm = ref(null)
+    const router = useRouter();
+    const route = useRoute();
+    const state = reactive({
+      form: {
+        userEmail: '',
+        password: '',
+        align: 'left',
+        isFormValid: false,
+      },
+      valid: {
+        email: false,
+        password: false,
+      },
+      emailHasError: false,
+      passwordHasError: false,
+    });
+
+    onMounted(() => {
+      console.log(loginForm.value);
+      if ($('.toggle-password').length > 0) {
+        $(document).on('click', '.toggle-password', function () {
+          $(this).toggleClass("feather-eye feather-eye-off");
+          var input = $(".pass-input");
+          if (input.attr("type") === "password") {
+            input.attr("type", "text");
+          } else {
+            input.attr("type", "password");
+          }
+        });
+      }
+    })
+
+    watch(() => state.form.userEmail, function (value) {
+      const validateEmail = /^[A-Za-z0-9_\\.\\-]+@[A-Za-z0-9\\-]+\.[A-Za-z0-9\\-]+/;
+      if (!validateEmail.test(value) || !value) {
+        state.valid.email = true
+        state.emailHasError = true
+      } else {
+        state.valid.email = false
+        state.emailHasError = false
+      }
+    })
+    watch(() => state.form.password, (value) => {
+      const validatePassword = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{8,16}$/
+      if (!validatePassword.test(value) || !value) {
+        state.valid.password = true
+        state.passwordHasError = true
+      } else {
+        state.valid.password = false
+        state.passwordHasError = false
+      }
+    })
+
+    const clickLogin = () => {
+      console.log(loginForm.value);
+      store.dispatch("userStore/userConfirm", {
+        user_email: state.form.userEmail,
+        password: state.form.password
+      })
+      // moveHome();
     }
+
+    const moveHome = () => {
+      router.push('/');
+    }
+
+    return {loginForm, state, clickLogin, moveHome}
+
+  }
+  ,
+}
 </script>
