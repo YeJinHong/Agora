@@ -1,9 +1,12 @@
 package com.ssafy.api.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,16 +20,21 @@ import java.util.List;
 public class DebateRegisterPostReq {
 
 	@ApiModelProperty(name="방장의 고유 ID")
-	Long ownerId;
+	long ownerId;
 
 	@ApiModelProperty(name="토론 카테고리 ID")
-	Long debateCategory;
+	long category;
+
+	@CreationTimestamp
+	@ApiModelProperty(name="토론 생성시간", example="2022-01-11 13:00:00")
+	LocalDateTime insertedTime;
 
 	@ApiModelProperty(name="토론 시작시간", example="2022-01-11 13:00:00")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	LocalDateTime callStartTime;
 
-
 	@ApiModelProperty(name="토론 종료시간", example="2022-01-11 14:00:00")
+	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	LocalDateTime callEndTime;
 
 	@ApiModelProperty(name="썸네일 URL")

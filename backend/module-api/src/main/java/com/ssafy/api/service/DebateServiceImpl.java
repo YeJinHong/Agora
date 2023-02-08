@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -45,7 +46,6 @@ public class DebateServiceImpl implements DebateService {
         perspectiveService.createPerspective(debateRegisterPostReq.getPerspectiveNames(), savedDebate);
         return savedDebate;
     }
-
     @Override
     public Page<Debate> searchAll(String keyword, String condition, Pageable pageable) {
         return debateRepository.findDebateBySearchCondition(keyword, condition, pageable);
@@ -99,5 +99,4 @@ public class DebateServiceImpl implements DebateService {
         Debate debate = debateRepository.findById(id).orElseThrow(NoSuchElementException::new);
         debateRepository.delete(debate);
     }
-
 }

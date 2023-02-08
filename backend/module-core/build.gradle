@@ -39,27 +39,11 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+
 }
 
-<<<<<<< HEAD
-// Querydsl 설정부
-def generated = 'src/main/generated'
-
-// querydsl QClass 파일 생성 위치를 지정
-tasks.withType(JavaCompile) {
-    options.getGeneratedSourceOutputDirectory().set(file(generated))
-}
-
-// java source set 에 querydsl QClass 위치 추가
-sourceSets {
-    main.java.srcDirs += [ generated ]
-}
-
-// gradle clean 시에 QClass 디렉토리 삭제
-clean {
-    delete file(generated)
-}
-=======
 //// Querydsl 설정부
 //def generated = 'src/main/generated'
 //
@@ -99,4 +83,3 @@ clean {
 //clean {
 //    delete file(generated)
 //}
->>>>>>> e1c1fd4 (Refactor : [FE] login userInfo store 저장 로직 수정)
