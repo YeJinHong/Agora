@@ -42,7 +42,7 @@ public class Debate extends BaseEntity {
     private LocalDateTime insertedTime;
 
     @Column
-    private LocalDateTime callStartTime;
+    private String debateModeOption;
 
     @Column
     private LocalDateTime callStartTime;
@@ -53,4 +53,6 @@ public class Debate extends BaseEntity {
     @OneToOne(mappedBy = "debate")
     private DebateResult debateResult;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private FileManager fileManager;
 }
