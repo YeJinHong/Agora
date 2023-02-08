@@ -39,9 +39,11 @@ public class UserController {
 	
 
 	private final UserService userService;
+
 	private final UserFileManagerService userFileManagerService;
 
 	private final MailService mailService;
+
 
 	@PostMapping()
 	@ApiOperation(value = "회원 가입", notes = "<strong>아이디와 패스워드</strong>를 통해 회원가입 한다.") 

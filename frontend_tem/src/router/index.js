@@ -5,7 +5,6 @@ import Bloggrid from '../views/pages/blog/blog-grid'
 import Bloglist from '../views/pages/blog/blog-list'
 import Blogmasonry from '../views/pages/blog/blog-masonry'
 import Blogmodern from '../views/pages/blog/blog-modern'
-import Blogtemp from '../views/pages/blog/blog-temp'
 import cart from '../views/pages/pages/cart.vue'
 import checkout from '../views/pages/pages/checkout.vue'
 import comesoon from '../views/pages/pages/error/come-soon.vue'
@@ -127,11 +126,6 @@ const routes = [
     path: '/blog-modern',
     name: 'blog-modern',
     component: Blogmodern
-  },
-  {
-    path: '/blog-temp',
-    name: 'blog-temp',
-    component: Blogtemp
   },
   {
     path: '/cart',
