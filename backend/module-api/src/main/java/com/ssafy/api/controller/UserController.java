@@ -39,9 +39,11 @@ public class UserController {
 	
 
 	private final UserService userService;
+
 	private final UserFileManagerService userFileManagerService;
 
 	private final MailService mailService;
+
 	private final FileService fileService;
 	
 	@PostMapping()

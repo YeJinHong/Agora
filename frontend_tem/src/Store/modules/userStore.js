@@ -7,7 +7,7 @@ const userStore = {
     state: {
         isLogin: false,
         isLoginError: false,
-        userInfo:'',
+        userInfo: null,
         isValidToken: false,
     },
     getters: {
@@ -34,7 +34,7 @@ const userStore = {
         },
     },
     actions: {
-         userConfirm({commit, dispatch}, user) {
+        userConfirm({commit, dispatch}, user) {
             login(user, ({data}) => {
                     if (data.message === "Success") {
                         let accessToken = data["tokenInfo"].authorization;
@@ -45,14 +45,17 @@ const userStore = {
                         commit("SET_IS_VALID_TOKEN", true);
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
-                        findById(accessToken.userId, ({data}) => {
+                        findById(data["tokenInfo"].userId, ({data}) => {
+                            let userInfo = {
+                                userEmail : data.userEmail,
+                                name : data.name,
+                                department : data.department,
+                                position : data.position,
+                                grade : data.grade,
+                                classNum : data.classNum,
+                                profile : data.profileUrl
+                            }
                             if (data.message === "Success") {
-                                let userInfo = {
-                                    userEmail : data.userEmail,
-                                    name : data.name,
-                                    department : data.department,
-                                    position : data.position
-                                }
                                 commit("SET_USER_INFO", userInfo);
                                 // console.log("3. getUserInfo data >> ", data);
                             } else {
