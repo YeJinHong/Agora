@@ -497,3 +497,39 @@
     </div>
     <!-- /Main Wrapper -->
 </template>
+<script>    
+
+import { apiInstance } from "/api/index.js";      
+
+const api = apiInstance();
+
+export default {
+    setup(){
+
+    },
+    data(){
+        return {
+            debate_list : [
+				{
+					debate_id : 1,
+					debate_mode : "CEDA",
+					debate_title : "반려동물 보유세 필요한가?",
+					call_start_time : "2023-01-11 13:00:00",
+					call_end_time : "2023-01-11 16:00:00",
+					thumbnail_url : "",
+					owner_email : "ssafy@naver.com",
+					owner_name : "김싸피",
+					
+
+				}
+			]
+        }
+    },
+    mounted(){
+    },
+    methods: {
+        
+    },
+    
+}
+</script>
