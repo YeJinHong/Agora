@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Debate;
@@ -30,7 +31,8 @@ public class DebateServiceImpl implements DebateService {
     private final DebateResultRepository debateResultRepository;
 
     private final DebateRepositoryCustomImpl debateRepositoryCustom;
-    private final PerspectiveRepository perspectiveRepository;
+
+    private final PerspectiveServiceImpl perspectiveService;
 
     @Override
     @Transactional
@@ -40,16 +42,7 @@ public class DebateServiceImpl implements DebateService {
         Debate debate = makeDebate(debateRegisterPostReq, owner);
         Debate savedDebate = debateRepository.save(debate);
 
-        List<Perspective> perspectives = debateRegisterPostReq.getPerspectiveNames()
-                .stream()
-                .map(perspectiveName -> {
-                    Perspective perspective = new Perspective();
-                    perspective.setDebate(savedDebate);
-                    perspective.setName(perspectiveName);
-                    return perspective;
-                })
-                .collect(Collectors.toList());
-        perspectiveRepository.saveAll(perspectives);
+        perspectiveService.createPerspective(debateRegisterPostReq.getPerspectiveNames(), savedDebate);
         return savedDebate;
     }
 
@@ -61,6 +54,20 @@ public class DebateServiceImpl implements DebateService {
     @Override
     public Debate search(long debateId) {
         return debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public void updateDebate(long debateId, DebateModifyPatchReq debateModifyReq) {
+        Debate debate = debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+        debate.setTitle(debateModifyReq.getTitle());
+        debate.setDescription(debateModifyReq.getDescription());
+        debate.setCategory(debateModifyReq.getCategory());
+        debate.setModeratorOnOff(debateModifyReq.getModeratorOnOff());
+        debate.setDebateMode(debateModifyReq.getDebateMode());
+        debate.setCallStartTime(debateModifyReq.getCallStartTime());
+        debate.setCallEndTime(debateModifyReq.getCallEndTime());
+        debate.setDebateModeOption(debateModifyReq.getDebateModeOption());
+        debateRepository.save(debate);
     }
 
     @Override

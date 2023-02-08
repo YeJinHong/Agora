@@ -1,5 +1,6 @@
 package com.ssafy.api.controller;
 
+import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.api.service.DebateService;
@@ -60,6 +61,19 @@ public class DebateController {
 	}
 
 	@PatchMapping("/{debateId}")
+	@ApiOperation(value = "토론 수정")
+	public ResponseEntity<?> modifyDebate(@PathVariable long debateId, @RequestBody DebateModifyPatchReq debateModifyReq){
+		try {
+			debateService.updateDebate(debateId, debateModifyReq);
+		} catch (NoSuchElementException e){
+			return ResponseEntity.status(404).body(BaseResponseBody.of(404, "토론이 존재하지 않습니다"));
+		} catch (Exception e){
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500, "서버 오류 발생"));
+		}
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	@PatchMapping("/state/{debateId}")
 	@ApiOperation(value = "토론 상태 수정")
 	public ResponseEntity<?> modifyDebateState(@PathVariable long debateId ,@RequestBody DebateModifyStatePatchReq debateModifyReq){
 		try {
