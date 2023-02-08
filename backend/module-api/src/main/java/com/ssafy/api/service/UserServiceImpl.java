@@ -113,6 +113,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void modifyUserPasswordByEmail(String userEmail, String password) {
+        User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
+        user.setPassword(passwordEncoder.encode(password));
+        userRepository.save(user);
+    }
+
+    @Override
     @Transactional
     public void deleteUser(String userEmail) {
         User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);

@@ -1,18 +1,18 @@
 <template>
     <!-- Main Wrapper -->
     <div class="main-wrapper">
-        
+
         <layouts></layouts>
-       
+
          <!--Dashbord Student -->
 			<div class="page-content">
 				<div class="container">
 					<div class="row">
-						
+
 						<studentsidebar></studentsidebar>
-						
+
 						<!-- Student Security -->
-						<div class="col-xl-9 col-md-8">	
+						<div class="col-xl-9 col-md-8">
 							<div class="settings-widget profile-details">
 								<div class="settings-menu p-0">
 									<div class="profile-heading">
@@ -54,7 +54,7 @@
 													</div>
 													<div class="form-group">
 <!--														<label class="form-control-label">새 비밀번호</label>-->
-														<div class="pass-group" id="passwordInput">																	
+														<div class="pass-group" id="passwordInput">
 															<input type="password" class="form-control pass-input" placeholder="새 비밀번호">
 														</div>
 <!--														<div  class="password-strength" id="passwordStrength">-->
@@ -63,7 +63,7 @@
 <!--															<span id="strong"></span>-->
 <!--															<span id="heavy"></span>-->
 <!--														</div>-->
-														<div id="passwordInfo"></div>	
+														<div id="passwordInfo"></div>
 													</div>
 													<div class="form-group">
 <!--														<label class="form-control-label">새 비밀번호 확인</label>-->
@@ -78,16 +78,16 @@
 									</div>
 								</div>
 							</div>
-						</div>	
+						</div>
 						<!-- Student Security -->
-						
+
 					</div>
 				</div>
-			</div>	
+			</div>
 			<!-- /Dashbord Student -->
-        
+
         <layouts1></layouts1>
-       
+
     </div>
     <!-- /Main Wrapper -->
 </template>

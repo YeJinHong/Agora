@@ -16,6 +16,8 @@ public interface UserService {
 	User getUserByUserEmail(String userEmail);
 	void updateUser(String userEmail, UserModifyPatchReq req);
 	void modifyUserPassword(String userEmail, UserModifyPasswordReq req);
+
+	void modifyUserPasswordByEmail(String userEmail, String password);
 	void deleteUser(String userEmail);
 	boolean checkExist(String userEmail);
 	ResponseEntity<?> reissue(UserReissuePostReq userReissuePostReq);
