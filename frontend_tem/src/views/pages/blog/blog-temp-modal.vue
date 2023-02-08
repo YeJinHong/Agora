@@ -163,9 +163,7 @@ export default {
             console.log(form);
 
 
-            // api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
-            console.log(sessionStorage.getItem("access-token"));
-            api.defaults.headers["Authorization"] = "Bearer " + "";
+            api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
             await api.post(`/evaluations`, form)
             .then((response) => {
                 console.log(response);

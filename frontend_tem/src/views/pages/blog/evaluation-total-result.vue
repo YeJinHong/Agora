@@ -97,7 +97,8 @@ export default {
         });
         },
         async getTotalResult(){
-            api.defaults.headers["Authorization"] = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzc2FmeUBuYXZlci5jb20iLCJpc3MiOiJSZXNldENvbnRlbnQiLCJleHAiOjE2NzU4MzUxMDYsImlhdCI6MTY3NTgzMzMwNn0.f_QOypEqZZRizynZirOeKXDQFSq9mZvJi12OeEhWlHOeqQuoV2qLTowoxAnALaWiZrG8NxNwD82VrjsvU0S0gQ";
+            
+            api.defaults.headers["Authorization"] = "Bearer " + sessionStorage.getItem("access-token");
             api.get('/evaluations')
             .then((response) => {
                 if(response.status == 200){
