@@ -1,17 +1,12 @@
 <template>
-    <!-- Main Wrapper -->
     <div class="main-wrapper">
-        
         <layouts></layouts>
-       
-            <!--Dashbord Student -->
-			<div class="page-content">
+       <div class="page-content">
 				<div class="container">
 					<div class="row">
 						
 						<studentsidebar></studentsidebar>
-						
-						<!-- Profile Details -->
+
 						<div class="col-xl-9 col-md-8">	
 							<div class="settings-widget profile-details">
 								<div class="settings-menu p-0">
@@ -28,7 +23,7 @@
 											</div>
 										</div>
 										<div class="profile-share d-flex align-items-center justify-content-center">
-											<a href="javascript:;" class="btn btn-success">수정</a>
+											<a href="javascript:;" data-bs-toggle="modal" data-bs-target="#editProfileImg" class="btn btn-success">수정</a>
 											<a href="javascript:;" class="btn btn-danger">삭제</a>
 										</div>
 									</div>
@@ -42,35 +37,31 @@
                         <div class="col-lg-6">
                           <div class="form-group">
                             <label class="form-control-label">Email</label>
-                            <input type="text" class="form-control" placeholder="Email을 입력하세요">
+                            <input type="text" class="form-control"  v-model="user.userEmail" placeholder="Email을 입력하세요">
                           </div>
                         </div>
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-label">학교</label>
-														<input type="text" class="form-control" placeholder="학교를 입력하세요">
+														<input type="text" class="form-control" v-model="user.userEmail" placeholder="학교를 입력하세요">
 													</div>
 												</div>
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-label">학년</label>
-														<input type="text" class="form-control" placeholder="학년을 입력하세요">
+														<input type="text" class="form-control" v-model="user.grade" placeholder="학년을 입력하세요">
 													</div>
 												</div>
 												<div class="col-lg-6">
 													<div class="form-group">
 														<label class="form-control-label">반</label>
-														<input type="text" class="form-control" placeholder="반을 입력하세요">
+														<input type="text" class="form-control" v-model="user.classNum" placeholder="반을 입력하세요">
 													</div>
 												</div>
                         <div class="col-lg-6">
                           <div class="form-group">
                             <label class="form-control-label">직위</label>
-                            <select class="form-select" style="border: #e9ecef 1px solid" >
-                              <!-- <option selected></option> -->
-                              <option value="1">학생</option>
-                              <option value="2">선생님</option>
-                            </select>
+                            <input type="text" class="form-control" v-model="user.position" placeholder="반을 입력하세요">
                           </div>
                         </div>
 <!--												<div class="col-lg-6">-->
@@ -123,21 +114,56 @@
        
     </div>
     <!-- /Main Wrapper -->
+  <editProfileImg></editProfileImg>
 </template>
 <script>
-    import Vue from 'vue'
     export default {
       components: {
         
       },
       data() {
             return {
-                country: ["Select country", "India", "America", "London"],
-               
+              user: {
+                userEmail: '',
+                name: '',
+                department: '',
+                grade: '',
+                classNum: ''
+              },
+
+
             }
         },
+      methods:{
+        // async changeUserInfo() {
+        //   if(this.userEmail != null && this.name != null
+        //       && this.department != null && this.grade!= null && this.classNum != null) {
+        //     const api = apiInstance();
+        //     api.defaults.headers["authorization"] = "Bearer " + this.token;
+        //     await api.patch("/users/info", this.user)
+        //         .then(response => {
+        //           if (response.status == 200) {
+        //             alert("비밀번호 변경에 성공하셨습니다.")
+        //             this.$router.push('/')
+        //           } else if (response.status == 404) {
+        //             this.$router.push('/error-404')
+        //           } else if (response.status == 500) {
+        //             this.$router.push('/error-500')
+        //           }
+        //         });
+        //   } else if(this.password == null || this.passwordConfirm == null) {
+        //     alert("비밀번호를 입력해 주세요")
+        //   }else if(this.password != this.passwordConfirm){
+        //     alert("비밀번호가 같지 않습니다.")
+        //   }
+        // }
+      },
         mounted() {
-
+          //this.user.userEmail = this.$route.params.userEmail;
+          //this.user.name = this.$route.params.name;
+          //this.user.department = this.$route.params.department;
+          //this.user.grade = this.$route.params.grade;
+          //this.user.classNum = this.$route.params.classNum;
         }
     }
 </script>
