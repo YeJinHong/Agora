@@ -49,9 +49,6 @@ public class Debate extends BaseEntity {
     private String debateModeOption;
 
     @Column
-    private String debateModeOption;
-
-    @Column
     private LocalDateTime callStartTime;
 
     @Column
