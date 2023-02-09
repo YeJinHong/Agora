@@ -92,6 +92,12 @@ import BlogMasonry from './views/pages/blog/blog-masonry.vue'
 import BlogMasonryBreadcrumb from './components/breadcrumb/blogmasonry.vue'
 import BlogModern from './views/pages/blog/blog-modern.vue'
 import BlogModernBreadcrumb from './components/breadcrumb/blogmodern.vue'
+import BlogTemp from './views/pages/blog/blog-temp.vue'
+import BlogTempModal from './views/pages/blog/blog-temp-modal.vue'
+import VoteRegisterModal from './views/pages/blog/vote-register-modal.vue'
+import EvaluationTotalResult from './views/pages/blog/evaluation-total-result.vue'
+import VoteResult from './views/pages/blog/vote-result.vue'
+import editProfileImg from "./views/pages/student/editProfileImg.vue";
 
 /*********Student**********/
 import CourseMessage from './views/pages/student/course-message.vue'
@@ -194,8 +200,8 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import './assets/css/feather.css';
 import './assets/plugins/fontawesome/css/fontawesome.min.css';
 import './assets/plugins/fontawesome/css/all.min.css';
-import'./assets/plugins/summernote/dist/summernote-lite.min.css';
-import'./assets/plugins/summernote/dist/summernote-lite.min.js';
+import'./assets/plugins/summernote/summernote-lite.min.css';
+import'./assets/plugins/summernote/summernote-lite.min.js';
 import'./assets/plugins/slick/slick.css';
 import'./assets/plugins/slick/slick-theme.css';
 import'./assets/plugins/slick/slick.js';
@@ -205,6 +211,7 @@ import'./assets/plugins/aos/aos.css';
 import'./assets/plugins/aos/aos.js';
 
 import './assets/css/style.css';
+
 
 
 
@@ -285,6 +292,14 @@ app.component('blog-masonry', BlogMasonry);
 app.component('blogmasonry', BlogMasonryBreadcrumb);
 app.component('blog-modern', BlogModern);
 app.component('blogmodern', BlogModernBreadcrumb);
+
+app.component('blogtemp', BlogTemp);
+app.component('blogtempmodal', BlogTempModal);
+app.component('editProfileImg',editProfileImg);
+app.component('voteregistermodal', VoteRegisterModal)
+app.component('evaluationtotalresult', EvaluationTotalResult);
+app.component('voteresult', VoteResult);
+
 /*********Student**********/
 app.component('course-message', CourseMessage);
 app.component('course-student', CourseStudent);

@@ -8,8 +8,8 @@
                     <router-link to="student-profile"><img src="../assets/img/user/user11.jpg" alt="" class="img-fluid"></router-link>
                     <div class="d-flex align-items-center">
                         <div class="course-name">
-                            <h4><router-link to="student-profile">Rolands R</router-link><span>Beginner</span></h4>
-                            <p>Student</p>
+                            <h4><router-link to="student-profile">학생이름!!</router-link><span>레벨여기다</span></h4>
+                            <p>직위여기~</p>
                         </div>
                     </div>
                 </div>
@@ -25,7 +25,9 @@
                 <li :class="currentPath == 'course-wishlist' ? 'active' : 'notactive'"><router-link to="course-wishlist">Wishlists</router-link></li>
                 <li :class="currentPath == 'course-message' ? 'active' : 'notactive'"><router-link to="course-message">Messages</router-link></li>
                 <li :class="currentPath == 'purchase-history' ? 'active' : 'notactive'"><router-link to="purchase-history">Purchase history</router-link></li>
-                <li :class="currentPath == 'deposit-student' ? 'active' : 'notactive'"><router-link to="deposit-student">Deposit</router-link></li>
+                <li :class="currentPath == 'deposit-student' ? 'active' : 'notactive'"><router-link to="deposit-student">
+
+                </router-link></li>
                 <li :class="currentPath == 'transactions-student' ? 'active' : 'notactive'" class="mb-0"><router-link to="transactions-student">Transactions</router-link></li>
             </ul>
         </div>

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -20,7 +21,7 @@ public class Debate extends BaseEntity {
     private User owner;
 
     @Column
-    private String category;
+    private Long category;
 
     @Column
     private String title;
@@ -29,19 +30,23 @@ public class Debate extends BaseEntity {
     private String description;
 
     @Column
-    private String moderatorOnOff;
+    private Boolean moderatorOnOff;
 
     @Column
-    private String mode;
+    private String debateMode;
 
     @Column
     private String thumbnailUrl;
 
-    @Column(name = "status")
-    private String status;
+    @Column(name = "state")
+    private String state;
 
     @Column
     private LocalDateTime insertedTime;
+
+
+    @Column
+    private String debateModeOption;
 
     @Column
     private LocalDateTime callStartTime;
@@ -52,4 +57,6 @@ public class Debate extends BaseEntity {
     @OneToOne(mappedBy = "debate")
     private DebateResult debateResult;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private FileManager fileManager;
 }

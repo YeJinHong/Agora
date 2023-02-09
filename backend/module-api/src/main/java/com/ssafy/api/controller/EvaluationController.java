@@ -2,9 +2,11 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.request.EvaluationRegisterPostReq;
 import com.ssafy.api.response.EvaluationRes;
+import com.ssafy.api.service.CommonCodeService;
 import com.ssafy.api.service.EvaluationService;
 import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.entity.rdbms.CommonCode;
 import com.ssafy.entity.rdbms.Evaluation;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,13 +29,18 @@ import java.util.List;
 public class EvaluationController {
 
     private final EvaluationService evaluationService;
+    
+    private final CommonCodeService commonCodeService;
 
     @PostMapping()
     @ApiOperation(value = "토론 상호 평가 생성")
-    public ResponseEntity<? extends BaseResponseBody> register(
+    public ResponseEntity<? extends BaseResponseBody> register(@ApiIgnore Authentication authentication,
             @RequestBody @ApiParam(value="상호 평가 정보", required = true) EvaluationRegisterPostReq evaluationRegisterPostReq) {
 
-        Evaluation evaluation = evaluationService.createEvaluation(evaluationRegisterPostReq);
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
+
+        Evaluation evaluation = evaluationService.createEvaluation(evaluationRegisterPostReq, userId);
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
@@ -46,18 +53,26 @@ public class EvaluationController {
         return ResponseEntity.status(204).body(BaseResponseBody.of(204, "Success"));
     }
 
-    @GetMapping("/users/{:userId}")
+    @GetMapping("")
     @ApiOperation(value="토론 상호 평가 조회", notes="")
-    public ResponseEntity<EvaluationRes> getEvaluations(@ApiIgnore Authentication authentication,
-                                                        @PathVariable String userId)
-    {
-        CustomUserDetails userDetails = (CustomUserDetails)authentication.getPrincipal();
-        if (!userId.equals(userDetails.getUsername())) {
-            return ResponseEntity.badRequest().build();
-        }
+    public ResponseEntity<?> getEvaluations(@ApiIgnore Authentication authentication) {
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        String userId = userDetails.getUsername();
 
         List<Evaluation> evaluationList = evaluationService.getEvaluationList(userId);
+        if(evaluationList.isEmpty())
+            return ResponseEntity.status(204).body(BaseResponseBody.of(204, "Success"));
 
-        return ResponseEntity.status(200).body(EvaluationRes.of(evaluationList));
+        return ResponseEntity.status(200).body(EvaluationRes.of(evaluationList, userId));
+    }
+
+
+    // 계층 구조를 유지한채 데이터를 보내는 방식.
+    @GetMapping("/questions")
+    @ApiOperation(value="토론 평가 문항 조회")
+    public ResponseEntity<CommonCode> getEvaluationQuestions(){
+        CommonCode questionList = commonCodeService.getQuestionList();
+        return ResponseEntity.status(200).body(questionList);
     }
 }

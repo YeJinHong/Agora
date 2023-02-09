@@ -5,6 +5,7 @@ import Bloggrid from '../views/pages/blog/blog-grid'
 import Bloglist from '../views/pages/blog/blog-list'
 import Blogmasonry from '../views/pages/blog/blog-masonry'
 import Blogmodern from '../views/pages/blog/blog-modern'
+import Blogtemp from '../views/pages/blog/blog-temp'
 import cart from '../views/pages/pages/cart.vue'
 import checkout from '../views/pages/pages/checkout.vue'
 import comesoon from '../views/pages/pages/error/come-soon.vue'
@@ -93,6 +94,8 @@ import verificationcode from '../views/pages/pages/verification-code.vue'
 import viewinvoice from '../views/pages/student/view-invoice.vue'
 import wishlist from '../views/pages/pages/wishlist.vue'
 import withdrawalinstructor from '../views/pages/instructor/withdrawal-instructor.vue'
+import changePasswordEmail from '../views/pages/pages/change-password-email.vue'
+// import devatemain from '../views/pages/debate/devatemain'
 
 const routes = [
   {
@@ -124,6 +127,11 @@ const routes = [
     path: '/blog-modern',
     name: 'blog-modern',
     component: Blogmodern
+  },
+  {
+    path: '/blog-temp',
+    name: 'blog-temp',
+    component: Blogtemp
   },
   {
     path: '/cart',
@@ -565,9 +573,19 @@ const routes = [
     name: 'withdrawal-instructor',
     component: withdrawalinstructor
   },
+  {
+    path:'/change-password-email',
+    name: 'change-password-email',
+    component: changePasswordEmail
+  }
+  // {
+  //   path: '/devatemain',
+  //   name: 'devatemain',
+  //   component: devatemain
+  // },
 ];
 export const router = createRouter({
-    history: createWebHistory('vuejs'),
+    history: createWebHistory(),
     linkActiveClass: 'active',
     routes
 });
