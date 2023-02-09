@@ -8,9 +8,8 @@
           </div>
         </div>
         <div class="modal-body">
-              <div class="profile-img">
-                <img :src="imageUrl" alt="">
-              </div>
+                <img :src="imageUrl" alt="" class="img-fluid">
+
             </div>
             <div class="profile-group">
               <div class="go-dashboard text-center">
@@ -26,29 +25,48 @@
 </template>
 
 <script>
+import { apiInstance } from "../../../api/index.js";
+import {findById} from "../../../api/User";
+
 export default {
+
   name: "editProfileImg",
   data(){
     return{
-      imageUrl : "../../../assets/img/user/user11.jpg"
+      imageUrl : ""
     }
   },
   mounted() {
-    //this.image = $route.user.img;
+    findById(data =>{
+      console.log(data)
+          if(data.data.imageUrl != null) {
+            this.imageUrl = data.data.imageUrl;
+            console.log(this.imageUrl)
+          }else if(data.data.imageUrl == null){
+            this.imageUrl = '../../../assets/img/user/female.png';
+          }
+        },
+        data =>{
+          alert("정보를 불러올수 없습니다.")
+        })
   },
-  // methods:{
-  //   async uploadImage(event) {
-  //     try {
-  //       const file = event.target.files[0];
-  //       const formData = new FormData();
-  //       formData.append('file', file);
-  //       const response = await axios.post('https://api.example.com/image-upload', formData);
-  //       this.form.profilePicture = response.data.imageUrl;
-  //     } catch (error) {
-  //       console.error(error)
-  //     }
-  //   }
-  // }
+  methods:{
+    async uploadImage(event) {
+      try {
+        const api = apiInstance();
+        api.defaults.headers["authorization"] = "Bearer " +  sessionStorage.getItem("access-token");
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+        const response = await axios.post('https://api.example.com/image-upload', formData);
+        this.form.profilePicture = response.data.imageUrl;
+      } catch (error) {
+        console.error(error)
+      }
+
+
+    }
+  }
 
 }
 </script>

@@ -101,12 +101,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(String userEmail, UserModifyPatchReq req) {
         User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
-        user.builder()
-                .name(req.getName())
-                .department(req.getDepartment())
-                .grade(req.getGrade())
-                .classNum(req.getClassNum())
-                .build();
+        user.update(req.getDepartment(), req.getGrade(), req.getClassNum());
         userRepository.save(user);
     }
 

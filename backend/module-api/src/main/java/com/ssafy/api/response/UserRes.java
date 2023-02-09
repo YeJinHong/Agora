@@ -32,7 +32,7 @@ public class UserRes extends BaseResponseBody {
 	@ApiModelProperty(name="User 이름")
 	String name;
 
-	@ApiModelProperty(name="User 이름")
+	@ApiModelProperty(name="User 프로필 Url")
 	String profileUrl;
 
 

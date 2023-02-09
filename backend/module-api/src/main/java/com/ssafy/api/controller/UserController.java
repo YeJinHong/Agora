@@ -87,7 +87,8 @@ public class UserController {
 		if(user.getFileManager() != null) {
 			userRes.setProfileUrl((userFileManagerService.getProfileUrl(user.getFileManager())).getSavedPath());
 		}
-		return ResponseEntity.status(200).body(UserRes.of(user));
+		System.out.println(userRes.getProfileUrl());
+		return ResponseEntity.status(200).body(userRes);
 	}
 
 	@GetMapping("/{userId}")
@@ -127,7 +128,7 @@ public class UserController {
 		}catch (Exception e){
 			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"서버에 문제가 발생했습니다."));
 		}
-		return ResponseEntity.status(409).body(BaseResponseBody.of(200,"Success"));
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200,"Success"));
 	}
 
 	@PatchMapping("/profile")

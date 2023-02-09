@@ -67,4 +67,9 @@ User extends BaseEntity {
         this.fileManager = fileManager;
 
     }
+    public void update(String department, int grade, int classNum){
+        this.department = department;
+        this.grade = grade;
+        this.classNum = classNum;
+    }
 }
