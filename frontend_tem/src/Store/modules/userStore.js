@@ -97,10 +97,9 @@ const userStore = {
         //         }
         //     );
         // },
-        async tokenRegeneration({commit, state}) {
+        async tokenRegeneration({dispatch, commit, state}) {
             console.log("토큰 재발급 >> 기존 토큰 정보 : {}", sessionStorage.getItem("access-token"));
             await tokenRegeneration(
-                JSON.stringify(state.userInfo),
                 ({data}) => {
                     if (data.message === "Success") {
                         let accessToken = data["access-token"];
