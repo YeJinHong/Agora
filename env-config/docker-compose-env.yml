@@ -50,8 +50,8 @@ services:
       - 3478:3478/udp
       - 65435-65535:65435-65535/udp
     environment:
-      - USERNAME: kurento
-      - PASSWORD: ssafy
+      - USERNAME=kurento
+      - PASSWORD=ssafy
 
   kurento:
     image: kurento/kurento-media-server
