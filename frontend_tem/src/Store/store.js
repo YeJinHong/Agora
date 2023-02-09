@@ -3,11 +3,12 @@ import createPersistedState from "vuex-persistedstate";
 
 // import userStore from "@/Store/modules/userStore";
 import userStore from "./modules/userStore";
+import devate from './modules/devate';
 
 
 // [store 데이터 설정 실시]
 const store = createStore({
-    modules: {userStore},
+    modules: {userStore, devate},
     state: { // [변수들의 집합]
 
     },

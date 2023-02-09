@@ -1,26 +1,12 @@
-/*
- * (C) Copyright 2014 Kurento (http://kurento.org/)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *   http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
-
 package com.ssafy.domain;
 
 import com.google.gson.JsonObject;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.kurento.client.*;
+import org.kurento.client.Continuation;
+import org.kurento.client.IceCandidate;
+import org.kurento.client.MediaPipeline;
+import org.kurento.client.WebRtcEndpoint;
 import org.kurento.jsonrpc.JsonUtils;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -30,31 +16,26 @@ import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-/**
- * @author Ivan Gracia (izanmail@gmail.com)
- * @since 4.3.1
- */
 @Slf4j
 @Getter
-public class UserSession implements Closeable {
+public class Participant implements Closeable {
 
     private final String name;
     private final WebSocketSession session;
 
     private final MediaPipeline pipeline;
 
-    private final String roomName;
-    private final String position;
+    private final String debateId;
+    private final Position position;
     private boolean screen;
     private final WebRtcEndpoint outgoingMedia;
     private final ConcurrentMap<String, WebRtcEndpoint> incomingMedia = new ConcurrentHashMap<>();
 
-    public UserSession(final String name, String roomName, String position, final WebSocketSession session, MediaPipeline pipeline) {
-
+    public Participant(final String name, String debateId, Position position, final WebSocketSession session, MediaPipeline pipeline) {
         this.pipeline = pipeline;
         this.name = name;
         this.session = session;
-        this.roomName = roomName;
+        this.debateId = debateId;
         this.position = position;
         this.screen = false;
         this.outgoingMedia = new WebRtcEndpoint.Builder(pipeline).build();
@@ -82,8 +63,8 @@ public class UserSession implements Closeable {
         return session;
     }
 
-    public void receiveVideoFrom(UserSession sender, String sdpOffer) throws IOException {
-        log.info("USER {}: connecting with {} in room {}", this.name, sender.getName(), this.roomName);
+    public void receiveVideoFrom(Participant sender, String sdpOffer) throws IOException {
+        log.info("USER {}: connecting with {} in room {}", this.name, sender.getName(), this.debateId);
 
         log.trace("USER {}: SdpOffer for {} is {}", this.name, sender.getName(), sdpOffer);
 
@@ -99,7 +80,7 @@ public class UserSession implements Closeable {
         this.getEndpointForUser(sender).gatherCandidates();
     }
 
-    private WebRtcEndpoint getEndpointForUser(final UserSession sender) {
+    private WebRtcEndpoint getEndpointForUser(final Participant sender) {
         if (sender.getName().equals(name)) {
             log.debug("PARTICIPANT {}: configuring loopback", this.name);
             return outgoingMedia;
@@ -148,12 +129,12 @@ public class UserSession implements Closeable {
             @Override
             public void onSuccess(Void result) throws Exception {
                 log.trace("PARTICIPANT {}: Released successfully incoming EP for {}",
-                        UserSession.this.name, senderName);
+                        Participant.this.name, senderName);
             }
 
             @Override
             public void onError(Throwable cause) throws Exception {
-                log.warn("PARTICIPANT {}: Could not release incoming EP for {}", UserSession.this.name,
+                log.warn("PARTICIPANT {}: Could not release incoming EP for {}", Participant.this.name,
                         senderName);
             }
         });
@@ -173,12 +154,12 @@ public class UserSession implements Closeable {
                 @Override
                 public void onSuccess(Void result) throws Exception {
                     log.trace("PARTICIPANT {}: Released successfully incoming EP for {}",
-                            UserSession.this.name, remoteParticipantName);
+                            Participant.this.name, remoteParticipantName);
                 }
 
                 @Override
                 public void onError(Throwable cause) throws Exception {
-                    log.warn("PARTICIPANT {}: Could not release incoming EP for {}", UserSession.this.name,
+                    log.warn("PARTICIPANT {}: Could not release incoming EP for {}", Participant.this.name,
                             remoteParticipantName);
                 }
             });
@@ -188,12 +169,12 @@ public class UserSession implements Closeable {
 
             @Override
             public void onSuccess(Void result) throws Exception {
-                log.trace("PARTICIPANT {}: Released outgoing EP", UserSession.this.name);
+                log.trace("PARTICIPANT {}: Released outgoing EP", Participant.this.name);
             }
 
             @Override
             public void onError(Throwable cause) throws Exception {
-                log.warn("USER {}: Could not release outgoing EP", UserSession.this.name);
+                log.warn("USER {}: Could not release outgoing EP", Participant.this.name);
             }
         });
     }
@@ -230,9 +211,9 @@ public class UserSession implements Closeable {
         if (obj == null || !(obj instanceof UserSession)) {
             return false;
         }
-        UserSession other = (UserSession) obj;
+        Participant other = (Participant) obj;
         boolean eq = name.equals(other.name);
-        eq &= roomName.equals(other.roomName);
+        eq &= debateId.equals(other.debateId);
         return eq;
     }
 
@@ -245,7 +226,7 @@ public class UserSession implements Closeable {
     public int hashCode() {
         int result = 1;
         result = 31 * result + name.hashCode();
-        result = 31 * result + roomName.hashCode();
+        result = 31 * result + debateId.hashCode();
         return result;
     }
 
@@ -255,5 +236,13 @@ public class UserSession implements Closeable {
 
     public void turnOnScreen() {
         this.screen = true;
+    }
+
+    public String getPositionName() {
+        return this.position.getPositionName();
+    }
+
+    public boolean isModerator() {
+        return this.getPositionName().equals("사회자");
     }
 }
