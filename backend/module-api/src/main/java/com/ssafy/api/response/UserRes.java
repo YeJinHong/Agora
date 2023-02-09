@@ -28,6 +28,7 @@ public class UserRes extends BaseResponseBody {
 
 	@ApiModelProperty(name="User 부서")
 	int classNum;
+
 	@ApiModelProperty(name="User 이름")
 	String name;
 

@@ -8,6 +8,7 @@ import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.FileManager;
 import com.ssafy.entity.rdbms.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,8 +61,8 @@ public class UserController {
 
 		try {
 			User user = userService.createUser(registerInfo);
-		}catch (Exception e) {
-			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"회원가입에 실패하셨습니다."));
+		}catch (DuplicateKeyException e) {
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500,e.getMessage()));
 		}
 		return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
 	}
