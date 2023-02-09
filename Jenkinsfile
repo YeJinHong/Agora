@@ -13,7 +13,6 @@ pipeline
 	stages {
 		stage('environment') {
 			when {
-				branch 'main'
 				changeset "env-config/**/*"
 			} 
 			steps {
@@ -38,7 +37,6 @@ pipeline
 		}
 		stage('build-module-chat') {
 			when {
-				branch 'main'
 				changeset "backend/module-chat/**/*"
 			}
 			steps {
@@ -49,18 +47,16 @@ pipeline
 		}
 		stage('build-module-kurento') {
 			when {
-				branch 'main'
 				changeset "backend/module-kurento/**/*"
 			}
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
-				sh './gradlew ${APP_KURENTO}:build -x test'
+				sh 'backend/gradlew ${APP_KURENTO}:build -x test'
 				echo 'Build End "${APP_KURENTO}"'
 			}
 		}
 		stage('deploy-module-api') {
 			when {
-				branch 'main'
 				anyOf {
 					changeset "backend/module-core/**/*"
 					changeset "backend/module-api/**/*"
@@ -74,7 +70,6 @@ pipeline
 		}
 		stage('deploy-module-chat') {
 			when {
-				branch 'main'
 				changeset "backend/module-chat/**/*"
 			}
 			steps {
@@ -85,7 +80,6 @@ pipeline
 		}
 		stage('deploy-module-kurento') {
 			when {
-				branch 'main'
 				changeset "backend/module-kurento/**/*"
 			}
 			steps {

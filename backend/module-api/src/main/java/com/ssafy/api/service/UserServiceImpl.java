@@ -10,6 +10,7 @@ import com.ssafy.entity.rdbms.Role;
 import com.ssafy.entity.rdbms.User;
 import com.ssafy.entity.redis.RefreshToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -39,17 +40,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User createUser(UserRegisterPostReq userRegisterInfo) {
+        
         User user = User.builder()
                 .userEmail(userRegisterInfo.getEmail())
                 // 보안을 위해서 유저 패스워드 암호화 하여 디비에 저장.
                 .password(passwordEncoder.encode(userRegisterInfo.getPassword()))
                 .name(userRegisterInfo.getName())
                 .position(userRegisterInfo.getPosition())
+                .grade(userRegisterInfo.getGrade())
+                .classNum(userRegisterInfo.getClassNum())
                 .department(userRegisterInfo.getDepartment())
                 .role(Role.ROLE_USER)
                 .build();
-
-        return userRepository.save(user);
+        try{
+            userRepository.save(user);
+        }catch (DuplicateKeyException e){
+            throw new DuplicateKeyException("중복되는 아이디가 존재합니다.");
+        }
+        return user;
     }
 
     @Override

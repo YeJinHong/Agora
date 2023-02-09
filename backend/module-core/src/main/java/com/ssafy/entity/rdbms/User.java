@@ -18,7 +18,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class User extends BaseEntity {
+public class
+User extends BaseEntity {
 
     @Column(unique = true,
             name = "user_email")
