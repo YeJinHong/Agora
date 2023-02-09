@@ -64,7 +64,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start Front App'
-				sh 'docker build -t app-vue .'
+				sh 'docker build -t app-vue frontend_tem/.'
 				echo 'Build End Front App'
 			}
 		}
