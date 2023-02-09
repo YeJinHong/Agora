@@ -77,7 +77,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_API}"'
-				sh 'docker-compose -f backend/module-core/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/module-api/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_API}"'
 			}
 		}
