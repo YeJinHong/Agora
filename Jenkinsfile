@@ -51,7 +51,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
-				sh './gradlew ${APP_KURENTO}:build -x test'
+				sh 'backend/gradlew ${APP_KURENTO}:build -x test'
 				echo 'Build End "${APP_KURENTO}"'
 			}
 		}
