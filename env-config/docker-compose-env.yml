@@ -60,4 +60,4 @@ services:
       - 8888:8888
       - 5000-5050:5000-5050/udp
     environment:
-      KMS_TURN_URL: kurento:ssafy@3.38.178.217?transport=udp
+      KMS_TURN_URL: kurento:ssafy@3.38.178.217:3478?transport=udp
