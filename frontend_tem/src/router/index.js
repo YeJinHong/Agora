@@ -96,8 +96,8 @@ import wishlist from '../views/pages/pages/wishlist.vue'
 import withdrawalinstructor from '../views/pages/instructor/withdrawal-instructor.vue'
 import changePasswordEmail from '../views/pages/pages/change-password-email.vue'
 import debateRegist from '../views/pages/debateConfiguration.vue'
-import devatemain from '../views/pages/devate/devatemain.vue'
-import devatewaiting from "../views/pages/devate/devatewaiting.vue";
+import debatemain from '../views/pages/debate/debatemain.vue'
+import debatewaiting from "../views/pages/debate/debatewaiting.vue";
 
 const routes = [
   {
@@ -587,14 +587,14 @@ const routes = [
     component: debateRegist
   },
   {
-    path: '/devatemain',
-    name: 'devatemain',
-    component: devatemain
+    path: '/debatemain',
+    name: 'debatemain',
+    component: debatemain
   },
   {
-    path: '/devatewaiting',
-    name: 'devatewaiting',
-    component: devatewaiting
+    path: '/debatewaiting',
+    name: 'debatewaiting',
+    component: debatewaiting
   },
 ];
 export const router = createRouter({

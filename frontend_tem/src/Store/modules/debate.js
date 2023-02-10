@@ -14,7 +14,7 @@ const getters = {
 
 const mutations = {
     participantList(state) {
-        if (state.chat_box == true) {
+        if (state.chat_box === true) {
             state.chat_box = false
             state.participant_list = !state.participant_list
         }
@@ -26,7 +26,7 @@ const mutations = {
         state.micro_phone = !state.micro_phone
     },
     chatBox(state) {
-        if (state.participant_list == true) {
+        if (state.participant_list === true) {
             state.participant_list = false
             state.chat_box = !state.chat_box
         }

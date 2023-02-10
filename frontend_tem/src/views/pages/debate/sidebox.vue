@@ -25,9 +25,9 @@ export default {
     return {store}
   },
   computed : {
-    ...mapState('devate',{middle_box:'middle_box'}),
-    ...mapState('devate',{participant_list:'participant_list'}),
-    ...mapState('devate',{chat_box:'chat_box'}),
+    ...mapState('debate',{middle_box:'middle_box'}),
+    ...mapState('debate',{participant_list:'participant_list'}),
+    ...mapState('debate',{chat_box:'chat_box'}),
 
 
   }
