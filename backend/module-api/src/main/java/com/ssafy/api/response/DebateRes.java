@@ -1,10 +1,12 @@
 package com.ssafy.api.response;
 
 import com.ssafy.entity.rdbms.Debate;
+import com.ssafy.entity.rdbms.Faq;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
 
@@ -15,6 +17,9 @@ public class DebateRes {
 
     @ApiModelProperty(name = "방장의 고유 ID")
     private long ownerId;
+
+    @ApiModelProperty(name = "방장의 소속")
+    private String ownerDepartment;
 
     @ApiModelProperty(name = "토론 카테고리 ID")
     private long category;
@@ -52,6 +57,7 @@ public class DebateRes {
     public static DebateRes of(Debate debate) {
         DebateRes res = new DebateRes();
         res.setOwnerId(debate.getOwner().getId());
+        res.setOwnerDepartment(debate.getOwner().getDepartment());
         res.setCategory(debate.getCategory());
         res.setInsertedTime(debate.getInsertedTime());
         res.setCallStartTime(debate.getCallStartTime());
@@ -64,6 +70,10 @@ public class DebateRes {
         res.setModeratorOnOff(debate.getModeratorOnOff());
         res.setDebateModeOption(debate.getDebateModeOption());
         return res;
+    }
+    public Page<DebateRes> toDtoList(Page<Debate> debates) {
+        Page<DebateRes> DebateResList = debates.map(debate -> DebateRes.of(debate));
+        return DebateResList;
     }
 
 }
