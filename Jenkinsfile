@@ -31,7 +31,7 @@ pipeline
 			steps {
 				echo 'Build Start "${APP_API}"'
 				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew backend/${APP_API}:build'
+				sh 'backend/gradlew backend/${APP_API}:bootJar'
 				echo 'Build End "${APP_API}"'
 			}
 		}
@@ -42,7 +42,7 @@ pipeline
 			steps {
 				echo 'Build Start "${APP_CHAT}"'
 				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew backend/${APP_CHAT}:build'
+				sh 'backend/gradlew backend/${APP_CHAT}:bootJar'
 				echo 'Build End "${APP_CHAT}"'
 			}
 		}
@@ -53,7 +53,7 @@ pipeline
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
 				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew backend/${APP_KURENTO}:build'
+				sh 'backend/gradlew backend/${APP_KURENTO}:bootJar'
 				echo 'Build End "${APP_KURENTO}"'
 			}
 		}

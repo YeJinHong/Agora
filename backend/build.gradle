@@ -71,9 +71,9 @@ subprojects {
     //     useJUnitPlatform()
     // }
     
-    test.onlyIf {
-        !project.hasProperty('test')
-    }   
+    // test.onlyIf {
+    //    !project.hasProperty('test')
+    // }   
 }
 
 
