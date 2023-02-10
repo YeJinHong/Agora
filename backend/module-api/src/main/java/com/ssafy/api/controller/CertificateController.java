@@ -2,6 +2,8 @@ package com.ssafy.api.controller;
 
 import com.ssafy.api.service.CertificateService;
 import com.ssafy.common.auth.CustomUserDetails;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
@@ -17,6 +19,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+@Api(value = "활동증명서 발급 API", tags = {"Certification"})
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ public class CertificateController {
 
     private final CertificateService certificateService;
 
+    @ApiOperation(value = "토론 증명서 발급")
     @GetMapping("/certification")
     public ResponseEntity<Resource> issueCertification(HttpServletRequest request, @ApiIgnore Authentication authentication){
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
