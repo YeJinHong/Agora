@@ -23,7 +23,6 @@ pipeline
 		}
 		stage('build-module-api') {
 			when {
-				branch 'main'
 				anyOf {
 					changeset "backend/module-core/**/*"
 					changeset "backend/module-api/**/*"
