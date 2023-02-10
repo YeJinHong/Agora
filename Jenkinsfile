@@ -21,17 +21,16 @@ pipeline
 				echo 'Environment Settings End'
 			}
 		}
-		stage('enviroment-nginx'){
-			when {
-				changeset "env-config/nginx/**/*"
-			}
-			steps {
-				echo 'Nginx Settings Start'
-				sh 'docker build --tag nginx-test-Img env-config/nginx'
-				sh 'docker run --name nginx-test -p 80:80 -v /etc/letsencrypt/live/i8c205.p.ssafy.io/:/etc/letsencrypt/live/i8c205.p.ssafy.io/ nginx-test-Img'
-				echo 'Nginx Settings End'
-			}
-		}
+		// stage('enviroment-nginx'){
+		// 	when {
+		// 		changeset "env-config/nginx/**/*"
+		// 	}
+		// 	steps {
+		// 		echo 'Nginx Settings Start'
+		// 		sh 'docker-compose -f env-config/nginx/docker-compose.yml up -d'
+		// 		echo 'Nginx Settings End'
+		// 	}
+		// }
 		stage('build-module-api') {
 			when {
 				branch 'main'

@@ -1,10 +1,10 @@
-FROM nginx:stalbe-alpine
+# FROM nginx:stable-alpine
 
-WORKDIR /app
+# WORKDIR /app
 
 # RUN rm /etc/nginx/conf.d/default.conf
-COPY agora-nginx.conf /etc/nginx/conf.d
+# COPY agora-nginx.conf /etc/nginx/conf.d
 
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
 
-EXPOSE 80
+# EXPOSE 80
