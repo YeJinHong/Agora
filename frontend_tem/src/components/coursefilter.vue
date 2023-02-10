@@ -20,7 +20,7 @@
                         <div class="col-md-6 col-item">
                             <div class=" search-group">
                                 <i class="feather-search"></i>
-                                <input type="text" class="form-control" placeholder="Search our courses" >
+                                <input type="text" class="form-control" placeholder="제목 혹은 작성자 명으로 검색" >
                             </div>
                         </div>
                         <div class="col-md-6 col-lg-6 col-item">
@@ -39,7 +39,10 @@
 <script>
     import Vue from 'vue'
     export default {
-      computed:{
+        setup(){
+            
+        },
+        computed:{
             currentPath() {
                 return this.$route.name;
             }
@@ -47,7 +50,6 @@
       data() {
             return {
                 published: ["Newly published", "published 1", "published 2", "published 3"],
-               
             }
         },
         mounted() {
