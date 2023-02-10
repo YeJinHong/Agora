@@ -23,7 +23,6 @@ pipeline
 		}
 		stage('build-module-api') {
 			when {
-				branch 'main'
 				anyOf {
 					changeset "backend/module-core/**/*"
 					changeset "backend/module-api/**/*"
@@ -32,7 +31,7 @@ pipeline
 			steps {
 				echo 'Build Start "${APP_API}"'
 				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew ${APP_API}:build -x test'
+				sh 'backend/gradlew backend/${APP_API}:build'
 				echo 'Build End "${APP_API}"'
 			}
 		}
@@ -43,7 +42,7 @@ pipeline
 			steps {
 				echo 'Build Start "${APP_CHAT}"'
 				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew ${APP_CHAT}:build -x test'
+				sh 'backend/gradlew backend/${APP_CHAT}:build'
 				echo 'Build End "${APP_CHAT}"'
 			}
 		}
@@ -54,7 +53,7 @@ pipeline
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
 				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew ${APP_KURENTO}:build -x test'
+				sh 'backend/gradlew backend/${APP_KURENTO}:build'
 				echo 'Build End "${APP_KURENTO}"'
 			}
 		}
@@ -77,7 +76,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_API}"'
-				sh 'docker-compose -f backend/module-core/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/module-api/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_API}"'
 			}
 		}

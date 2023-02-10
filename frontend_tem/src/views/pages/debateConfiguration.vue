@@ -41,22 +41,28 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">사회자 여부</label>
-                    <input type="radio" name="select_specialist" v-model="moderateOnOff" , value="1">
-                    <span class="checkmark"></span> 사회자 참여
-                    <input type="radio" name="select_specialist" v-model="moderateOnOff" , value="2">
-                    <span class="checkmark"></span> 사회자 불참
+                    <div>
+                      <input type="radio" name="select_specialist" v-model="state.debate.moderateOnOff" value="1">
+                      <span class="checkmark"></span> 사회자 참여
+                      <input type="radio" name="select_specialist" v-model="state.debate.moderateOnOff" value="2">
+                      <span class="checkmark"></span> 사회자 불참
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="start-time">토론 시작 시간</label>
-                    <input id="start-time" type="datetime-local" v-model="state.debate.callStartTime"/>
+                    <div>
+                      <input id="start-time" type="datetime-local" v-model="state.debate.callStartTime"/>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label for="end-time">토론 종료 시간</label>
-                    <input id="end-time" type="datetime-local" v-model="state.debate.callEndTime"/>
+                    <div>
+                      <input id="end-time" type="datetime-local" v-model="state.debate.callEndTime"/>
+                    </div>
                   </div>
                 </div>
                 <div class="submit-ticket">
-                  <button type="button" class="btn btn-primary" @click.prevent="saveDebateConfig">생성</button>
+                  <button type="button" class="btn btn-primary" @click.prevent="">생성</button>
                 </div>
               </div>
             </div>
@@ -73,7 +79,6 @@ import {useRouter, useRoute} from 'vue-router';
 import {useStore} from 'vuex';
 import SummernoteEditor from 'vue3-summernote-editor';
 
-
 export default {
   name: 'debateConfiguration',
   components: {SummernoteEditor},
@@ -86,6 +91,7 @@ export default {
         description: '',
         category: '',
         mode: '',
+        moderateOnOff: '',
         callStartTime: '',
         callEndTime: '',
       },
@@ -119,7 +125,7 @@ export default {
     //   http.post('/debates', {})
     // }
 
-    return {state, summernoteChange,summernoteImageLinkInsert }
+    return {state, summernoteChange, summernoteImageLinkInsert}
   },
   // methods: {
   //   // saveDebateConfig() {

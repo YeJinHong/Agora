@@ -2,7 +2,7 @@ version: '2'
 services:
   back-module-kurento:
     build:
-      context: ./backend/module-kurento/
+      context: .
     container_name: agora-back-module-kurento
     ports:
       - "8083:8443"

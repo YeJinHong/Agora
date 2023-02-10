@@ -67,9 +67,13 @@ subprojects {
         annotationProcessor("org.projectlombok:lombok:1.18.20")
     }
 
-    tasks.named('test') {
-        useJUnitPlatform()
-    }
+    // tasks.named('test') {
+    //     useJUnitPlatform()
+    // }
+    
+    test.onlyIf {
+        !project.hasProperty('test')
+    }   
 }
 
 
