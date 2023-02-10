@@ -30,4 +30,5 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation group: 'org.xhtmlrenderer', name: 'flying-saucer-pdf-openpdf', version: '9.1.22'
     implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
-    implementation 'com.itextpdf:html2pdf:3.0.0'}
+    implementation 'com.itextpdf:html2pdf:3.0.0'
+}
