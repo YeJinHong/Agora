@@ -8,6 +8,7 @@ import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.entity.rdbms.FileManager;
 import com.ssafy.entity.rdbms.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -60,8 +61,8 @@ public class UserController {
 
 		try {
 			User user = userService.createUser(registerInfo);
-		}catch (Exception e) {
-			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"회원가입에 실패하셨습니다."));
+		}catch (DuplicateKeyException e) {
+			return ResponseEntity.status(500).body(BaseResponseBody.of(500,e.getMessage()));
 		}
 		return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
 	}
@@ -86,7 +87,8 @@ public class UserController {
 		if(user.getFileManager() != null) {
 			userRes.setProfileUrl((userFileManagerService.getProfileUrl(user.getFileManager())).getSavedPath());
 		}
-		return ResponseEntity.status(200).body(UserRes.of(user));
+		System.out.println(userRes.getProfileUrl());
+		return ResponseEntity.status(200).body(userRes);
 	}
 
 	@GetMapping("/{userId}")
@@ -126,7 +128,7 @@ public class UserController {
 		}catch (Exception e){
 			return ResponseEntity.status(500).body(BaseResponseBody.of(500,"서버에 문제가 발생했습니다."));
 		}
-		return ResponseEntity.status(409).body(BaseResponseBody.of(200,"Success"));
+		return ResponseEntity.status(200).body(BaseResponseBody.of(200,"Success"));
 	}
 
 	@PatchMapping("/profile")

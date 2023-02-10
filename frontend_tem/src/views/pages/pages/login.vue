@@ -151,7 +151,7 @@ export default {
         user_email: state.form.userEmail,
         password: state.form.password
       })
-      // moveHome();
+      moveHome();
     }
 
     const moveHome = () => {

@@ -4,11 +4,14 @@ import createPersistedState from "vuex-persistedstate";
 // import userStore from "@/Store/modules/userStore";
 import userStore from "./modules/userStore";
 import commonCodeStore from "./modules/commonCodeStore";
+import debate from './modules/debate';
+
 
 
 // [store 데이터 설정 실시]
 const store = createStore({
-    modules: {userStore, commonCodeStore},
+
+    modules: {userStore, commonCodeStore, debate},
     state: { // [변수들의 집합]
 
     },

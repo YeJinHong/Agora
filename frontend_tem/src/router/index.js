@@ -5,7 +5,6 @@ import Bloggrid from '../views/pages/blog/blog-grid'
 import Bloglist from '../views/pages/blog/blog-list'
 import Blogmasonry from '../views/pages/blog/blog-masonry'
 import Blogmodern from '../views/pages/blog/blog-modern'
-import Blogtemp from '../views/pages/blog/blog-temp'
 import cart from '../views/pages/pages/cart.vue'
 import checkout from '../views/pages/pages/checkout.vue'
 import comesoon from '../views/pages/pages/error/come-soon.vue'
@@ -96,7 +95,8 @@ import wishlist from '../views/pages/pages/wishlist.vue'
 import withdrawalinstructor from '../views/pages/instructor/withdrawal-instructor.vue'
 import changePasswordEmail from '../views/pages/pages/change-password-email.vue'
 import debateRegist from '../views/pages/debateConfiguration.vue'
-// import devatemain from '../views/pages/debate/devatemain'
+import devatemain from '../views/pages/devate/devatemain.vue'
+import devatewaiting from "../views/pages/devate/devatewaiting.vue";
 
 const routes = [
   {
@@ -580,15 +580,21 @@ const routes = [
     component: changePasswordEmail
   },
   {
+
     path:'/debate-regist',
     name: 'debate-regist',
     component: debateRegist
-  }
-  // {
-  //   path: '/devatemain',
-  //   name: 'devatemain',
-  //   component: devatemain
-  // },
+  },
+  {
+    path: '/devatemain',
+    name: 'devatemain',
+    component: devatemain
+  },
+  {
+    path: '/devatewaiting',
+    name: 'devatewaiting',
+    component: devatewaiting
+  },
 ];
 export const router = createRouter({
     history: createWebHistory(),
