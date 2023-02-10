@@ -21,6 +21,16 @@ pipeline
 				echo 'Environment Settings End'
 			}
 		}
+		// stage('enviroment-nginx'){
+		// 	when {
+		// 		changeset "env-config/nginx/**/*"
+		// 	}
+		// 	steps {
+		// 		echo 'Nginx Settings Start'
+		// 		sh 'docker-compose -f env-config/nginx/docker-compose.yml up -d'
+		// 		echo 'Nginx Settings End'
+		// 	}
+		// }
 		stage('build-module-api') {
 			when {
 				anyOf {
