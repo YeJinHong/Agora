@@ -23,7 +23,6 @@ pipeline
 		}
 		stage('build-module-api') {
 			when {
-				branch 'main'
 				anyOf {
 					changeset "backend/module-core/**/*"
 					changeset "backend/module-api/**/*"
@@ -31,6 +30,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_API}"'
+				sh 'chmod +x backend/gradlew'
 				sh 'backend/gradlew ${APP_API}:build -x test'
 				echo 'Build End "${APP_API}"'
 			}
@@ -41,6 +41,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_CHAT}"'
+				sh 'chmod +x backend/gradlew'
 				sh 'backend/gradlew ${APP_CHAT}:build -x test'
 				echo 'Build End "${APP_CHAT}"'
 			}
@@ -51,8 +52,19 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
+				sh 'chmod +x backend/gradlew'
 				sh 'backend/gradlew ${APP_KURENTO}:build -x test'
 				echo 'Build End "${APP_KURENTO}"'
+			}
+		}
+		stage('build-front') {
+			when {
+				changeset "frontend_tem/**/*"
+			}
+			steps {
+				echo 'Build Start Front App'
+				sh 'docker build -t app-vue frontend_tem/.'
+				echo 'Build End Front App'
 			}
 		}
 		stage('deploy-module-api') {
@@ -64,7 +76,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_API}"'
-				sh 'docker-compose -f backend/module-core/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/module-api/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_API}"'
 			}
 		}
@@ -86,6 +98,16 @@ pipeline
 				echo 'Deploy Start "${APP_KURENTO}"'
 				sh 'docker-compose -f backend/module-kurento/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_KURENTO}"'
+			}
+		}
+		stage('build-deploy-front') {
+			when {
+				changeset "frontend_tem/**/*"
+			}
+			steps {
+				echo 'Deploy Start Front App'
+				sh 'docker run -d -p 80:8083 --name front-app app-vue'
+				echo 'Deploy End Front App'
 			}
 		}
 	}

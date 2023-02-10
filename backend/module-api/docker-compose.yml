@@ -2,7 +2,7 @@ version: '2'
 services:
   back-module-api:
     build:
-      context: ./backend/module-api/
+      context: .
     container_name: agora-back-module-api
     ports:
-      - "8081:8081"
+      - "8081:8082"

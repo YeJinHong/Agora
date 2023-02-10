@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.transaction.Transactional;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +33,6 @@ public class UserFileManagerServiceImpl implements UserFileManagerService{
     private final FileRepository fileRepository;
 
     @Override
-    @Transactional
     public FileManager getFileManager(String userEmail) throws IOException {
 
         User user = userRepository.findByUserEmail(userEmail).orElseThrow(NoSuchElementException::new);
@@ -48,11 +46,10 @@ public class UserFileManagerServiceImpl implements UserFileManagerService{
                     .files(new ArrayList<>())
                     .build();
             user.createFileManager(fileManager);
+            fileManagerRepository.save(fileManager);
             userRepository.save(user);
         }
-        FileManager fileManager = user.getFileManager();
-
-        return fileManager;
+       return user.getFileManager();
     }
 
     @Override
@@ -62,7 +59,6 @@ public class UserFileManagerServiceImpl implements UserFileManagerService{
     }
 
     @Override
-    @Transactional
     public File saveFile(MultipartFile file, FileManager fileManager) throws IOException {
 
         if(fileManager.getFiles().size() >= 1) {

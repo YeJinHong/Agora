@@ -113,6 +113,7 @@
 import  Vue, { reactive, computed, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import http from '../../../api/http';
+import {useRouter, useRoute} from 'vue-router';
 
 export default {
   name: "register",
@@ -121,6 +122,7 @@ export default {
   setup(props) {
     const store = useStore();
     const SignupForm = ref(null);
+    const router = useRouter();
     const state = reactive({
       form : {
         userEmail : '',
@@ -409,13 +411,15 @@ export default {
         department: state.form.department, position: state.form.position, name: state.form.name,
         grade: state.form.grade, classNum: state.form.classNum, role: state.form.role})
           .then(({ data }) => {
-                let msg = "등록 처리시 문제가 발생했습니다.";
+              console.log(data)
                 if (data.message === "Success") {
-                  msg = "등록이 완료되었습니다.";
+                  alert("등록이 완료되었습니다.");
+                  router.push('/login');
                 }
-                alert(msg);
               }
-          )
+          ).catch(error => {
+            alert(error.response.data.message)
+      })
     }
     const isValid = () => {
       SignupForm.value.validate((valid) => {

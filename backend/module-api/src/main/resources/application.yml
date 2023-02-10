@@ -6,7 +6,7 @@ spring:
       static-locations: classpath:/dist/
       add-mappings: 'false'
   redis:
-    port: 36379
+    port: 6379
     host: i8c205.p.ssafy.io
   jpa:
     hibernate:
@@ -24,7 +24,7 @@ spring:
     hikari:
       password: ssafy
       username: root
-    url: jdbc:mysql://i8c205.p.ssafy.io:33306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
+    url: jdbc:mysql://i8c205.p.ssafy.io:3306/ssafy_web_db?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Seoul&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true
   mail:
     host: smtp.gmail.com
     port: 587
@@ -61,7 +61,7 @@ server:
 spa:
   default-file: /dist/index.html
 file:
-  path: /Users/muntaeho/Desktop/SSAFY/pj2/backend/module-api/src/main/resources/static/profile
+  path: C:\Users\multicampus\Desktop
   path-certificate: /Users/bellroot/Documents/ssafy/S08P12C205/backend/module-api/src/main/resources
 common-code:
   evaluation-question-parent-id : 1
