@@ -16,7 +16,7 @@ pipeline
 				}                     
 			} steps { 
 				echo 'Environment Settings Start' 
-				docker-compose -f env-config/docker-compose.yml up -d
+				sh 'docker-compose -f env-config/docker-compose-env.yml up -d'
 				echo 'Environment Settings End' 
 			}      
 		}
@@ -71,7 +71,7 @@ pipeline
 					}
 					steps {    
 						echo 'Deploy Start "${APP_API}"'     
-						docker-compose -f backend/module-core/docker-compose.yml up -d
+						sh 'docker-compose -f backend/module-core/docker-compose.yml up -d'
 						echo 'Deploy End "${APP_API}"'        
 					}   
 				}
@@ -83,7 +83,7 @@ pipeline
 					} 
                     steps {                      
 						echo 'Deploy Start "${APP_CHAT}"'        
-						docker-compose -f backend/module-chat/docker-compose.yml up -d
+						sh 'docker-compose -f backend/module-chat/docker-compose.yml up -d'
 						echo 'Deploy End "${APP_CHAT}"'          					
 					}                 
 				}
@@ -95,7 +95,7 @@ pipeline
 					} 
                     steps {         
 						echo 'Deploy Start "${APP_KURENTO}"'     
-						docker-compose -f backend/module-kurento/docker-compose.yml up -d
+						sh 'docker-compose -f backend/module-kurento/docker-compose.yml up -d'
 						echo 'Deploy End "${APP_KURENTO}"'        
 					}       
 				}             
