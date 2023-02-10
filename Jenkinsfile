@@ -1,7 +1,7 @@
 pipeline 
 {
 	agent any
-	tools {			 
+	tools {
 		gradle 'gradle 6.8'
 	}
 	environment {
@@ -14,7 +14,7 @@ pipeline
 		stage('environment') {
 			when {
 				changeset "env-config/**/*"
-			} 
+			}
 			steps {
 				echo 'Environment Settings Start'
 				sh 'docker-compose -f env-config/docker-compose-env.yml up -d'
