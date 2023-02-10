@@ -62,5 +62,6 @@ spa:
   default-file: /dist/index.html
 file:
   path: C:\Users\multicampus\Desktop
+  path-certificate: /Users/bellroot/Documents/ssafy/S08P12C205/backend/module-api/src/main/resources
 common-code:
   evaluation-question-parent-id : 1
