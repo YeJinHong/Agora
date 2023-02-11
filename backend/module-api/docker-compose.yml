@@ -5,4 +5,4 @@ services:
       context: .
     container_name: agora-back-module-api
     ports:
-      - "8081:8082"
+      - "8084:8082"
