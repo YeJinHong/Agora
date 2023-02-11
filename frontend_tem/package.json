@@ -60,7 +60,7 @@
     "vue3-slide-up-down": "^1.2.4",
     "vue3-summernote-editor": "^1.0.2",
     "vue3-tags-input": "^1.0.2",
-    "vuex": "^4.1.0",
+    "vuex": "^4.0.0-beta.4",
     "vuex-persistedstate": "^4.1.0",
     "yup": "^0.32.11"
   },

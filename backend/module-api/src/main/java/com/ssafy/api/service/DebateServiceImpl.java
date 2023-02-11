@@ -3,12 +3,14 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
+import com.ssafy.api.response.DebateRes;
 import com.ssafy.entity.rdbms.Debate;
 import com.ssafy.entity.rdbms.Perspective;
 import com.ssafy.entity.rdbms.User;
 import com.ssafy.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,13 +49,15 @@ public class DebateServiceImpl implements DebateService {
         return savedDebate;
     }
     @Override
-    public Page<Debate> searchAll(String keyword, String condition, Pageable pageable) {
-        return debateRepository.findDebateBySearchCondition(keyword, condition, pageable);
+    public Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable) {
+        Page<Debate> debates = debateRepository.findDebateBySearchCondition(keyword, condition, pageable);
+        return new DebateRes().toDtoList(debates);
     }
 
     @Override
-    public Debate search(long debateId) {
-        return debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+    public DebateRes search(long debateId) {
+        Debate debate = debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
+        return DebateRes.of(debate);
     }
 
     @Override
