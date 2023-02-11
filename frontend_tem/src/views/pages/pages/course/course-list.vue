@@ -13,7 +13,7 @@
 							<coursefilter></coursefilter>
 							
 							<div class="row">
-								<div class="col-lg-12 col-md-12 d-flex" v-for="debate in debate_list">
+								<div class="col-lg-12 col-md-12 d-flex" v-for="(debate, index) in debate_list">
 									<div class="course-box course-design list-course d-flex">
 										<div class="product">
 											<div class="product-img">
@@ -21,7 +21,8 @@
 													<img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg">
                                                 </router-link>
 												<div class="price">
-													<h3>$300 <span>$99.00</span></h3>
+													<!-- <h3>$300 <span>$99.00</span></h3> -->
+													<h3 :class="debate.state">{{ debate.state }}</h3>
 												</div>
 											</div>
 											<div class="product-content">
@@ -31,28 +32,18 @@
 														<router-link to="checkout" class="btn btn-primary">참여하기</router-link>
 													</div>
 												</div>
-												<div class="course-info border-bottom-0 pb-0 d-flex align-items-center">
-													<div class="rating-img d-flex align-items-center">
-														<img src="../../../../assets/img/icon/icon-01.svg" alt="">
-														<p>12+ Lesson</p>
-													</div>
+												<div class="course-info border-bottom-0 pb-0 d-flex ali	gn-items-center">
 													<div class="course-view d-flex align-items-center">
 														<img src="../../../../assets/img/icon/icon-02.svg" alt="">
-														<p>9hr 30min</p>
+														<p>{{ debate.call_start_time }} ~ {{ debate.call_end_time }}</p>
 													</div>
-												</div>
-												<div class="rating">							
-													<i class="fas fa-star filled me-1"></i>
-													<i class="fas fa-star filled me-1"></i>
-													<i class="fas fa-star filled me-1"></i>
-													<i class="fas fa-star filled me-1"></i>
-													<i class="fas fa-star me-1"></i>
-													<span class="d-inline-block average-rating"><span>4.0</span> (15)</span>
 												</div>
 												<div class="course-group d-flex mb-0">
 													<div class="course-group-img d-flex">
-														<!-- <router-link to="instructor-profile"><img :src="debate.owner_thumbnail" alt="" class="img-fluid"></router-link> -->
-														<router-link to="instructor-profile"><img src="../../../../assets/img/user/temp_user1.png" alt="" class="img-fluid"></router-link>
+														<!-- <router-link to="instructor-profile"><img :src="debate.owner_profile" alt="" class="img-fluid"></router-link> -->
+														<router-link to="instructor-profile"><img src="../../../../assets/img/user/temp_user2.png" alt="" class="img-fluid"></router-link>
+														<!-- <router-link to="instructor-profile"><img :src="debate.owner_profile" alt="" class="img-fluid"></router-link> -->
+														
 														<div class="course-name">
 															<h4><router-link to="instructor-profile">{{ debate.owner_name }}</router-link></h4>
 															<p>{{ debate.owner_department_position }}</p>
@@ -104,7 +95,7 @@
 												</div>
 												<div class="course-group d-flex mb-0">
 													<div class="course-group-img d-flex">
-														<router-link to="instructor-profile"><img src="../../../../assets/img/user/temp_user2.png" alt="" class="img-fluid"></router-link>
+														<router-link to="instructor-profile"><img src="../../../../assets/img/user/temp_user1.png" alt="" class="img-fluid"></router-link>
 														<div class="course-name">
 															<h4><router-link to="instructor-profile">Jesse Stevens</router-link></h4>
 															<p>Instructor</p>
@@ -142,10 +133,11 @@ const api = apiInstance();
 
 export default {
     setup(){
-
+		
     },
     data(){
         return {
+			owners : [],
             debate_list : [
 			{
 					debate_id : 1,
@@ -156,9 +148,9 @@ export default {
 					thumbnail_url : "../../../../assets/img/course/testImg.jpg",
 					owner_email : "ssafy@naver.com",
 					owner_name : "김싸피",
-					owner_thumbnail : "../../../../assets/img/user/temp_user1.png",
+					owner_profile : "../../../../assets/img/user/temp_user1.png",
 					owner_department_position : "싸피고등학교 선생님",
-					status : "active",
+					state : "inactive",
 				},
 				{
 					debate_id : 2,
@@ -169,9 +161,9 @@ export default {
 					thumbnail_url : "../../../../assets/img/course/testImg2.jpg",
 					owner_email : "debate@naver.com",
 					owner_name : "김토론",
-					owner_thumbnail : "../../../../assets/img/user/temp_user2.png",
+					owner_profile : "../../../../assets/img/user/temp_user2.png",
 					owner_department_position : "토론고등학교 선생님",
-					status : "inactive",
+					state : "active",
 				},
 				{
 					debate_id : 3,
@@ -182,17 +174,18 @@ export default {
 					thumbnail_url : "../../../../assets/img/course/testImg3.jpg",
 					owner_email : "fake@naver.com",
 					owner_name : "김철수",
-					owner_thumbnail : "../../../../assets/img/user/temp_user3.png",
+					owner_profile : "../../../../assets/img/user/temp_user3.png",
 					owner_department_position : "광주고등학교 선생님",
-					status : "active",
+					state : "active",
 				},
 			]
         }
     },
     mounted(){
+
     },
     methods: {
-        
+
     },
     
 }
