@@ -90,7 +90,7 @@ function onParticipantLeft(request) {
 	console.log('Participant ' + request.userName + ' left');
 	var participant = participants[request.userName];
 	participant.dispose();
-	delete participants[request.name];
+	delete participants[request.userName];
 }
 
 function onExistingParticipants(msg) {

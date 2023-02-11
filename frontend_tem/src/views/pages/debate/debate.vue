@@ -39,9 +39,9 @@
       <div id="room" style="display: none;">
         <h2 id="room-header"></h2>
         <div id="participants">
-<!--          <div id="participants-agree"></div>-->
-<!--          <div id="moderator"></div>-->
-<!--          <div id="participants-opp" style="float: right;"></div>-->
+          <div id="participants-agree"></div>
+          <div id="moderator"></div>
+          <div id="participants-opp" style="float: right;"></div>
         </div>
         <div id="timer" style="font-size: 20px"></div>
         <div id="screen"></div>
@@ -90,16 +90,24 @@ export default {
       debateId: "",
       userName: "",
       position : ""
-      }
+      },
+
     }
   },
   mounted() {
       room.connect();
   },
   methods: {
-    async connect() {
-      const registerRoom = await room.registerRoom(this.data);
+    // async connect() {
+    //   const connectRoom = await room.connect();
+    //   const registerRoom = await room.registerRoom(this.data);
+    //   this.room = connectRoom()
+    // },
+    connect() {
+
+    room.registerRoom(this.data);
     },
+
     leaveRoom() {
       room.leaveRoom();
     },
