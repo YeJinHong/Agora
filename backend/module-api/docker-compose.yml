@@ -11,5 +11,4 @@ services:
     
 networks:
   agora_network:
-    name: agora_network
     external: true
