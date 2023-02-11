@@ -42,9 +42,9 @@ pipeline
 				echo 'Build Start "${APP_API}"'
 				sh 'cd backend'
 				sh 'chmod +x backend/gradlew'
-				sh './gradlew ${APP_API}:clean'
-				sh './gradlew ${APP_API}:build -x test'
-				sh 'cd ..'
+				sh 'pwd'
+				sh 'backend/gradlew ${APP_API}:clean'
+				sh 'backend/gradlew ${APP_API}:build -x test'
 				echo 'Build End "${APP_API}"'
 			}
 		}
