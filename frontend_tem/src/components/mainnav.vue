@@ -8,6 +8,10 @@
           <router-link to="/deposit-student-dashboard">MY PAGE</router-link>
         </li>
 
+      <li v-bind:class="{'active': currentPath === 'debate' || currentPath === 'debate'}">
+        <router-link to="/debate">debate</router-link>
+      </li>
+
 
       <li class="has-submenu" :class=" PagesMenu ? 'active' : 'notactive'">
         <a href="javascript:void(0);">토론 <i class="fas fa-chevron-down"></i></a>
