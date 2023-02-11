@@ -19,11 +19,11 @@
           </p>
           <h4>방 입장 정보</h4>
           <p>
-            <input type="text" name="room" id="debateId" v-model="data.debateId"
+            <input type="text" name="debateId" id="debateId" v-model="data.debateId"
                    placeholder="DebateId" required>
           </p>
           <p>
-            <input type="text" name="name" id="userName" v-model="data.userName"
+            <input type="text" name="userName" id="userName" v-model="data.userName"
                    placeholder="Username" required>
           </p>
           <p>
@@ -97,8 +97,8 @@ export default {
       room.connect();
   },
   methods: {
-    connect() {
-      room.registerRoom(this.data);
+    async connect() {
+      const registerRoom = await room.registerRoom(this.data);
     },
     leaveRoom() {
       room.leaveRoom();
