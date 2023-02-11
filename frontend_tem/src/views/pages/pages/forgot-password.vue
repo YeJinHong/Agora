@@ -21,15 +21,13 @@
                         <div class="reset-password">
                             <p>Enter your email to reset your password.</p>
                         </div>
-                        <form action="login">
                             <div class="form-group">
                                 <label class="form-control-label">Email</label>
-                                <input type="email" class="form-control" placeholder="Enter your email address">
+                                <input type="email" class="form-control" v-model:userEmail placeholder="Enter your email address">
                             </div>
                             <div class="d-grid">
-                                <button class="btn btn-start" type="submit">Submit</button>
+                                <button class="btn btn-start" @click="sendEmail" type="submit">Submit</button>
                             </div>
-                        </form>
                     </div>
                 </div>
                 <!-- /Login -->
@@ -41,3 +39,34 @@
     </div>
     <!-- /Main Wrapper -->
 </template>
+
+<script>
+import { apiInstance } from "../../../api/index.js";
+
+export default {
+  data(){
+    return {
+      userEmail:''
+    }
+  },
+  methods:{
+    sendEmail(){
+      if(userEmail != ''){
+        const api = apiInstance();
+        api.post('/users/email',
+            {
+              userEmail : this.userEmail
+            }).then(response => {
+              alert("이메일이 전송되었습니다." +
+                  "30분 내로 변경 가능합니다.")
+        }).catch(error => {
+          alert("이메일 변경에 실패 하셨습니다." )
+        })
+      }
+    }
+
+  }
+}
+
+
+</script>
