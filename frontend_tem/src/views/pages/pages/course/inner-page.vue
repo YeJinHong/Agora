@@ -11,7 +11,7 @@
                         </div>
                         <div class="instructor-detail me-3">
                             <h5><router-link to="instructor-profile">{{ debate.owner_name }}</router-link></h5>
-                            <p> category : {{debate.owner_department_position}}</p>
+                            <p>{{debate.owner_department_position}}</p>
                         </div>									
                         <!-- <div class="rating mb-0">							
                             <i class="fas fa-star filled me-1"></i>
@@ -22,7 +22,7 @@
                             <span class="d-inline-block average-rating"><span>4.5</span> (15)</span>
                         </div> -->
                     </div>
-                    <span class="web-badge mb-3">{{ debate_detail.category }}</span>
+                    <span class="web-badge mb-3">  category : {{ debate_detail.category }}</span>
                 </div>
                 <h2>{{ debate.debate_title }}</h2>
                 <!-- <p>토론 내용 한줄 요약 - (현재 적당한 데이터 없음)</p> -->

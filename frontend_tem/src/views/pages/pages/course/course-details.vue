@@ -45,84 +45,23 @@
 									<br/>
 
 									<h6> 청중 투표 결과 </h6>
-								</div>
-							</div>
-
-							<div class="card overview-sec">
-								<div class="card-body">
-									<h5 class="subs-title">Overview</h5>
-									<h6>토론 설명</h6>
-									<p></p>
-									<br/>
-									
+									<p v-for="perspective in vote_result.perspective_list">
+										{{ perspective.perspective_name }} : {{ Math.round(perspective.percent * 1000)/10 }} %
+									</p>
 								</div>
 							</div>
 
 
 							
-							<!-- Reviews -->
-							<div class="card review-sec">
-								<div class="card-body">
-									<h5 class="subs-title">Reviews</h5>
-									<div class="review-wrapper pb-5" v-for="reviewer in reviewers">
-										<div class="instructor-wrap">
-											<div class="about-instructor">
-												<div class="abt-instructor-img">
-													<router-link to="instructor-profile"><img src="../../../../assets/img/user/user1.jpg" alt="img" class="img-fluid"></router-link>
-												</div>
-												<div class="instructor-detail">
-													<h5><router-link to="instructor-profile">{{ reviewer.user_name}}</router-link></h5>
-													<p>{{ reviewer.department_position }}</p>
-												</div>
-											</div>
-											<div class="rating">							
-												<i class="fas fa-star filled me-1"></i>
-												<i class="fas fa-star filled me-1"></i>
-												<i class="fas fa-star filled me-1"></i>
-												<i class="fas fa-star filled me-1"></i>
-												<i class="fas fa-star filled me-1"></i>
-												<span class="d-inline-block average-rating"> {{ reviewer.rating }}</span>
-											</div>
-										</div>
-										<p class="rev-info">{{ reviewer.content }}</p>
-										<!-- <a href="javascript:;" class="btn btn-reply"><i class="feather-corner-up-left"></i> Reply</a> -->
-									</div>
-								</div>
 
-								
-							</div>
-							<!-- /Reviews -->
-							
-							<!-- Comment -->
-							<div class="card comment-sec">
+							<div class="card overview-sec" v-if="summary != ''"> 
 								<div class="card-body">
-									<h5 class="subs-title"> 댓글 달기 </h5>
-									<form>
-										<div class="row">
-											<div class="col-md-6">
-												<div class="form-group">
-													<input type="text" class="form-control" placeholder="Full Name">
-												</div>
-											</div>
-											<div class="col-md-6">
-												<div class="form-group">
-													<input type="email" class="form-control" placeholder="Email">
-												</div>
-											</div>
-										</div>
-										<div class="form-group">
-											<input type="email" class="form-control" placeholder="Subject">
-										</div>
-										<div class="form-group">
-											<textarea rows="4" class="form-control" placeholder="Your Comments"></textarea>
-										</div>
-										<div class="submit-section">
-											<button class="btn submit-btn" type="submit">Submit</button>
-										</div>
-									</form>
+									<h5 class="subs-title"> Summary </h5>
+									<p> {{ summary }} </p>
 								</div>
 							</div>
-							<!-- /Comment -->
+
+							
 							
 						</div>	
 						
@@ -158,21 +97,22 @@
 								
 								
 								<!-- Features -->
-								<div class="card feature-sec">
+								<div class="card feature-sec" v-if="Object.keys(debate_files).length != 0">
 									<div class="card-body">
 										<div class="cat-title">
-											<h4>Includes</h4>
+											<h4> 사용된 파일 </h4>
 										</div>
-										<ul>
-											<li><img src="../../../../assets/img/icon/users.svg" class="me-2" alt=""> Enrolled: <span>32 students</span></li>
-											<li><img src="../../../../assets/img/icon/timer.svg" class="me-2" alt=""> Duration: <span>20 hours</span></li>
-											<li><img src="../../../../assets/img/icon/chapter.svg" class="me-2" alt=""> Chapters: <span>15</span></li>
-											<li><img src="../../../../assets/img/icon/video.svg" class="me-2" alt=""> Video:<span> 12 hours</span></li>
-											<li><img src="../../../../assets/img/icon/chart.svg" class="me-2" alt=""> Level: <span>Beginner</span></li>
-										</ul>
+										<div class="perspective wrapper pb-2" v-for="(perspective, index) in debate_files" :key ="index">
+											<h6 ><img src="../../../../assets/img/icon/chapter.svg" class="me-2" alt=""><strong>{{ perspective.perspective_name }}</strong></h6>
+											<ul class="mb-0">
+												<li v-for="file in perspective.files">{{ file.file_name }}</li>
+											</ul>
+											<br/>
+										</div>
 									</div>
 								</div>
 								<!-- /Features -->
+					
 								
 							</div>
 						</div>
@@ -217,22 +157,19 @@ export default {
 				category : "정치",
 				enroll_count : 6,
 			},
-			// TODO : 해당 토론에 달린 댓글들. 구현된 API X. 페이지가 너무 허해서 넣음.
-			reviewers : [
-				{user_email : "fake@naver.com", user_name : "김리뷰어", user_profileUrl : "../../../../assets/img/user/temp_user1.png", department_position : "싸피고등학교", rating : "5.0", 	content : "정말 기대가 됩니다.\n 우리 생활에 꼭 필요한 토론 주제입니다!"},
-				{user_email : "debate@naver.com", user_name : "박토론", user_profileUrl : "../../../../assets/img/user/temp_user2.png", department_position : "싸피고등학교", rating : "5.0", 	content : "재밌는 주제입니다! 좋다."},
-				{user_email : "news@naver.com", user_name : "신 문", user_profileUrl : "../../../../assets/img/user/temp_user3.png", department_position : "싸피고등학교", rating : "5.0", 	content : "안녕하세요. 즐거운 토론해요."},
-			],
 
-			// TODO : 종료된 토론(state==closed)에 대해서만 데이터를 로드한다.
+
+			// TODO : 종료된 토론(state==closed)에 대해서만 데이터를 로드한다. 일부 API 구현 필요.
 			vote_result : {}, 
-			files : [],
-
+			debate_files : [],
+			summary : '',
         }
     },
     mounted(){
         if(this.debate.state == 'closed'){
-			this.vote_result = this.getVoteResult();
+			this.getVoteResult();
+			this.getDebateFiles();
+			this.getSummary();
 		}
     },
     methods: {
@@ -252,6 +189,33 @@ export default {
                 console.log(error);
             });
         },
+		async getDebateFiles(){
+			// 토론의 각 패널에서 사용된(업로드된) 파일들
+			this.debate_files = [
+				{
+					perspective_id : 143,
+					perspective_name : "반려동물 보유세는 필요하다.",
+					files : [
+						{file_name : "143번측 파일명 1", file_url : "../../../../assets/img/user/temp_user2.png"},
+						{file_name : "143번측 파일명 2", file_url : "../../../../assets/img/user/temp_user3.png"}
+					]
+				},  	
+				{
+					perspective_id : 144,
+					perspective_name : "반려동물 보유세는 필요하지않다.",
+					files : [
+						{file_name : "144번측 파일명 1", file_url : "../../../../assets/img/user/temp_user2.png"},
+						{file_name : "144번측 파일명 2", file_url : "../../../../assets/img/user/temp_user3.png"}
+					]
+				}, 
+
+			];
+		},
+		async getSummary(){
+			this.summary = 
+			'이건 대충 적은 요약글입니다. 적을 내용이 없어서 한겨레 자율주행 뉴스 글을 막 끌고 왔습니다. 어쩌구 저쩌구 '+
+			'전문가들이 레벨 4∼5 수준의 자율주행 기술 구현이 시기상조라고 보는 데에는 몇가지 이유가 있다. 우선 막대한 비용이다. 김일평 삼성화재 자동차보험전략팀장은 “스마트 도로 시설, 모바일 네트워크 등 자율주행 인프라 구축에 천문학적 비용이 필요하다. 이 때문에 완전 자율주행차 시대는 굉장히 늦게 올 것”이라고 내다봤다. 실제 자율주행 기술이 상용화하려면 도로 위의 많은 변수를 통제해야 한다. 자율주행차에 적합한 전용 도로를 깔고 도로를 주행하는 차량 대부분이 사람의 개입을 최소화한 자율차여야 안정적인 기술 구현이 가능하다.'
+		}
     },
     
 }
