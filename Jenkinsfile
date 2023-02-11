@@ -53,7 +53,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_CHAT}"'
-				sh 'chmod +x gradlew'
+				sh 'chmod +x backend/gradlew'
 				sh '''
 					backend/gradlew -p backend/${APP_CHAT} build -x test
 				'''
@@ -66,7 +66,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
-				sh 'chmod +x gradlew'
+				sh 'chmod +x backend/gradlew'
 				sh '''
 					backend/gradlew -p backend/${APP_KURENTO} build -x test
 				'''
