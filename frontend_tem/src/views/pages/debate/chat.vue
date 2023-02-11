@@ -1,11 +1,12 @@
 <template>
   <div class="side-element" >
     여기에 채팅 컴포넌트
+
   </div>
 </template>
 
 <script>
-import { useStore } from 'vuex';
+import {mapState, useStore} from 'vuex';
 
 export default {
   name: "chat",
@@ -13,6 +14,11 @@ export default {
     const store = useStore();
     return { store }
   },
+  computed: {
+
+
+
+  }
 
 
 

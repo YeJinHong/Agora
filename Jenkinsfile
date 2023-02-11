@@ -17,6 +17,7 @@ pipeline
 			}
 			steps {
 				echo 'Environment Settings Start'
+				sh 'docker-compose -f env-config/docker-compose-env.yml down'
 				sh 'docker-compose -f env-config/docker-compose-env.yml up -d'
 				echo 'Environment Settings End'
 			}
@@ -80,7 +81,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start Front App'
-				sh 'docker build -t app-vue frontend_tem/.'
+				sh 'docker build -t app-vue frontend_tem/. --no-cache'
 				echo 'Build End Front App'
 			}
 		}
@@ -125,7 +126,11 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start Front App'
-				sh 'docker run -d --no-cache -p 80:8083 --name front-app app-vue'
+				sh '''
+					docker stop front-app
+					docker rm front-app
+					docker run -d -p 80:8083 --name front-app app-vue
+				'''
 				echo 'Deploy End Front App'
 			}
 		}
