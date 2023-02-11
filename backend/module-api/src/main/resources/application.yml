@@ -56,7 +56,7 @@ server:
       force: 'true'
       charset: UTF-8
     contextPath: /
-  address: i8c205.p.ssafy.io
+  address: localhost
   port: '8082'
   compression:
     enabled: 'true'
