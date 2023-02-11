@@ -37,8 +37,8 @@ const userStore = {
         },
     },
     actions: {
-        async userConfirm({commit, dispatch}, user) {
-            await login(user, ({data}) => {
+         async userConfirm({commit, dispatch}, user) {
+             await login(user, async ({data}) => {
                     if (data.message === "Success") {
                         let accessToken = data["tokenInfo"].authorization;
                         let refreshToken = data["tokenInfo"].refreshToken;
@@ -48,7 +48,7 @@ const userStore = {
                         commit("SET_IS_VALID_TOKEN", true);
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
-                        findById(({data}) => {
+                        await findById(({data}) => {
                             let userInfo = {
                                 userEmail: data.userEmail,
                                 name: data.name,

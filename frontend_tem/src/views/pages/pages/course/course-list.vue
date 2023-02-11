@@ -29,7 +29,7 @@
 												<div class="head-course-title">
 													<h3 class="title"><router-link to="course-details">{{ debate.debate_title }}</router-link></h3>
 													<div class="all-btn all-category d-flex align-items-center">
-														<router-link to="checkout" class="btn btn-primary">참여하기</router-link>
+														<router-link to="checkout" class="btn btn-primary">상세 보기</router-link>
 													</div>
 												</div>
 												<div class="course-info border-bottom-0 pb-0 d-flex ali	gn-items-center">
@@ -138,6 +138,7 @@ export default {
     data(){
         return {
 			owners : [],
+			// TODO : GET API로 Debate 정보 받아오기
             debate_list : [
 			{
 					debate_id : 1,
