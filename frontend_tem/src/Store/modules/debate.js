@@ -1,9 +1,9 @@
 const state = {
-    participant: 0,
+    participant: {},
     participant_list:false,
     micro_phone : true,
     chat_box: false,
-    middle_box: true
+    middle_box: true,
 
 };
 

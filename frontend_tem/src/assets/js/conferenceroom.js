@@ -104,7 +104,7 @@ function onExistingParticipants(msg) {
 			}
 		}
 	};
-	if (msg.data === null) {
+	if (msg.data === []) {
 		console.log('data is null')
 	} else {
 		console.log(userName + " registered in room " + msg.data.title);
@@ -126,7 +126,7 @@ function onExistingParticipants(msg) {
 			}
 			this.generateOffer(participant.offerToReceiveVideo.bind(participant));
 		});
-
+	console.log('리시브비디오직전~')
 	msg.data.forEach(receiveVideo);
 }
 
