@@ -29,6 +29,36 @@
 							</div>
 							<!-- /Overview -->
 							
+							<div class="card overview-sec" v-if="Object.keys(vote_result).length != 0">
+								<div class="card-body">
+									<h5 class="subs-title">토론 투표 결과</h5>
+									<h6>이 토론의 MVP</h6>
+									<div class="about-instructor">
+										<div class="abt-instructor-img">
+											<router-link to="instructor-profile"><img src="../../../../assets/img/user/temp_user1.png" alt="img" class="img-fluid"></router-link>
+											<!-- <router-link to="instructor-profile"><img :src="vote_result.mvp_profile" alt="img" class="img-fluid"></router-link> -->
+										</div>
+										<div class="instructor-detail">
+											<h5><router-link to="instructor-profile">{{ vote_result.mvp_name }} </router-link></h5>
+										</div>
+									</div>
+									<br/>
+
+									<h6> 청중 투표 결과 </h6>
+								</div>
+							</div>
+
+							<div class="card overview-sec">
+								<div class="card-body">
+									<h5 class="subs-title">Overview</h5>
+									<h6>토론 설명</h6>
+									<p></p>
+									<br/>
+									
+								</div>
+							</div>
+
+
 							
 							<!-- Reviews -->
 							<div class="card review-sec">
@@ -103,16 +133,11 @@
 								<div class="video-sec vid-bg">
 									<div class="card">
 										<div class="card-body">
-											<a href="https://www.youtube.com/embed/1trvO6dqQUI" class="video-thumbnail" data-fancybox="">
-												<div class="play-icon">
-													<i class="fa-solid fa-play"></i>
-												</div>
+											<a class="video-thumbnail" data-fancybox="">
 												<img class="" src="../../../../assets/img/video.jpg" alt="">
+												<!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
 											</a>
 											<div class="video-details">
-												<div class="course-fee">
-													<h2>{{debate.state}}</h2>
-												</div>
 												<div class="row gx-2">
 													<div class="col-md-6">
 														<router-link to="course-wishlist" class="btn btn-wish w-100"><i class="feather-heart"></i> 위시리스트에 넣기 </router-link>
@@ -121,7 +146,10 @@
 														<a href="javascript:;" class="btn btn-wish w-100"><i class="feather-share-2"></i> 공유하기 </a>
 													</div>
 												</div>
-												<router-link to="checkout" class="btn btn-enroll w-100">지금 참여하기</router-link>
+												<router-link to="checkout" class="btn btn-enroll w-100" v-if="debate.state == 'active'"> 지금 입장하기 </router-link>
+												<router-link class="btn btn-enroll w-100 disabled" v-else-if="debate.state == 'inactive'" > 준비 중 </router-link>
+												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="debate.state == 'in ready'" > 대기열 입장 </router-link>
+												<router-link to="checkout" class="btn btn-dark w-100 disabled" v-else-if="debate.state == 'closed'"> 종료됨 </router-link>
 											</div>
 										</div>
 									</div>
@@ -181,7 +209,7 @@ export default {
 				owner_name : "김싸피",	
 				owner_profile : "../../../../assets/img/user/temp_user1.png",
 				owner_department_position : "싸피고등학교 선생님",
-				state : "inactive",
+				state : "closed",
 				},
 			// TODO : 현재 페이지 진입시 debate_id를 통해서 상세정보 요청.	
 			debate_detail : {
@@ -194,15 +222,36 @@ export default {
 				{user_email : "fake@naver.com", user_name : "김리뷰어", user_profileUrl : "../../../../assets/img/user/temp_user1.png", department_position : "싸피고등학교", rating : "5.0", 	content : "정말 기대가 됩니다.\n 우리 생활에 꼭 필요한 토론 주제입니다!"},
 				{user_email : "debate@naver.com", user_name : "박토론", user_profileUrl : "../../../../assets/img/user/temp_user2.png", department_position : "싸피고등학교", rating : "5.0", 	content : "재밌는 주제입니다! 좋다."},
 				{user_email : "news@naver.com", user_name : "신 문", user_profileUrl : "../../../../assets/img/user/temp_user3.png", department_position : "싸피고등학교", rating : "5.0", 	content : "안녕하세요. 즐거운 토론해요."},
-			]
+			],
+
+			// TODO : 종료된 토론(state==closed)에 대해서만 데이터를 로드한다.
+			vote_result : {}, 
+			files : [],
 
         }
     },
     mounted(){
-
+        if(this.debate.state == 'closed'){
+			this.vote_result = this.getVoteResult();
+		}
     },
     methods: {
-
+        async getVoteResult(){
+            api.get('/vote/debates/'+this.debate.debate_id)
+            .then((response) => {
+                if(response.status == 200){
+                    console.log(response);
+                    this.vote_result = response.data;
+                    console.log('특정 토론 청중 평가 결과 로드 완료');
+                    
+                } else {
+                    console.log(response);
+                    console.log('정상 조회 실패')
+                }
+            }).catch((error)=>{
+                console.log(error);
+            });
+        },
     },
     
 }

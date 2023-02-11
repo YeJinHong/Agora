@@ -11,7 +11,7 @@
                         </div>
                         <div class="instructor-detail me-3">
                             <h5><router-link to="instructor-profile">{{ debate.owner_name }}</router-link></h5>
-                            <p>{{debate.owner_department_position}}</p>
+                            <p> category : {{debate.owner_department_position}}</p>
                         </div>									
                         <!-- <div class="rating mb-0">							
                             <i class="fas fa-star filled me-1"></i>
