@@ -5,6 +5,8 @@ services:
     container_name: agora-zookeeper
     ports:
       - "2181:2181"
+    networks:
+      - agora_network
 
   kafka:
     image: wurstmeister/kafka:2.12-2.5.0
@@ -19,12 +21,16 @@ services:
       KAFKA_CREATE_TOPICS: "kafka-chat:1:1"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - agora_network
 
   redis:
     image: redis
     container_name: agora-redis
     ports:
       - "6379:6379"
+    networks:
+      - agora_network
 
   mysql:
     image: mysql
@@ -40,6 +46,8 @@ services:
     command:
       --character-set-server=utf8mb4
       --collation-server=utf8mb4_unicode_ci
+    networks:
+      - agora_network
 
   coturn:
     image: zenosmosis/docker-coturn
@@ -51,7 +59,7 @@ services:
       - 65435-65535:65435-65535/udp
     environment:
       - USERNAME=kurento
-      - PASSWORD=ssafy
+      - PASSWORD=ssafy_web_db
 
   kurento:
     image: kurento/kurento-media-server
@@ -61,3 +69,9 @@ services:
       - 5000-5050:5000-5050/udp
     environment:
       KMS_TURN_URL: kurento:ssafy@3.38.178.217:3478?transport=udp
+    networks:
+      - agora_network
+
+networks:
+  agora_network:
+    driver: bridge
