@@ -2304,9 +2304,15 @@ html.menu-opened body {
 	font-size: 14px;
 	color: #777777;
 }
-.price h3 {
+.price h3.active {
 	font-size: 24px;
-	color: #F66962;
+	color: #4eae42;
+	font-weight: 700;
+	margin-bottom: 0;
+}
+.price h3.inactive {
+	font-size: 24px;
+	color: #d04841;
 	font-weight: 700;
 	margin-bottom: 0;
 }
@@ -6582,7 +6588,7 @@ input[type=password]::-ms-clear
 	margin-right: 20px;
 }
 .list-course .course-view {
-    margin-left: 30px;
+    margin-left: 0px;
 }
 .list-course .product-content {
 	padding-top: 0;
