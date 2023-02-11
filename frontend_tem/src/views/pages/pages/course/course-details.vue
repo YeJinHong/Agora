@@ -86,7 +86,7 @@
 													</div>
 												</div>
 												<router-link to="checkout" class="btn btn-enroll w-100" v-if="debate.state == 'active'"> 지금 입장하기 </router-link>
-												<router-link class="btn btn-enroll w-100 disabled" v-else-if="debate.state == 'inactive'" > 준비 중 </router-link>
+												<router-link to="checkout" class="btn btn-enroll w-100 disabled" v-else-if="debate.state == 'inactive'" > 토론 준비 중 </router-link>
 												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="debate.state == 'in ready'" > 대기열 입장 </router-link>
 												<router-link to="checkout" class="btn btn-dark w-100 disabled" v-else-if="debate.state == 'closed'"> 종료됨 </router-link>
 											</div>
@@ -149,7 +149,7 @@ export default {
 				owner_name : "김싸피",	
 				owner_profile : "../../../../assets/img/user/temp_user1.png",
 				owner_department_position : "싸피고등학교 선생님",
-				state : "closed",
+				state : "inactive",
 				},
 			// TODO : 현재 페이지 진입시 debate_id를 통해서 상세정보 요청.	
 			debate_detail : {
