@@ -126,7 +126,11 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start Front App'
-				sh 'docker run -d -p 80:8083 --name front-app app-vue'
+				sh '''
+					docker stop front-app
+					docker rm front-app
+					docker run -d -p 80:8083 --name front-app app-vue
+				'''
 				echo 'Deploy End Front App'
 			}
 		}
