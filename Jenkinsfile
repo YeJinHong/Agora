@@ -94,7 +94,7 @@ pipeline
 			steps {
 				echo 'Deploy Start "${APP_API}"'
 				sh 'docker-compose -f backend/${APP_API}/docker-compose.yml build --no-cache'
-				sh 'docker-compose --no-cache -f backend/${APP_API}/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/${APP_API}/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_API}"'
 			}
 		}
@@ -105,7 +105,7 @@ pipeline
 			steps {
 				echo 'Deploy Start "${APP_CHAT}"'
 				sh 'docker-compose -f backend/${APP_CHAT}/docker-compose.yml build --no-cache'
-				sh 'docker-compose --no-cache -f backend/${APP_CHAT}/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/${APP_CHAT}/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_CHAT}"'
 			}
 		}
@@ -116,7 +116,7 @@ pipeline
 			steps {
 				echo 'Deploy Start "${APP_KURENTO}"'
 				sh 'docker-compose -f backend/${APP_KURENTO}/docker-compose.yml build --no-cache'
-				sh 'docker-compose --no-cache -f backend/${APP_KURENTO}/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/${APP_KURENTO}/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_KURENTO}"'
 			}
 		}
