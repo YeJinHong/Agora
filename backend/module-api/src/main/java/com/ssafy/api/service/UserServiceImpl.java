@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         if(!jwtTokenUtil.validateToken(userReissuePostReq.getRefreshToken())){
             return ResponseEntity.status(401).body(UserAuthPostRes.of(401, "Refresh Token 정보가 유효하지 않습니다.",null));
         }
-        Authentication authentication = jwtTokenUtil.getAuthentication(userReissuePostReq.getAccessToken().substring(7));
+        Authentication authentication = jwtTokenUtil.getAuthentication(userReissuePostReq.getRefreshToken());
         if(!redisRepository.findById(authentication.getName()).get().getRefreshToken().equals(userReissuePostReq.getRefreshToken())){
             return ResponseEntity.status(404).body(UserAuthPostRes.of(404, "RefreshToken 정보가 잘못되었습니다..",null));
         }
