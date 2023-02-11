@@ -61,7 +61,7 @@ services:
       - 65435-65535:65435-65535/udp
     environment:
       - USERNAME=kurento
-      - PASSWORD=ssafy_web_db
+      - PASSWORD=ssafy
 
   kurento:
     image: kurento/kurento-media-server
