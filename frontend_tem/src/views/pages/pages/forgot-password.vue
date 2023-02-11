@@ -23,7 +23,7 @@
                         </div>
                             <div class="form-group">
                                 <label class="form-control-label">Email</label>
-                                <input type="email" class="form-control" v-model:userEmail placeholder="Enter your email address">
+                                <input type="email" class="form-control" v-model="userEmail" placeholder="Enter your email address">
                             </div>
                             <div class="d-grid">
                                 <button class="btn btn-start" @click="sendEmail" type="submit">Submit</button>
