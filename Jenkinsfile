@@ -42,7 +42,7 @@ pipeline
 				echo 'Build Start "${APP_API}"'
 				sh 'chmod +x backend/gradlew'
 				sh '''
-					backend/gradlew backend:${APP_API} build
+					backend/gradlew -p backend/${APP_API} build -x test
 				'''
 				echo 'Build End "${APP_API}"'
 			}
@@ -55,8 +55,7 @@ pipeline
 				echo 'Build Start "${APP_CHAT}"'
 				sh 'chmod +x gradlew'
 				sh '''
-					cd backend
-					gradlew ${APP_CHAT}:build -x test
+					backend/gradlew -p backend/${APP_CHAT} build -x test
 				'''
 				echo 'Build End "${APP_CHAT}"'
 			}
@@ -69,8 +68,7 @@ pipeline
 				echo 'Build Start "${APP_KURENTO}"'
 				sh 'chmod +x gradlew'
 				sh '''
-					cd backend
-					gradlew ${APP_KURENTO}:build -x test
+					backend/gradlew -p backend/${APP_KURENTO} build -x test
 				'''
 				
 				echo 'Build End "${APP_KURENTO}"'
