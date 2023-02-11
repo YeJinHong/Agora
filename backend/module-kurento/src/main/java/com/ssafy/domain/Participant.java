@@ -43,7 +43,7 @@ public class Participant implements Closeable {
         this.outgoingMedia.addIceCandidateFoundListener(event -> {
             JsonObject response = new JsonObject();
             response.addProperty("id", "iceCandidate");
-            response.addProperty("name", name);
+            response.addProperty("userName", name);
             response.add("candidate", JsonUtils.toJsonObject(event.getCandidate()));
             try {
                 synchronized (session) {
@@ -71,7 +71,7 @@ public class Participant implements Closeable {
         final String ipSdpAnswer = this.getEndpointForUser(sender).processOffer(sdpOffer);
         final JsonObject scParams = new JsonObject();
         scParams.addProperty("id", "receiveVideoAnswer");
-        scParams.addProperty("name", sender.getName());
+        scParams.addProperty("userName", sender.getName());
         scParams.addProperty("sdpAnswer", ipSdpAnswer);
 
         log.trace("USER {}: SdpAnswer for {} is {}", this.name, sender.getName(), ipSdpAnswer);
@@ -96,7 +96,7 @@ public class Participant implements Closeable {
             incoming.addIceCandidateFoundListener(event -> {
                 JsonObject response = new JsonObject();
                 response.addProperty("id", "iceCandidate");
-                response.addProperty("name", sender.getName());
+                response.addProperty("userName", sender.getName());
                 response.add("candidate", JsonUtils.toJsonObject(event.getCandidate()));
                 try {
                     synchronized (session) {
