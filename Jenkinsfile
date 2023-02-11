@@ -42,6 +42,7 @@ pipeline
 				echo 'Build Start "${APP_API}"'
 				sh 'chmod +x backend/gradlew'
 				sh '''
+					echo pwd
 					cd backend
 					gradlew ${APP_API}:build -x test
 				'''
