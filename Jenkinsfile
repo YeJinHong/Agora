@@ -93,7 +93,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_API}"'
-				sh 'docker-compose -f backend/module-api/docker-compose.yml up -d'
+				sh 'docker-compose --no-cache -f backend/module-api/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_API}"'
 			}
 		}
@@ -103,7 +103,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_CHAT}"'
-				sh 'docker-compose -f backend/module-chat/docker-compose.yml up -d'
+				sh 'docker-compose --no-cache -f backend/module-chat/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_CHAT}"'
 			}
 		}
@@ -113,7 +113,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_KURENTO}"'
-				sh 'docker-compose -f backend/module-kurento/docker-compose.yml up -d'
+				sh 'docker-compose --no-cache -f backend/module-kurento/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_KURENTO}"'
 			}
 		}
@@ -123,7 +123,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start Front App'
-				sh 'docker run -d -p 80:8083 --name front-app app-vue'
+				sh 'docker run -d --no-cache -p 80:8083 --name front-app app-vue'
 				echo 'Deploy End Front App'
 			}
 		}
