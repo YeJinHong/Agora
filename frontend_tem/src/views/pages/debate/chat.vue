@@ -7,25 +7,21 @@
           <span class="comment">{{ m.content }}</span>
         </div>
         <ul class="chat-time" >
-          <li style="list-style: none; float: right">{{ m.timestamp }}</li>
+          <li style="list-style: none; float: right">{{ new Date(m.timestamp).toLocaleTimeString() }}</li>
         </ul>
       </div>
 
     </div>
-    <div id="sendBar">
-      <input id="contentBar"
-             placeholder="Send a message..."
-             type="text"
-             v-model="content"
-             @keyup.enter="sendMessage"
-      />
-      <button id="sendButton" @click="sendMessage" name="전송" value="전송"/>
+    <div id="sendBar" class="input-group">
+      <input v-model="content" @keyup.enter="sendMessage" type="text" class="input-msg-send form-control" placeholder="Type your message here...">
+      <button @click="sendMessage" type="button" class="btn btn-primary msg-send-btn rounded-pill"><img src="../../../assets/img/send-icon.svg" alt="" ></button>
     </div>
   </div>
 </template>
 
 <script>
 import {useStore} from 'vuex';
+import Axios from "axios";
 
 export default {
   name: "chat",
@@ -34,7 +30,10 @@ export default {
     const socket = store.state.debate.socket
     const stompClient = store.state.debate.stompClient
     const chatList = store.state.debate.chatList
-    return {store, socket, stompClient, chatList}
+    const api = Axios.create({
+      baseURL: "http://i8c205.p.ssafy.io:8082/kafka",
+    });
+    return {store, socket, stompClient, chatList, api}
   },
   data() {
     return {
@@ -50,10 +49,13 @@ export default {
         let chatMessage = {
           'content': this.content,
           'roomId': 1,
-          'author': '김피먹',
-          'timestamp': new Date(Date.now()).toISOString().replace('T', ' ').replace(/\..*/, '')
+          'author': '김피먹'
         }
-        this.stompClient.send("/pub/message", JSON.stringify(chatMessage), {})
+        console.log(chatMessage)
+        // this.stompClient.send("/pub/message", JSON.stringify(chatMessage), {})
+        this.api.post(`/publish`, chatMessage, {
+          headers: { "Content-Type": "application/json" },
+        });
         this.content = ''
       }
     }
