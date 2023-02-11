@@ -115,7 +115,6 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_KURENTO}"'
-				sh 'docker-compose -f backend/${APP_KURENTO}/docker-compose.yml build --no-cache'
 				sh 'docker-compose -f backend/${APP_KURENTO}/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_KURENTO}"'
 			}
