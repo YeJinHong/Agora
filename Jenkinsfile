@@ -40,9 +40,11 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_API}"'
-				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew backend/${APP_API}:clean'
-				sh 'backend/gradlew backend/${APP_API}:build -x test'
+				sh 'cd backend'
+				sh 'chmod +x gradlew'
+				sh 'gradlew ${APP_API}:clean'
+				sh 'gradlew ${APP_API}:build -x test'
+				sh 'cd ..'
 				echo 'Build End "${APP_API}"'
 			}
 		}
@@ -52,8 +54,10 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_CHAT}"'
-				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew backend/${APP_CHAT}:bootJar'
+				sh 'cd backend'
+				sh 'chmod +x gradlew'
+				sh 'gradlew ${APP_CHAT}:build -x test'
+				sh 'cd ..'
 				echo 'Build End "${APP_CHAT}"'
 			}
 		}
@@ -63,8 +67,10 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
-				sh 'chmod +x backend/gradlew'
-				sh 'backend/gradlew backend/${APP_KURENTO}:bootJar'
+				sh 'cd backend'
+				sh 'chmod +x gradlew'
+				sh 'gradlew ${APP_KURENTO:build -x test'
+				sh 'cd ..'
 				echo 'Build End "${APP_KURENTO}"'
 			}
 		}
