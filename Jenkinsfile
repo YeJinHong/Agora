@@ -41,9 +41,9 @@ pipeline
 			steps {
 				echo 'Build Start "${APP_API}"'
 				sh 'cd backend'
-				sh 'chmod +x gradlew'
-				sh 'gradlew ${APP_API}:clean'
-				sh 'gradlew ${APP_API}:build -x test'
+				sh 'chmod +x backend/gradlew'
+				sh './gradlew ${APP_API}:clean'
+				sh './gradlew ${APP_API}:build -x test'
 				sh 'cd ..'
 				echo 'Build End "${APP_API}"'
 			}
