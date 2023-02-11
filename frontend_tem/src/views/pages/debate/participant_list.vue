@@ -18,7 +18,7 @@ export default {
     }
   },
   computed : {
-    ...mapState('devate',{middle_box:'middle_box'}),
+    ...mapState('debate',{middle_box:'middle_box'}),
 
   },
   mounted() {

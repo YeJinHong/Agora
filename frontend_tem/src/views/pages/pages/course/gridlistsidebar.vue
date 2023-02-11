@@ -14,129 +14,17 @@
                     <div class="card-body">
                         <div class="filter-widget mb-0">
                             <div class="categories-head d-flex align-items-center">
-                                <h4>Course categories</h4>
+                                <h4> 토론 카테고리 </h4>
                                 <i class="fas fa-angle-down"></i>
                             </div>
-                            <div>
+                            <div v-for="category in categories">
                                 <label class="custom_check">
                                     <input type="checkbox" name="select_specialist" >
-                                    <span class="checkmark"></span> Backend (3)
+                                    <span class="checkmark"></span> {{ category.codeName }}
 
                                 </label>
                             </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" >
-                                    <span class="checkmark"></span>  CSS (2)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist">
-                                    <span class="checkmark"></span>  Frontend (2)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" checked>
-                                    <span class="checkmark"></span> General (2)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" checked>
-                                    <span class="checkmark"></span> IT & Software (2)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist">
-                                    <span class="checkmark"></span> Photography (2)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist">
-                                    <span class="checkmark"></span>  Programming Language (3)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check mb-0">
-                                    <input type="checkbox" name="select_specialist">
-                                    <span class="checkmark"></span>  Technology (2)
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Search Filter -->
-                
-                <!-- Search Filter -->
-                <div class="card search-filter">
-                    <div class="card-body">
-                        <div class="filter-widget mb-0">
-                            <div class="categories-head d-flex align-items-center">
-                                <h4>Instructors</h4>
-                                <i class="fas fa-angle-down"></i>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" >
-                                    <span class="checkmark"></span> Keny White (10)
-
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" >
-                                    <span class="checkmark"></span>  Hinata Hyuga (5)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist">
-                                    <span class="checkmark"></span>  John Doe (3)
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check mb-0">
-                                    <input type="checkbox" name="select_specialist" checked>
-                                    <span class="checkmark"></span> Nicole Brown
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /Search Filter -->
-                
-                <!-- Search Filter -->
-                <div class="card search-filter ">
-                    <div class="card-body">
-                        <div class="filter-widget mb-0">
-                            <div class="categories-head d-flex align-items-center">
-                                <h4>Price</h4>
-                                <i class="fas fa-angle-down"></i>
-                            </div>
-                            <div>
-                                <label class="custom_check custom_one">
-                                    <input type="radio" name="select_specialist" >
-                                    <span class="checkmark"></span> All (18)
-
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check custom_one">
-                                    <input type="radio" name="select_specialist" >
-                                    <span class="checkmark"></span>  Free (3) 
-
-                                </label>
-                            </div>
-                            <div>
-                                <label class="custom_check custom_one mb-0">
-                                    <input type="radio" name="select_specialist" checked>
-                                    <span class="checkmark"></span>  Paid (15)
-                                </label>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -175,45 +63,7 @@
                                     <p>$200</p>
                                 </div>
                             </li>
-                            <li>
-                                <div class="post-thumb">
-                                    <a href="course-details">
-                                        <img class="img-fluid" src="../../../../assets/img/blog/blog-03.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-info free-color">
-                                    <h4>
-                                        <a href="course-details">Learning jQuery Mobile for Beginners</a>
-                                    </h4>
-                                    <p>FREE</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="post-thumb">
-                                    <a href="course-details">
-                                        <img class="img-fluid" src="../../../../assets/img/blog/blog-01.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-info">
-                                    <h4>
-                                        <a href="course-details">Improve Your CSS Workflow with SASS</a>
-                                    </h4>
-                                    <p>$200</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="post-thumb ">
-                                    <a href="course-details">
-                                        <img class="img-fluid" src="../../../../assets/img/blog/blog-02.jpg" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-info free-color">
-                                    <h4>
-                                        <a href="course-details">HTML5/CSS3 Essentials in 4-Hours</a>
-                                    </h4>
-                                    <p>FREE</p>
-                                </div>
-                            </li>
+                            
                         </ul>
                     </div>
                 </div>
@@ -223,3 +73,38 @@
         </div>
     </div>
 </template>
+
+<script>    
+
+import { apiInstance } from "/api/index.js";      
+
+const api = apiInstance();
+
+export default {
+    setup(){
+
+    },
+    data(){
+        return {
+			categories : [],
+        }
+    },
+    mounted(){
+        this.getCategories();
+    },
+    methods: {
+        async getCategories(){
+            api.get(`/codes/category`)
+			.then((data) => {
+				let result = data["data"].data;
+				console.log(result);
+				this.categories = result;
+			})
+			.catch((error) => {
+				alert("error : " + error.code);
+			})
+        }
+    },
+    
+}
+</script>

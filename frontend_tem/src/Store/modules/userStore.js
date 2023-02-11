@@ -14,12 +14,16 @@ const userStore = {
         checkUserInfo: function (state) {
             return state.userInfo;
         },
+        getIsLogin: function (state) {
+            return state.isLogin;
+        },
         checkToken: function (state) {
             return state.isValidToken;
         },
     },
     mutations: {
         SET_IS_LOGIN: (state, isLogin) => {
+            console.log("check  " + isLogin);
             state.isLogin = isLogin;
         },
         SET_IS_LOGIN_ERROR: (state, isLoginError) => {
@@ -29,13 +33,12 @@ const userStore = {
             state.isValidToken = isValidToken;
         },
         SET_USER_INFO: (state, userInfo) => {
-            state.isLogin = true;
             state.userInfo = userInfo;
         },
     },
     actions: {
-        userConfirm({commit, dispatch}, user) {
-            login(user, ({data}) => {
+        async userConfirm({commit, dispatch}, user) {
+            await login(user, ({data}) => {
                     if (data.message === "Success") {
                         let accessToken = data["tokenInfo"].authorization;
                         let refreshToken = data["tokenInfo"].refreshToken;
@@ -75,7 +78,7 @@ const userStore = {
                 (error) => {
                     console.log(error);
                 }
-            );
+            )
         },
         getUserInfo({commit, dispatch}) {
             findById(({data}) => {
@@ -107,7 +110,6 @@ const userStore = {
                         console.log("갱신 실패");
                         // 다시 로그인 전 DB에 저장된 RefreshToken 제거.
                         await logout(
-                            state.userInfo.userid,
                             ({data}) => {
                                 if (data.message === "Success") {
                                     console.log("리프레시 토큰 제거 성공");
@@ -132,9 +134,8 @@ const userStore = {
         },
 
 
-        async userLogout({commit}, userid) {
+        async userLogout({commit}) {
             await logout(
-                userid,
                 ({data}) => {
                     if (data.message === "Success") {
                         commit("SET_IS_LOGIN", false);

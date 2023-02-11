@@ -6,7 +6,7 @@
     </div>
     <div style="height: 5vh"></div>
     <h5>n명 중 m명 참가 대기중입니다</h5>
-    <router-link to="/devatemain">
+    <router-link to="/debatemain">
       <button>참가완</button>
 
     </router-link>
@@ -16,7 +16,7 @@
 <script>
 
 export default {
-  name: "devatewaiting",
+  name: "debatewaiting",
 
 }
 </script>

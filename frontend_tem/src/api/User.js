@@ -2,8 +2,8 @@ import { apiInstance } from "./index.js";
 
 const api = apiInstance();
 
-function login(user, success, fail) {
-    api.post(`/auth/login`, user).then(success).catch(fail);
+async function login(user, success, fail) {
+    await api.post(`/auth/login`, user).then(success).catch(fail);
 }
 
 function findById(success, fail) {
@@ -24,7 +24,8 @@ function tokenRegeneration(success, fail) {
 }
 
 
-function logout(userid, success, fail) {
+function logout(success, fail) {
+    api.defaults.headers["authorization"] = "Bearer " + sessionStorage.getItem("access-token");
     api.get(`/auth/auth`).then(success).catch(fail);
 }
 

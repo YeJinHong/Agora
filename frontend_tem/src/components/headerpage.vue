@@ -247,14 +247,30 @@
                         <input class="form-check-input" type="checkbox" id="night-mode">
                     </div>
                 </div>
-                <router-link class="dropdown-item" to="/"><i class="feather-log-out me-1"></i> Logout</router-link>
+                <router-link class="dropdown-item" to="/" @click="logout" ><i class="feather-log-out me-1"></i>로그아웃</router-link>
             </div>
         </li>
     </ul>
 </template>
 <script>
-    import Vue from 'vue'
+import Vue, {reactive} from 'vue'
+import {useStore} from "vuex";
+import {useRouter} from "vue-router";
     export default {
+      setup() {
+        const store = useStore();
+        const router = useRouter();
+        const logout = async () => {
+          await store.dispatch("userStore/userLogout");
+          moveHome();
+        }
+
+        const moveHome = () => {
+          router.push('/');
+        }
+        return {logout};
+      },
+
       components: {
           
       },
