@@ -3,6 +3,7 @@ package com.ssafy.api.service;
 import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
+import com.ssafy.api.response.DebateRes;
 import com.ssafy.entity.rdbms.Debate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,9 +16,9 @@ import java.util.Optional;
 public interface DebateService {
 	Debate createDebate(DebateRegisterPostReq debateRegisterPostReq);
 
-	Page<Debate> searchAll(String keyword, String condition, Pageable pageable);
+	Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable);
 
-	Debate search(long debateId);
+	DebateRes search(long debateId);
 
 	void updateDebate(long debateId, DebateModifyPatchReq debateModifyReq);
 

@@ -25,19 +25,27 @@
                   </div>
                   <div class="form-group">
                     <label class="add-course-label">토론 설명</label>
-                    <SummernoteEditor
+                    <textarea
                         v-model="state.debate.description"
-                        @update:modelValue="summernoteChange($event)"
-                        @summernoteImageLinkInsert="summernoteImageLinkInsert"
                     />
                   </div>
                   <div class="form-group">
                     <label class="form-label">토론 카테고리</label>
-                    <vue-select :options="state.option.categories" placeholder="Choose Category" name="sellist1"/>
+                    <div>
+                      <select class="form-control" v-model="state.debate.category" name="sellist1">
+                        <option value="">Choose Category</option>
+                        <option
+                            v-for="(item, index) in state.option.categories"
+                            :key="index"
+                            :value="item.id"
+                        >{{ item.codeName }}
+                        </option>
+                      </select>
+                    </div>
                   </div>
                   <div class="form-group">
                     <label class="form-label">토론 모드</label>
-                    <vue-select :options="state.option.categories" placeholder="Choose Category" name="sellist1"/>
+                    <vue-select :options="state.option.modes" placeholder="Choose Category" name="sellist1"/>
                   </div>
                   <div class="form-group">
                     <label class="form-label">사회자 여부</label>
@@ -78,6 +86,7 @@ import {onMounted, reactive} from "vue";
 import {useRouter, useRoute} from 'vue-router';
 import {useStore} from 'vuex';
 import SummernoteEditor from 'vue3-summernote-editor';
+import axios from "axios";
 
 export default {
   name: 'debateConfiguration',
@@ -85,6 +94,7 @@ export default {
   setup() {
     const router = useRouter();
     const store = useStore();
+    axios.defaults.baseURL = "http://localhost:8082/api/v1";
     const state = reactive({
       debate: {
         title: '',
@@ -96,36 +106,35 @@ export default {
         callEndTime: '',
       },
       option: {
-        categories: ['정치/사회', '운동', '기술', '연예'],
+        categories: null,
         modes: ['CEDA', '시간총량제'],
       }
     });
 
     onMounted(() => {
-      store.dispatch('commonCodeStore/getCategories');
-      state.option.categories = store.getters["commonCodeStore/checkCategories"];
+      axios.get(`codes/category`)
+          .then((data) => {
+            let result = data["data"].data;
+            console.log(result);
+            state.option.categories = result;
+          })
+          .catch((error) => {
+            alert("error : " + error.code);
+          })
     })
 
-    const summernoteChange = (newValue) => {
-      console.log("summernoteChange", newValue);
+    const saveDebateConfig = () => {
+      const req = {
+        ownerId: store.state.userStore.userInfo.userEmail,
+        category: state.debate.category,
+
+
+      }
+
+      http.post('/debates', {})
     }
 
-    const summernoteImageLinkInsert = (...args) => {
-      console.log("summernoteImageLinkInsert()", args);
-    }
-
-    // const saveDebateConfig = () => {
-    //   const req = {
-    //     ownerId: store.state.userStore.userInfo.userEmail,
-    //     category: state.debate.category,
-    //
-    //
-    //   }
-    //
-    //   http.post('/debates', {})
-    // }
-
-    return {state, summernoteChange, summernoteImageLinkInsert}
+    return {state, saveDebateConfig}
   },
   // methods: {
   //   // saveDebateConfig() {

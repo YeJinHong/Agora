@@ -3,6 +3,7 @@ package com.ssafy.api.controller;
 import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
+import com.ssafy.api.response.DebateRes;
 import com.ssafy.api.service.DebateService;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.model.response.BaseResponseDataBody;
@@ -44,19 +45,19 @@ public class DebateController {
 
 	@GetMapping()
 	@ApiOperation(value = "토론 조회")
-	public ResponseEntity<BaseResponseDataBody<Page<Debate>>> searchAll(@RequestParam String keyword,
-												  @RequestParam String condition,
+	public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
+												  @RequestParam(required = false) String condition,
 												  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
-		Page<Debate> debates = debateService.searchAll(keyword, condition, pageable);
-		BaseResponseDataBody<Page<Debate>> response = BaseResponseDataBody.of("Success", 200, debates);
+		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable);
+		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
 		return ResponseEntity.status(201).body(response);
 	}
 
 	@GetMapping("/{debateId}")
 	@ApiOperation(value = "토론 아이디 조회")
-	public ResponseEntity<BaseResponseDataBody<Debate>> search(@PathVariable long debateId){
-		Debate debate = debateService.search(debateId);
-		BaseResponseDataBody<Debate> response = BaseResponseDataBody.of("Success", 200, debate);
+	public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId){
+		DebateRes debate = debateService.search(debateId);
+		BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
 		return ResponseEntity.status(201).body(response);
 	}
 
