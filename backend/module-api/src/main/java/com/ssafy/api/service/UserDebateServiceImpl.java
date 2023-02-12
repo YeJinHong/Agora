@@ -1,6 +1,5 @@
 package com.ssafy.api.service;
 
-import com.google.protobuf.Enum;
 import com.ssafy.api.request.UserDebateRegisterPostReq;
 import com.ssafy.entity.rdbms.Action;
 import com.ssafy.entity.rdbms.Debate;
