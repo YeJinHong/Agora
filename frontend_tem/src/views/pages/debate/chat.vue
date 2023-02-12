@@ -19,7 +19,8 @@
 </template>
 
 <script>
-import {mapState, useStore} from 'vuex';
+import {useStore} from 'vuex';
+import Axios from 'axios';
 
 export default {
   name: "chat",
