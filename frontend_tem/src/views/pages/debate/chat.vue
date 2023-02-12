@@ -1,17 +1,16 @@
 <template>
-  <div class="side-element">
-    <div class="chatList" v-for="(m, idx) in chatList" :key="idx">
-      <div class="chatItem msg-box">
-        <div class="msg-bg">
-          <strong class="name">{{ m.author }}</strong>
-          <span class="comment">{{ m.content }}</span>
+  <div class="side-element" style="overflow: auto;">
+      <div class="chatList" v-for="(m, idx) in chatList" :key="idx">
+        <div class="chatItem msg-box">
+          <div class="msg-bg">
+            <strong class="name">{{ m.author }}</strong>
+            <span class="comment">{{ m.content }}</span>
+          </div>
+          <ul class="chat-time" >
+            <li style="list-style: none; float: right">{{ m.timestamp }}</li>
+          </ul>
         </div>
-        <ul class="chat-time" >
-          <li style="list-style: none; float: right">{{ new Date(m.timestamp).toLocaleTimeString() }}</li>
-        </ul>
       </div>
-
-    </div>
     <div id="sendBar" class="input-group">
       <input v-model="content" @keyup.enter="sendMessage" type="text" class="input-msg-send form-control" placeholder="Type your message here...">
       <button @click="sendMessage" type="button" class="btn btn-primary msg-send-btn rounded-pill"><img src="../../../assets/img/send-icon.svg" alt="" ></button>
@@ -27,13 +26,13 @@ export default {
   name: "chat",
   setup() {
     const store = useStore();
-    const socket = store.state.debate.socket
+    const chatSocket = store.state.debate.chatSocket
     const stompClient = store.state.debate.stompClient
     const chatList = store.state.debate.chatList
     const api = Axios.create({
       baseURL: "http://i8c205.p.ssafy.io:8082/kafka",
     });
-    return {store, socket, stompClient, chatList, api}
+    return {store, chatSocket, stompClient, chatList, api}
   },
   data() {
     return {
@@ -87,15 +86,8 @@ export default {
   width: 100%;
   position: absolute;
   bottom: 80px;
-}
-
-#contentBar {
-  width: 80%;
-}
-
-#sendButton {
-  width: 20%;
-  height: 2px;
+  padding: 5px 15px 5px 0;
+  background: whitesmoke;
 }
 
 .msg-box > div {

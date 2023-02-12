@@ -1,13 +1,13 @@
 <template>
   <div
       class="side-box"
-      v-if="participant_list == true ||chat_box == true">
-    <div class="box1" v-if="middle_box == true"></div>
-    <div :class="[ middle_box == true ? 'side-el' : 'side-el-full' ]">
-     <participant_list v-if="participant_list == true"></participant_list>
-     <chat v-show="chat_box == true"></chat>
+      v-if="participant_list === true ||chat_box === true">
+    <div class="box1" v-if="middle_box === true"></div>
+    <div :class="[ middle_box === true ? 'side-el' : 'side-el-full' ]">
+     <participant_list v-if="participant_list === true"></participant_list>
+     <chat v-show="chat_box === true"></chat>
     </div>
-    <div class="box2" v-if="middle_box == true"></div>
+    <div class="box2" v-if="middle_box === true"></div>
 
   </div>
 
@@ -25,24 +25,22 @@ export default {
   components : { chat, participant_list },
   setup() {
     const store = useStore();
-    const socket = store.state.debate.socket;
+    const chatSocket = store.state.debate.chatSocket;
     const stompClient = store.state.debate.stompClient;
     const chatList = store.state.debate.chatList;
-    return {store, socket, stompClient, chatList}
+    return {store, chatSocket, stompClient, chatList}
   },
   computed : {
     ...mapState('debate',{middle_box:'middle_box'}),
     ...mapState('debate',{participant_list:'participant_list'}),
     ...mapState('debate',{chat_box:'chat_box'}),
-
-
   },
   created() {
     // const serverURL = "http://localhost:8082/my-chat"
     const serverURL = "http://i8c205.p.ssafy.io:8082/my-chat/"
-    this.socket = new SockJS(serverURL);
-    this.stompClient = Stomp.over(this.socket);
-    this.store.state.debate.socket = this.socket
+    this.chatSocket = new SockJS(serverURL);
+    this.stompClient = Stomp.over(this.chatSocket);
+    this.store.state.debate.chatSocket = this.chatSocket
     this.store.state.debate.stompClient = this.stompClient
     console.log(`소켓 연결을 시도합니다. 서버 주소: ${serverURL}`)
     this.stompClient.connect(
@@ -56,7 +54,12 @@ export default {
           this.stompClient.subscribe("/topic/group/1", res => {
             console.log('구독으로 받은 메시지 입니다.', res.body);
             // 받은 데이터를 json으로 파싱하고 리스트에 넣어줍니다.
-            this.chatList.push(JSON.parse(res.body))
+            let message = JSON.parse(res.body);
+            let date = new Date(message.timestamp)
+            date.setHours(date.getHours() + 9)
+            message.timestamp = date.toLocaleTimeString();
+
+            this.chatList.push(message)
           });
         },
         error => {
