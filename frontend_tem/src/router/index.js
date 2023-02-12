@@ -98,6 +98,7 @@ import changePasswordEmail from '../views/pages/pages/change-password-email.vue'
 import debateRegist from '../views/pages/debate/debateConfiguration.vue'
 import debatemain from '../views/pages/debate/debatemain.vue'
 import debatewaiting from "../views/pages/debate/debatewaiting.vue";
+import debate from "../views/pages/debate/debate.vue";
 
 const routes = [
   {
@@ -595,6 +596,11 @@ const routes = [
     path: '/debatewaiting',
     name: 'debatewaiting',
     component: debatewaiting
+  },
+  {
+    path: '/debate',
+    name: 'debate',
+    component: debate
   },
 ];
 export const router = createRouter({

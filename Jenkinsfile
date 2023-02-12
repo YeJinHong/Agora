@@ -17,6 +17,7 @@ pipeline
 			}
 			steps {
 				echo 'Environment Settings Start'
+				sh 'docker-compose -f env-config/docker-compose-env.yml down'
 				sh 'docker-compose -f env-config/docker-compose-env.yml up -d'
 				echo 'Environment Settings End'
 			}
@@ -40,11 +41,10 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_API}"'
-				sh 'cd backend'
 				sh 'chmod +x backend/gradlew'
-				sh './gradlew ${APP_API}:clean'
-				sh './gradlew ${APP_API}:build -x test'
-				sh 'cd ..'
+				sh '''
+					backend/gradlew -p backend/${APP_API} build -x test
+				'''
 				echo 'Build End "${APP_API}"'
 			}
 		}
@@ -54,10 +54,10 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_CHAT}"'
-				sh 'cd backend'
-				sh 'chmod +x gradlew'
-				sh 'gradlew ${APP_CHAT}:build -x test'
-				sh 'cd ..'
+				sh 'chmod +x backend/gradlew'
+				sh '''
+					backend/gradlew -p backend/${APP_CHAT} build -x test
+				'''
 				echo 'Build End "${APP_CHAT}"'
 			}
 		}
@@ -67,10 +67,11 @@ pipeline
 			}
 			steps {
 				echo 'Build Start "${APP_KURENTO}"'
-				sh 'cd backend'
-				sh 'chmod +x gradlew'
-				sh 'gradlew ${APP_KURENTO:build -x test'
-				sh 'cd ..'
+				sh 'chmod +x backend/gradlew'
+				sh '''
+					backend/gradlew -p backend/${APP_KURENTO} build -x test
+				'''
+				
 				echo 'Build End "${APP_KURENTO}"'
 			}
 		}
@@ -80,7 +81,7 @@ pipeline
 			}
 			steps {
 				echo 'Build Start Front App'
-				sh 'docker build -t app-vue frontend_tem/.'
+				sh 'docker build -t app-vue frontend_tem/. --no-cache'
 				echo 'Build End Front App'
 			}
 		}
@@ -93,7 +94,8 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_API}"'
-				sh 'docker-compose -f backend/module-api/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/${APP_API}/docker-compose.yml build --no-cache'
+				sh 'docker-compose -f backend/${APP_API}/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_API}"'
 			}
 		}
@@ -103,7 +105,8 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_CHAT}"'
-				sh 'docker-compose -f backend/module-chat/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/${APP_CHAT}/docker-compose.yml build --no-cache'
+				sh 'docker-compose -f backend/${APP_CHAT}/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_CHAT}"'
 			}
 		}
@@ -113,7 +116,7 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start "${APP_KURENTO}"'
-				sh 'docker-compose -f backend/module-kurento/docker-compose.yml up -d'
+				sh 'docker-compose -f backend/${APP_KURENTO}/docker-compose.yml up -d'
 				echo 'Deploy End "${APP_KURENTO}"'
 			}
 		}
@@ -123,7 +126,11 @@ pipeline
 			}
 			steps {
 				echo 'Deploy Start Front App'
-				sh 'docker run -d -p 80:8083 --name front-app app-vue'
+				sh '''
+					docker stop front-app
+					docker rm front-app
+					docker run -d -p 80:8083 --name front-app app-vue
+				'''
 				echo 'Deploy End Front App'
 			}
 		}
