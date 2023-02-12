@@ -90,7 +90,7 @@ function onParticipantLeft(request) {
 	console.log('Participant ' + request.userName + ' left');
 	var participant = participants[request.userName];
 	participant.dispose();
-	delete participants[request.name];
+	delete participants[request.userName];
 }
 
 function onExistingParticipants(msg) {
@@ -104,7 +104,7 @@ function onExistingParticipants(msg) {
 			}
 		}
 	};
-	if (msg.data === null) {
+	if (msg.data === []) {
 		console.log('data is null')
 	} else {
 		console.log(userName + " registered in room " + msg.data.title);
@@ -126,7 +126,7 @@ function onExistingParticipants(msg) {
 			}
 			this.generateOffer(participant.offerToReceiveVideo.bind(participant));
 		});
-
+	console.log('리시브비디오직전~')
 	msg.data.forEach(receiveVideo);
 }
 
