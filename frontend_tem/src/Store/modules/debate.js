@@ -14,6 +14,9 @@ const state = {
 const getters = {
     isDocumentBox: () => {
         return state.document_box;
+    },
+    getWebRtcSocket: () => {
+        return state.webRtcSocket;
     }
 };
 

@@ -134,3 +134,5 @@ function Participant(userName, position, isScreen) {
         container.parentNode.removeChild(container);
     };
 }
+
+export default Participant;
