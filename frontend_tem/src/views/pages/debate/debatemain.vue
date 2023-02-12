@@ -1,11 +1,13 @@
 <template>
   <div class="main">
-      <sidebox class="side-box"></sidebox>
+    <sidebox class="side-box"></sidebox>
+    <documentbox></documentbox>
     <div class="main-wrapper">
       <participant></participant>
       <middlebox v-if="middle_box === true"></middlebox>
     </div>
-      <uibar></uibar>
+    <uibar></uibar>
+
   </div>
 </template>
 
@@ -15,20 +17,20 @@ import middlebox from "./middlebox.vue";
 import uibar from "./uibar.vue";
 import participant_list from './participant_list.vue';
 import chat from './chat.vue';
-import { mapState } from 'vuex';
+import {mapState} from 'vuex';
 import Sidebox from "./sidebox.vue";
+import Documentbox from "./documentbox.vue";
 
 
-export default{
-    components: {Sidebox, participant, middlebox, participant_list, chat, uibar},
+export default {
+  components: {Documentbox, Sidebox, participant, middlebox, participant_list, chat, uibar},
   data() {
-      return {
-      }
+    return {}
   },
-    computed: {
-        ...mapState('debate',{participant_list:'participant_list'}),
-        ...mapState('debate',{chat_box:'chat_box'}),
-        ...mapState('debate',{middle_box:'middle_box'}),
+  computed: {
+    ...mapState('debate', {participant_list: 'participant_list'}),
+    ...mapState('debate', {chat_box: 'chat_box'}),
+    ...mapState('debate', {middle_box: 'middle_box'}),
 
   },
   mounted() {
@@ -54,9 +56,9 @@ export default{
 }
 
 @media screen and (max-width: 800px) {
-.side-box {
-  display: none;
-}
+  .side-box {
+    display: none;
+  }
 }
 
 

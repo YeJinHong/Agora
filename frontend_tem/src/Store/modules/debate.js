@@ -1,15 +1,20 @@
 const state = {
-    participant: {},
-    participant_list:false,
-    micro_phone : true,
+    participant: 0,
+    participant_list: false,
+    micro_phone: true,
     chat_box: false,
+    document_box: false,
     middle_box: true,
-
+    chatList: [],
+    chatSocket: null,
+    stompClient: null,
+    webRtcSocket: null,
 };
 
 const getters = {
-
-
+    isDocumentBox: () => {
+        return state.document_box;
+    }
 };
 
 const mutations = {
@@ -17,8 +22,7 @@ const mutations = {
         if (state.chat_box === true) {
             state.chat_box = false
             state.participant_list = !state.participant_list
-        }
-        else {
+        } else {
             state.participant_list = !state.participant_list
         }
     },
@@ -29,10 +33,12 @@ const mutations = {
         if (state.participant_list === true) {
             state.participant_list = false
             state.chat_box = !state.chat_box
-        }
-        else {
+        } else {
             state.chat_box = !state.chat_box
         }
+    },
+    documentBox(state) {
+        state.document_box = !state.document_box
     }
 };
 
