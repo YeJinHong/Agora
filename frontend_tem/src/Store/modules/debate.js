@@ -8,14 +8,22 @@ const debate = {
         selectedOptionName : "",
         selectedCategoryIdList : "",
         debateList: [],
-        participant: {},
+        participant: 0,
         participant_list: false,
         micro_phone: true,
         chat_box: false,
+        document_box: false,
         middle_box: true,
+        chatList: [],
+        chatSocket: null,
+        stompClient: null,
+        webRtcSocket: null,
         categoryList : [],
     },
     getters: {
+        isDocumentBox: () => {
+            return state.document_box;
+        },
         getDebateList: function (state) {
             return state.debateList;
         },
@@ -98,6 +106,9 @@ const debate = {
                 }
             )
         }
+    },
+    documentBox(state) {
+        state.document_box = !state.document_box
     }
 }
 
