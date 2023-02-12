@@ -20,6 +20,8 @@ public interface DebateService {
 
 	DebateRes search(long debateId);
 
+	Long searchFileId(long debateId);
+
 	void updateDebate(long debateId, DebateModifyPatchReq debateModifyReq);
 
 	void updateDebateState(long debateId, DebateModifyStatePatchReq debateModifyStateReq);

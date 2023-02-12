@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -40,7 +41,7 @@ public class DebateServiceImpl implements DebateService {
     @Override
     @Transactional
     public Debate createDebate(DebateRegisterPostReq debateRegisterPostReq) {
-        User owner = userRepository.findById(debateRegisterPostReq.getOwnerId())
+        User owner = userRepository.findByUserEmail(debateRegisterPostReq.getOwnerId())
                 .orElseThrow(NoSuchElementException::new);
         Debate debate = makeDebate(debateRegisterPostReq, owner);
         Debate savedDebate = debateRepository.save(debate);
@@ -58,6 +59,11 @@ public class DebateServiceImpl implements DebateService {
     public DebateRes search(long debateId) {
         Debate debate = debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
         return DebateRes.of(debate);
+    }
+
+    @Override
+    public Long searchFileId(long debateId) {
+        return debateRepository.findFileManagerIdByDebateId(debateId);
     }
 
     @Override
@@ -88,9 +94,9 @@ public class DebateServiceImpl implements DebateService {
         debate.setTitle(debateRegisterPostReq.getTitle());
         debate.setDescription(debateRegisterPostReq.getDescription());
         debate.setModeratorOnOff(debateRegisterPostReq.getModeratorOnOff());
-        debate.setDebateMode(debate.getDebateMode());
+        debate.setDebateMode(debateRegisterPostReq.getDebateMode());
         debate.setThumbnailUrl(debateRegisterPostReq.getThumbnailUrl());
-        debate.setState(debate.getState());
+        debate.setState(debateRegisterPostReq.getState());
         debate.setInsertedTime(debateRegisterPostReq.getInsertedTime());
         debate.setCallStartTime(debateRegisterPostReq.getCallStartTime());
         debate.setCallEndTime(debateRegisterPostReq.getCallEndTime());

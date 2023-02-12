@@ -32,7 +32,7 @@ public class UserDebateServiceImpl implements UserDebateService{
         User user = userRepository.findByUserEmail(userDebateReq.getUserEmail()).orElseThrow(NoSuchFieldError::new);
         UserDebate userDebate = makeUserDebate(userDebateReq, user, debate);
         UserDebate savedUserDebate = userDebateRepository.save(userDebate);
-        Action action = Action.valueOf("Join");
+        Action action = Action.JOIN;
         debateHistoryService.createDebateHistory(action, debate, user);
 
         return userDebateRepository.save(userDebate);

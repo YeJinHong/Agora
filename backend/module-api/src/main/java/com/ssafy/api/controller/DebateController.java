@@ -17,6 +17,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.NoSuchElementException;
@@ -27,7 +28,7 @@ import java.util.Optional;
  */
 @Api(value = "토론 API", tags = {"Debate"})
 @RestController
-@RequestMapping("/api/v1/debates/")
+@RequestMapping("/api/v1/debates")
 @RequiredArgsConstructor
 public class DebateController {
 
@@ -36,7 +37,7 @@ public class DebateController {
 	@PostMapping()
 	@ApiOperation(value = "토론 생성")
 	public ResponseEntity<? extends BaseResponseBody> register(
-			@RequestBody @ApiParam(value="회원가입 정보", required = true) DebateRegisterPostReq debateRegisterPostReq) {
+			@RequestBody DebateRegisterPostReq debateRegisterPostReq) {
 
 		Debate debate = debateService.createDebate(debateRegisterPostReq);
 
@@ -47,7 +48,7 @@ public class DebateController {
 	@ApiOperation(value = "토론 조회")
 	public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
 												  @RequestParam(required = false) String condition,
-												  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+												  @PageableDefault(sort = "title", direction = Sort.Direction.DESC) Pageable pageable){
 		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable);
 		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
 		return ResponseEntity.status(201).body(response);
@@ -87,7 +88,16 @@ public class DebateController {
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 	}
 
+	@PatchMapping("/thumbnail/{debateId}")
+	@ApiOperation(value = "토론 썸네일 수정")
+	public ResponseEntity<BaseResponseDataBody<DebateRes>> modifyThumbnail(@PathVariable long debateId, MultipartFile file){
+		DebateRes debate = debateService.search(debateId);
+		if(debateService.searchFileId(debateId) != null){
 
+		}
+		BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
+		return ResponseEntity.status(201).body(response);
+	}
 
 	@DeleteMapping("/{id}")
 	@ApiOperation(value = "토론 삭제")
