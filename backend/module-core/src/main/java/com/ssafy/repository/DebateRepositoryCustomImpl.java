@@ -41,17 +41,6 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
         return new PageImpl<Debate>(debates, pageable, query.fetch().size());
     }
 
-    @Override
-    public Long findFileManagerIdByDebateId(long debateId) {
-
-        return jpaQueryFactory
-                .select(debate.fileManager.id)
-                .from(debate)
-                .where(debate.id.eq(debateId))
-                .fetchOne();
-    }
-
-
     private BooleanExpression eqKeyword(String keyword, String condition){
         if(keyword == null || keyword.isEmpty() || condition == null || condition.isEmpty()){
             return null;

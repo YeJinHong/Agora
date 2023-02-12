@@ -7,7 +7,7 @@
           <div class="col-md-12">
             <div class="filter-grp ticket-grp tiket-suport d-flex align-items-center justify-content-between">
               <div>
-                <h3>토론 생성</h3>
+                <h3>토론 수정</h3>
               </div>
               <div class="ticket-btn-grp">
                 <router-link to="index">Back to Home</router-link>
@@ -125,6 +125,19 @@ export default {
 
     onMounted(() => {
       api.get(`/codes/category`)
+          .then((data) => {
+            let result = data["data"].data;
+            console.log(result);
+            state.option.categories = result;
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("error : " + error.code);
+          })
+    })
+
+    onMounted(() => {
+      api.get(`/debates/`)
           .then((data) => {
             let result = data["data"].data;
             console.log(result);

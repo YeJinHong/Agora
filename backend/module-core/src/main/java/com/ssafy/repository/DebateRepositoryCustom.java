@@ -6,6 +6,4 @@ import org.springframework.data.domain.Pageable;
 
 public interface DebateRepositoryCustom {
     Page<Debate> findDebateBySearchCondition(String keyword, String condition, Pageable pageable);
-
-    Long findFileManagerIdByDebateId(long debateId);
 }
