@@ -30,7 +30,7 @@ const commonCodeStore = {
             // }).catch((error) => {
             //     alert("error");
             // })
-            axios.defaults.baseURL = "http://localhost:8082/api/v1";
+            axios.defaults.baseURL = "http://localhost:8088/api/v1";
             axios.get(`codes/category`)
                 .then((data) => {
                     let result = data["data"];

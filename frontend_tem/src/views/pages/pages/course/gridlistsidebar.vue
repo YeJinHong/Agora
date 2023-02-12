@@ -17,11 +17,10 @@
                                 <h4> 토론 카테고리 </h4>
                                 <i class="fas fa-angle-down"></i>
                             </div>
-                            <div v-for="category in categories">
+                            <div v-for="category in data.categories">
                                 <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" >
+                                    <input type="checkbox" name="select_specialist" :value="category.id" @click="setSelectedCategories()">
                                     <span class="checkmark"></span> {{ category.codeName }}
-
                                 </label>
                             </div>
                             
@@ -29,45 +28,6 @@
                     </div>
                 </div>
                 <!-- /Search Filter -->
-                
-                <!-- Latest Posts -->
-                <div class="card post-widget ">
-                    <div class="card-body">
-                        <div class="latest-head">
-                            <h4 class="card-title">Latest Courses</h4>
-                        </div>
-                        <ul class="latest-posts">
-                            <li>
-                                <div class="post-thumb">
-                                    <router-link to="course-details">
-                                        <img class="img-fluid" src="../../../../assets/img/blog/blog-01.jpg" alt="">
-                                    </router-link>
-                                </div>
-                                <div class="post-info free-color">
-                                    <h4>
-                                        <router-link to="course-details">Introduction LearnPress – LMS plugin</router-link>
-                                    </h4>
-                                    <p>FREE</p>
-                                </div>
-                            </li>
-                            <li>
-                                <div class="post-thumb">
-                                    <router-link to="course-details">
-                                        <img class="img-fluid" src="../../../../assets/img/blog/blog-02.jpg" alt="">
-                                    </router-link>
-                                </div>
-                                <div class="post-info">
-                                    <h4>
-                                        <router-link to="course-details">Become a PHP Master and Make Money</router-link>
-                                    </h4>
-                                    <p>$200</p>
-                                </div>
-                            </li>
-                            
-                        </ul>
-                    </div>
-                </div>
-                <!-- /Latest Posts -->
             
             </div>
         </div>
@@ -77,34 +37,44 @@
 <script>    
 
 import { apiInstance } from "/api/index.js";      
+import {useStore} from "vuex";
+import { onMounted, reactive,  watch} from "vue";
 
 const api = apiInstance();
 
 export default {
     setup(){
+        const store = useStore();
+        const data = reactive ({
+            categories : [],
+        })
+        onMounted(() => {
+            getCategories();
+        })
+        const getCategories = async ()=> {
+            await store.dispatch("debate/getCategoryList");
+        }
+        
+        watch (
+            () => store.getters["debate/getCategoryList"],
+            (val, oldVal) => {
+			    data.categories = store.getters["debate/getCategoryList"];
+		  }
+        )
 
-    },
-    data(){
-        return {
-			categories : [],
+        const setSelectedCategories = ()=>{
+
+            let check_val = [];
+            $("input:checkbox[name=select_specialist]:checked").each(function(i, iVal){
+                check_val.push(iVal.value);
+            });
+            console.log(check_val);
+
+            // store.commit('debate/SET_SELECTED_CATEGORY_LIST', check_val);
+            store.dispatch('debate/setSelectedCategoryList', check_val);
         }
+        
+      return {data, setSelectedCategories}
     },
-    mounted(){
-        this.getCategories();
-    },
-    methods: {
-        async getCategories(){
-            api.get(`/codes/category`)
-			.then((data) => {
-				let result = data["data"].data;
-				console.log(result);
-				this.categories = result;
-			})
-			.catch((error) => {
-				alert("error : " + error.code);
-			})
-        }
-    },
-    
 }
 </script>

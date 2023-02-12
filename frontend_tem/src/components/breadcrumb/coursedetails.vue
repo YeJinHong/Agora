@@ -10,7 +10,7 @@
                             <li class="breadcrumb-item"><router-link to="/">Home</router-link></li>
                             <li class="breadcrumb-item" aria-current="page">Debates</li>
                             <li class="breadcrumb-item" aria-current="page">All Debates</li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ debate.debate_title }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ debate.title }}</li>
                         </ol>
                     </nav>
                 </div>
