@@ -94,10 +94,10 @@ export default {
             receiveVideoResponse(parsedMessage);
             break;
           case 'iceCandidate':
-            console.log(parsedMessage.userName, "                 parsedMessage.userName");
+            console.log(parsedMessage.userName, "parsedMessage.userName");
             const test = data.participants[parsedMessage.userName];
-            console.log(test, "                          test");
-            console.log(test.rtcPeer);
+            console.log(test, "test");
+            console.log("test.rtcPeer",test.rtcPeer);
             data.participants[parsedMessage.userName].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
               if (error) {
                 console.error("Error adding candidate: " + error);
@@ -164,6 +164,7 @@ export default {
     }
 
     const onNewParticipant = (request) => {
+      console.log('리퀘스트', request)
       receiveVideo(request.userName, request.position, request.isScreen);
     }
 
@@ -219,7 +220,7 @@ export default {
                             })
                           });
                   msg.data.forEach(m => {
-                    receiveVideo(m.name, m.position)
+                    receiveVideo(m.userName, m.position)
                   });
                 });
           }
@@ -262,7 +263,7 @@ export default {
                 })
               });
         } else {
-          participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+          data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
             if (error) {
               return console.error(error);
             }
@@ -277,7 +278,7 @@ export default {
           });
         }
 
-        msg.data.forEach(m => (receiveVideo(m.name, m.position, m.isScreen)));
+        msg.data.forEach(m => (receiveVideo(m.userName, m.position, m.isScreen)));
       }
 
     }
@@ -406,7 +407,7 @@ export default {
             this.generateOffer((error, offerSdp, wp) => {
               let msg = {
                 id: "receiveVideoFrom",
-                sender: data.name,
+                sender: name,
                 sdpOffer: offerSdp
               };
               sendMessage(msg);
@@ -414,21 +415,21 @@ export default {
           });
     }
 
-    const callResponse = (message) => {
-      if (message.response !== 'accepted') {
-        console.info('Call not accepted by peer. Closing call');
-        stop();
-      } else {
-        webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
-          if (error) return console.error(error);
-        });
-      }
-    }
+    // const callResponse = (message) => {
+    //   if (message.response !== 'accepted') {
+    //     console.info('Call not accepted by peer. Closing call');
+    //     stop();
+    //   } else {
+    //     webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
+    //       if (error) return console.error(error);
+    //     });
+    //   }
+    // }
 
     const onParticipantLeft = (request) => {
       console.log('Participant ' + request.name + ' left');
       var participant = data.participants[request.name];
-      data.participant.dispose();
+      participant.dispose();
       document.getElementById('video-' + request.name).remove();
       delete data.participants[request.name];
     }
