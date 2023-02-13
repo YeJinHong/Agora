@@ -82,7 +82,9 @@ public class DebateRes {
         res.setDebateMode(debate.getDebateMode());
         res.setModeratorOnOff(debate.getModeratorOnOff());
         res.setDebateModeOption(debate.getDebateModeOption());
-        res.setFileList(new FileRes().toDtoList(debate.getFileManager().getFiles()));
+        if(debate.getFileManager() != null){
+            res.setFileList(new FileRes().toDtoList(debate.getFileManager().getFiles()));
+        }
         return res;
     }
     public Page<DebateRes> toDtoList(Page<Debate> debates) {
