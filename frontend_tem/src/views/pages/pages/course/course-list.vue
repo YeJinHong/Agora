@@ -97,6 +97,7 @@
 	  const router = useRouter();
 	  const data = reactive({
 		debate_list : [],
+		
 	  })
 	  
 	  watch(

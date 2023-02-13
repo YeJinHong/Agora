@@ -11,7 +11,7 @@
                            class="list-view"><i class="feather-list"></i></router-link>
             </div>
             <div class="show-result">
-              <h4>Showing 1-9 of 50 results</h4>
+              <h4>Showing  {{data.pageNumber*data.size}} - {{ data.pageNumber*data.size + data.numberOfElements}} of {{ data.totalElements }} results</h4>
             </div>
           </div>
         </div>
@@ -62,6 +62,11 @@
         keyword :store.state.debate.keyword,
         condition: store.state.debate.condition,
         selectedOptionName : store.state.debate.selectedOptionName,
+        totalPages : store.state.debate.totalElements,
+        totalElements : store.state.debate.totalElements,
+        pageNumber : store.state.debate.pageNumber, 
+        size : store.state.debate.size,
+        numberOfElements : store.state.debate.numberOfElements,
       })
       onMounted(() => {
         loadDebateList();

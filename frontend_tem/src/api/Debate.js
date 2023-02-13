@@ -6,8 +6,9 @@ async function searchAll(search, success, fail) {
     console.log(search.keyword + " ------- ");
     console.log(search.condition + " ------- ");
     console.log(search.categoryList + " ------- ");
+    console.log(search.page + " ------- ");
     console.log(search);
-    await api.get(`/debates?keyword=${search.keyword}&condition=${search.condition}&categoryList=${search.categoryList}`).then(success).catch(fail);
+    await api.get(`/debates?keyword=${search.keyword}&condition=${search.condition}&categoryList=${search.categoryList}&page=${search.page}`).then(success).catch(fail);
 }
 
 async function getCategoryList(success, fail){
