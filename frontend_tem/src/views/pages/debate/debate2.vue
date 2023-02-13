@@ -10,101 +10,94 @@
       <div id="timer" style="font-size: 20px"></div>
       <div id="screen"></div>
       <div id="buttons" style="display: none">
-        <input type="button" id="button-start" onmouseup="start();"
+        <input type="button" id="button-start" onMouseUp="start();"
                value="start">
-        <input type="button" id="button-stop" onmouseup="stop();"
+        <input type="button" id="button-stop" onMouseUp="stop();"
                value="stop">
-        <input type="button" id="button-share-on" onmouseup="shareScreen()"
+        <input type="button" id="button-share-on" onMouseUp="shareScreen()"
                value="share screen on">
-        <input type="button" id="button-share-off" onmouseup="stopShareScreen()" style="display: none"
+        <input type="button" id="button-share-off" onMouseUp="stopShareScreen()" style="display: none"
                value="share screen off">
-        <input type="button" id="vidOn" onmouseup="videoOnOff()" style="display: none"
+        <input type="button" id="vidOn" onMouseUp="videoOnOff()" style="display: none"
                value="video On">
-        <input type="button" id="vidOff" onmouseup="videoOnOff()"
+        <input type="button" id="vidOff" onMouseUp="videoOnOff()"
                value="video Off">
-        <input type="button" id="audOn" onmouseup="audioOnOff()" style="display: none"
+        <input type="button" id="audOn" onMouseUp="audioOnOff()" style="display: none"
                value="Audio On">
-        <input type="button" id="audOff" onmouseup="audioOnOff()"
+        <input type="button" id="audOff" onMouseUp="audioOnOff()"
                value="Audio Off">
-        <input type="button" id="button-system-comment" onmouseup="sendSystemComment()"
+        <input type="button" id="button-system-comment" onMouseUp="sendSystemComment()"
                value="system comment">
-        <input type="button" id="button-leave" onmouseup="leaveRoom();"
+        <input type="button" id="button-leave" onMouseUp="leaveRoom();"
                value="Leave room">
       </div>
     </div>
   </div>
 </template>
 
+
 <script>
 import {mapState, useStore} from "vuex";
 import kurentoUtils from "kurento-utils";
-import {reactive} from "vue";
+import {onMounted, reactive} from "vue";
 import Participant from "../../../assets/js/participant.js";
 
 export default {
   name: 'debate2',
   components: {},
-  setup() {
+  props: {
+    call: JSON
+  },
+  setup(props) {
     const store = useStore();
     const data = reactive({
-      ws: store.getters["debate/getWebRtcSocket"]
-    })
-    return {store, data}
-  },
-  props: {
-    call: JSON,
-  },
-  data() {
-    return {
-      participants: {},
-      mame: '',
+      ws: store.getters["debate/getWebRtcSocket"],
+      participants: [],
+      name: '',
       title: '',
       position: ''
-    }
-  },
-  computed: {
-    ...mapState('debate', {middle_box: 'middle_box'})
-  },
-  mounted() {
-    this.connect()
-  },
-  methods: {
-    makeWebsocket() {
-      this.data.ws = new WebSocket('wss://localhost:8443/groupcall');
-      this.data.ws.onopen = () => {
+    })
+    onMounted(() => {
+      connect();
+    })
+
+    const makeWebsocket = () => {
+      data.ws = new WebSocket('wss://localhost:8443/groupcall');
+      data.ws.onopen = () => {
         console.log('WebSocket connection established');
-        this.register()
+        register()
       };
 
-      this.data.ws.onerror = (error) => {
+      data.ws.onerror = (error) => {
         console.error('WebSocket connection error:', error);
       };
-    },
-    async connect() {
-      await this.makeWebsocket()
+    }
 
-      this.data.ws.onmessage = (message) => {
+    const connect = async () => {
+      await makeWebsocket()
+
+      data.ws.onmessage = (message) => {
         let parsedMessage = JSON.parse(message.data);
         console.info('Received message: ' + message.data);
 
         switch (parsedMessage.id) {
           case 'existingParticipants':
-            this.onExistingParticipants(parsedMessage)
+            onExistingParticipants(parsedMessage)
             break;
           case 'newParticipantArrived':
-            console.log('newArrived')
-            this.onNewParticipant(parsedMessage);
+            onNewParticipant(parsedMessage);
             break;
           case 'participantLeft':
-            this.onParticipantLeft(parsedMessage);
+            onParticipantLeft(parsedMessage);
             break;
           case 'receiveVideoAnswer':
-            console.log(this.participants)
-            this.receiveVideoResponse(parsedMessage);
+            receiveVideoResponse(parsedMessage);
             break;
           case 'iceCandidate':
-            console.log('iceCandidate', parsedMessage)
-            this.participants[parsedMessage.name].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
+            const test = data.participants[parsedMessage.userName];
+            console.log(test, "                          test");
+            console.log(test.rtcPeer);
+            data.participants[parsedMessage.userName].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
               if (error) {
                 console.error("Error adding candidate: " + error);
                 return;
@@ -112,11 +105,11 @@ export default {
             });
             break;
           case 'timeRemaining':
-            var time = parsedMessage.time;
+            let time = parsedMessage.time;
             document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
             break
           case 'pauseSpeaking':
-            var time = parsedMessage.time;
+            time = parsedMessage.time;
             document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
             break
           case 'receiveSystemComment':
@@ -130,58 +123,51 @@ export default {
             console.error('Unrecognized message', parsedMessage);
         }
       }
-
       console.log('connect done')
-    },
-    register() {
-      console.log('register')
-      this.name = this.call.name;
-      this.title = this.call.title;
-      let debateId = this.call.debateId;
-      this.position = this.call.position;
-      let roomType = this.call.roomType;
-      let time = this.call.time;
+    }
 
-      this.sendMessage({
+    const register = () => {
+      console.log('register')
+      data.name = props.call.name;
+      data.title = props.call.title;
+      let debateId = props.call.debateId;
+      data.position = props.call.position;
+      let roomType = props.call.roomType;
+      let time = props.call.time;
+
+      sendMessage({
         id: 'createRoom',
         debateId: debateId,
-        title: this.title,
+        title: data.title,
         roomType: roomType,
         time: time
       })
 
       let message = {
         id: 'joinRoom',
-        userName: this.name,
+        userName: data.name,
         debateId: debateId,
-        title: this.title,
-        position: this.position,
+        title: data.title,
+        position: data.position,
       }
-      this.sendMessage(message);
-    },
+      sendMessage(message);
+    }
 
-    onNewParticipant(request) {
-      this.receiveVideo(request.name, request.position, request.isScreen);
-    },
+    const onIceCandidate =  (candidate) => {
+      let message = {
+        id: 'onIceCandidate',
+        candidate: candidate,
+        userName: data.name
+      };
+      sendMessage(message);
+    }
 
-    receiveVideoResponse(result) {
-      this.participants[result.name].rtcPeer.processAnswer(result.sdpAnswer, function (error) {
-        if (error) return console.error(error);
-      });
-    },
+    const onNewParticipant = (request) => {
+      receiveVideo(request.userName, request.position, request.isScreen);
+    }
 
-    callResponse(message) {
-      if (message.response !== 'accepted') {
-        console.info('Call not accepted by peer. Closing call');
-        stop();
-      } else {
-        webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
-          if (error) return console.error(error);
-        });
-      }
-    },
+    const onExistingParticipants = (msg) => {
 
-    onExistingParticipants(msg) {
       let constraints = {
         audio: true,
         video: {
@@ -194,147 +180,180 @@ export default {
       };
 
       if (false) {
-        console.log('share screen:', this.name, this.position)
-        let participant = new Participant(this.name, this.position, true);
-        this.participants[this.name] = participant;
+        console.log('share screen:', data.name, data.position)
+        let participant = new Participant(data.name, data.position, true);
+        data.participants[data.name] = participant;
         let video = participant.getVideoElement();
 
         if (navigator.getDisplayMedia || navigator.mediaDevices.getDisplayMedia) {
           if (navigator.mediaDevices.getDisplayMedia) {
-            navigator.mediaDevices
-                .getDisplayMedia({video: true, audio: true})
-                .then((stream) => {
+            navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then((stream) => {
                   video.srcObject = stream;
-                  options = {
+                  let options = {
                     videoStream: stream,
                     mediaConstraints: constraints,
                     sendSource: "screen",
-                    onicecandidate: participant.onIceCandidate.bind(participant),
+                    onicecandidate: participant.onIceCandidate.bind(participant).then((candidate) => {
+                      let message = {
+                        id: 'onIceCandidate',
+                        candidate: candidate,
+                        userName: data.name
+                      };
+                      sendMessage(message);
+                    }),
                   };
                   participant.rtcPeer =
                       new kurentoUtils.WebRtcPeer.WebRtcPeerSendrecv(options,
-                          function (error) {
+                          (error) => {
                             if (error) {
                               return console.error(error);
                             }
-                            this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+                            this.generateOffer((error, offerSdp, wp) => {
+                              let msg = {
+                                id: "receiveVideoFrom",
+                                sender: data.name,
+                                sdpOffer: offerSdp
+                              };
+                              sendMessage(msg);
+                            })
                           });
                   msg.data.forEach(m => {
-                    this.receiveVideo(m.name, m.position)
+                    receiveVideo(m.name, m.position)
                   });
                 });
           }
         }
 
       } else {
-        console.log(this.name + " registered in room " + this.title);
-        let participant = new Participant(this.name, this.position, msg.isScreen);
-        this.participants[name] = participant;
+        console.log(data.name + " registered in room " + data.title);
+        let participant = new Participant(data.name, data.position, msg.isScreen);
+        data.participants[data.name] = participant;
         let video = participant.getVideoElement();
+
+        participant.onIceCandidate = (candidate) => {
+          let message = {
+            id: 'onIceCandidate',
+            candidate: candidate,
+            userName: data.name
+          };
+          sendMessage(message);
+        };
 
         let options = {
           localVideo: video,
           mediaConstraints: constraints,
-          onicecandidate: participant.onIceCandidate.bind(participant)
+          onicecandidate: participant.onIceCandidate.bind(participant, sendMessage()),
         }
 
-        if (this.position === '청중') {
+        if (data.position === '청중') {
           participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
-              function (error) {
+              (error) => {
                 if (error) {
                   return console.error(error);
                 }
-                this.generateOffer(participant.offerToReceiveVideo.bind(participant)).then(() => {
+                this.generateOffer((error, offerSdp, wp) => {
                   let msg = {
                     id: "receiveVideoFrom",
-                    sender: this.userName,
-                    sdpOffer: this.sdpOffer
+                    sender: data.name,
+                    sdpOffer: offerSdp
                   };
-                  this.sendMessage(msg);
-                });
+                  sendMessage(msg);
+                })
               });
         } else {
-          participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
-              function (error) {
-                if (error) {
-                  return console.error(error);
-                }
-                this.generateOffer(participant.offerToReceiveVideo.bind(participant));
-              });
+          participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+            if (error) {
+              return console.error(error);
+            }
+            this.generateOffer((error, offerSdp, wp) => {
+              let msg = {
+                id: "receiveVideoFrom",
+                sender: data.name,
+                sdpOffer: offerSdp
+              };
+              sendMessage(msg);
+            });
+          });
         }
 
-        msg.data.forEach(m => (this.receiveVideo(m.name, m.position, m.isScreen)));
+        msg.data.forEach(m => (receiveVideo(m.name, m.position, m.isScreen)));
       }
 
-    },
+    }
 
-    start() {
+    const receiveVideoResponse = (result) => {
+      console.log(data.participants);
+      // console.log(data.participants[result.userName]);
+      data.participants[result.userName].rtcPeer.processAnswer(result.sdpAnswer, function (error) {
+        if (error) return console.error(error);
+      });
+    }
+    const start = () => {
       let debateId = document.getElementById('debateId').value;
 
-      this.sendMessage({
+      sendMessage({
         id: 'startSpeaking',
         debateId: debateId
       });
-    },
+    }
 
-    stop() {
+    const stop = () => {
       let debateId = document.getElementById('debateId').value;
 
-      this.sendMessage({
+      sendMessage({
         id: 'pauseSpeaking',
         debateId: debateId
       });
-    },
+    }
 
-    shareScreen() {
+    const shareScreen = () => {
       name = document.getElementById('name').value;
       let debateId = document.getElementById('debateId').value;
       let title = document.getElementById('title').value;
-      isScreen = true;
+      let isScreen = true;
 
       this.sendMessage({
         id: 'leaveRoom'
       });
-      for (var key in participants) {
-        if (participants[key].name !== name) {
-          var partVideo = document.getElementById("video-" + participants[key].name);
-          console.log('leave', participants[key].name);
+      for (var key in data.participants) {
+        if (data.participants[key].name !== name) {
+          var partVideo = document.getElementById("video-" + data.participants[key].name);
+          console.log('leave', data.participants[key].name);
           partVideo.parentElement.remove();
         }
       }
-      delete this.participants[name];
+      delete data.participants[data.name];
       document.getElementById("video-" + name).parentElement.remove();
 
       var message = {
         id: 'shareScreen',
-        userName: name,
+        userName: data.name,
         debateId: debateId,
         title: title,
-        position: position,
+        position: data.position,
       }
       // name = 'screen_' + name;
-      this.sendMessage(message);
+      sendMessage(message);
       document.getElementById("button-share-on").style.display = "none";
       document.getElementById("button-share-off").style.display = "";
-    },
-
-    stopShareScreen() {
+    }
+    const stopShareScreen = () => {
       name = document.getElementById('name').value;
       let debateId = document.getElementById('debateId').value;
       let title = document.getElementById('title').value;
-      isScreen = false;
+      let isScreen = false;
 
-      this.sendMessage({
+      sendMessage({
         id: 'leaveRoom'
       });
-      for (let key in participants) {
-        if (participants[key].name !== name) {
-          let partVideo = document.getElementById("video-" + participants[key].name);
-          console.log('leave', participants[key].name);
+      for (let key in data.participants) {
+        if (data.participants[key].name !== name) {
+          let partVideo = document.getElementById("video-" + data.participants[key].name);
+          console.log('leave', data.participants[key].name);
           partVideo.parentElement.remove();
         }
       }
-      delete participants[name];
+      delete data.participants[data.name];
       document.getElementById(name).remove();
       let video = document.getElementById("video-" + name);
       video.srcObject.getTracks().forEach(track => track.stop());
@@ -343,96 +362,107 @@ export default {
 
       var message = {
         id: 'joinRoom',
-        userName: name,
+        userName: data.name,
         debateId: debateId,
-        title: title,
-        position: position,
+        position: data.position,
       }
       // name = 'screen_' + name;
-      this.sendMessage(message);
+      sendMessage(message);
       document.getElementById("button-share-on").style.display = "";
       document.getElementById("button-share-off").style.display = "none";
-    },
+    }
 
-    leaveRoom() {
+    const leaveRoom = () => {
       sendMessage({
         id: 'leaveRoom'
       });
 
-      for (var key in participants) {
-        participants[key].dispose();
+      for (var key in data.participants) {
+        data.participants[key].dispose();
       }
 
       document.getElementById('join').style.display = 'block';
       document.getElementById('room').style.display = 'none';
 
-      ws.close();
-    },
-
-    receiveVideo(name, position, isScreen) {
-      console.log(name, position)
+      data.ws.close();
+    }
+    const receiveVideo = (name, position, isScreen) => {
+      console.log(name, position , "======================= receiveVideo")
       var sender = name;
-      var participant = new Participant(sender, position, isScreen);
-      participants[sender] = participant;
+      var participant = new Participant(name, position, isScreen);
+      data.participants[name] = participant;
       var video = participant.getVideoElement();
 
       var options = {
         remoteVideo: video,
         onicecandidate: participant.onIceCandidate.bind(participant)
       }
-
       participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
           function (error) {
             if (error) {
               return console.error(error);
             }
-            this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+            this.generateOffer((error, offerSdp, wp) => {
+              let msg = {
+                id: "receiveVideoFrom",
+                sender: data.name,
+                sdpOffer: offerSdp
+              };
+              sendMessage(msg);
+            })
           });
-    },
+    }
 
-    onParticipantLeft(request) {
+    const callResponse = (message) => {
+      if (message.response !== 'accepted') {
+        console.info('Call not accepted by peer. Closing call');
+        stop();
+      } else {
+        webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
+          if (error) return console.error(error);
+        });
+      }
+    }
+
+    const onParticipantLeft = (request) => {
       console.log('Participant ' + request.name + ' left');
-      var participant = participants[request.name];
-      participant.dispose();
+      var participant = data.participants[request.name];
+      data.participant.dispose();
       document.getElementById('video-' + request.name).remove();
-      delete participants[request.name];
-    },
-
-    sendMessage(message) {
-      console.log(this.data.ws)
+      delete data.participants[request.name];
+    }
+    const sendMessage = (message) => {
+      console.log(data.ws)
       console.log('send message', message)
       let jsonMessage = JSON.stringify(message);
       console.log('Sending message: ' + jsonMessage);
-      this.data.ws.send(jsonMessage);
-      console.log(this.data.ws)
-    },
-
-    videoOnOff() {
-      if (participants[name].rtcPeer.videoEnabled) {
+      data.ws.send(jsonMessage);
+      console.log(data.ws)
+    }
+    const videoOnOff = () => {
+      if (data.participants[name].rtcPeer.videoEnabled) {
         // 끌때
-        participants[name].rtcPeer.videoEnabled = false;
+        data.participants[name].rtcPeer.videoEnabled = false;
         document.getElementById("vidOn").style.display = "";
         document.getElementById("vidOff").style.display = "none";
       } else {
-        participants[name].rtcPeer.videoEnabled = true;
+        data.participants[name].rtcPeer.videoEnabled = true;
         document.getElementById("vidOn").style.display = "none";
         document.getElementById("vidOff").style.display = "";
       }
-    },
-
-    audioOnOff() {
-      if (participants[name].rtcPeer.audioEnabled) {
-        participants[name].rtcPeer.audioEnabled = false;
+    }
+    const audioOnOff = () => {
+      if (data.participants[name].rtcPeer.audioEnabled) {
+        data.participants[name].rtcPeer.audioEnabled = false;
         document.getElementById("audOn").style.display = "";
         document.getElementById("audOff").style.display = "none";
       } else {
-        participants[name].rtcPeer.audioEnabled = true;
+        data.participants[name].rtcPeer.audioEnabled = true;
         document.getElementById("audOn").style.display = "none";
         document.getElementById("audOff").style.display = "";
       }
-    },
-
-    sendSystemComment() {
+    }
+    const sendSystemComment = () => {
       let debateId = document.getElementById('debateId').value;
 
       sendMessage({
@@ -440,9 +470,8 @@ export default {
         debateId: debateId,
         comment: 'test',
       })
-    },
-
-    terminateDebate() {
+    }
+    const terminateDebate = () => {
       let debateId = document.getElementById('debateId').value;
 
       sendMessage({
@@ -450,10 +479,17 @@ export default {
         debateId: debateId
       })
     }
-  }
+
+    return {store, data}
+  },
+  // computed: {
+  //   ...
+  //       mapState('debate', {middle_box: 'middle_box'})
+  // },
 }
 
 </script>
+
 
 <style scoped>
 

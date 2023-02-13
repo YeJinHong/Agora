@@ -1,4 +1,3 @@
-
 const PARTICIPANT_MAIN_CLASS = 'participant main';
 const PARTICIPANT_CLASS = 'participant';
 
@@ -88,15 +87,14 @@ function Participant(userName, position, isScreen) {
     }
 
 
-    this.onIceCandidate = function (candidate, wp) {
+    this.onIceCandidate = function (candidate, callback) {
         console.log("Local candidate" + JSON.stringify(candidate));
-
         var message = {
             id: 'onIceCandidate',
             candidate: candidate,
             userName: userName
         };
-        sendMessage(message);
+        callback.bind(message);
     }
 
     Object.defineProperty(this, 'rtcPeer', {writable: true});
