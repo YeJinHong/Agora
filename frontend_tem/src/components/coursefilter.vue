@@ -11,7 +11,7 @@
                            class="list-view"><i class="feather-list"></i></router-link>
             </div>
             <div class="show-result">
-              <h4>Showing  {{data.pageNumber*data.size}} - {{ data.pageNumber*data.size + data.numberOfElements}} of {{ data.totalElements }} results</h4>
+              <h4>Showing  {{store.state.debate.offset + 1}} - {{ store.state.debate.offset + store.state.debate.numberOfElements}} of {{ store.state.debate.totalElements }} results</h4>
             </div>
           </div>
         </div>
@@ -21,8 +21,7 @@
               <div class="row gx-2 align-items-center">
                 <div class="col-md-3 col-lg-3 col-item">
                   <div class="form-group select-form mb-0">
-  <!--                    <vue-select :options="conditions" label="name"></vue-select>-->
-                    <select class="form-control" v-model="data.selectedOptionName">
+                    <select class="form-control" v-model="store.state.debate.selectedOptionName">
                         <option value="" selected>검색 조건 선택</option>
                       <option v-for="(item, index) in conditions"
                               :key="index"
@@ -35,7 +34,7 @@
                 <div class="col-md-7 col-item">
                   <div class=" search-group">
                     <i class="feather-search"></i>
-                    <input type="text" class="form-control" v-model = "data.keyword" placeholder="제목 혹은 작성자 명으로 검색">
+                    <input type="text" class="form-control" v-model = "store.state.debate.keyword" placeholder="제목 혹은 작성자 명으로 검색">
                   </div>
                 </div>
                 <div class="btn btn-primary col-md-2  col-item"  @click ="loadDebateList" > 검색 </div>
@@ -59,13 +58,8 @@
     setup() {
       const store = useStore();
       const data = reactive({
-        keyword :store.state.debate.keyword,
-        condition: store.state.debate.condition,
-        selectedOptionName : store.state.debate.selectedOptionName,
-        totalPages : store.state.debate.totalElements,
         totalElements : store.state.debate.totalElements,
         pageNumber : store.state.debate.pageNumber, 
-        size : store.state.debate.size,
         numberOfElements : store.state.debate.numberOfElements,
       })
       onMounted(() => {
@@ -73,13 +67,10 @@
       })
 
       const loadDebateList = async () => {
-        await store.dispatch("debate/searchDebateList", {
-          condition: data.selectedOptionName,
-          keyword: data.keyword,
-          page : data.pageNumber,
-        })
+        await store.dispatch("debate/searchDebateList", {})
       }
-      return {data, loadDebateList};
+
+      return {data, loadDebateList, store};
     },
   
     computed: {
@@ -90,7 +81,6 @@
     data() {
       return {
         conditions: [{name: "ownerName", text: "개설자"}, {name: "title", text: "제목"}],
-        options: ["개설자", "제목"],
       }
     },
     mounted() {

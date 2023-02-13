@@ -18,7 +18,7 @@
 					<div class="product">
 					  <div class="product-img">
 						<router-link to="course-details">
-						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg" @click="setSelectedDebateId(debate.id)">
+						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg" @click="setSelectedDebateId(debate.debateId)">
 						</router-link>
 						<div class="price">
 						  <!-- <h3>$300 <span>$99.00</span></h3> -->
@@ -53,7 +53,7 @@
   
 							<div class="course-name">
 							  <h4>
-								<router-link to="instructor-profile">{{ debate.ownerId }} 이것은 유저의 ID. API 수정 필요.</router-link>
+								<router-link to="instructor-profile">{{ debate.ownerName }}</router-link>
 							  </h4>
 							  <p>{{ debate.ownerDepartment }}</p>
 							</div>
@@ -108,13 +108,9 @@
 		  }
 	  )
 
-	  // TODO : 토론 목록에서 Debate ID 정보가 추가로 필요함.
-	  function setSelectedDebateId(debate_id){
-		console.log(debate_id);
-		console.log(debate_id == undefined);
-		console.log(debate_id == '');
-		if(debate_id == undefined) debate_id = 3;
-		store.dispatch('debate/setSelectedDebateId', debate_id)
+	  function setSelectedDebateId(debateId){
+		if(debateId == undefined) debateId = 3; // 토론 ID가 없을시 대신 표시될 임시 데이터.
+		store.dispatch('debate/setSelectedDebateId', debateId)
 	}
   
 	  return {data, setSelectedDebateId}

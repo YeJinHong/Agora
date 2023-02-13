@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -18,7 +19,7 @@ import java.util.Optional;
 public interface DebateService {
 	Debate createDebate(DebateRegisterPostReq debateRegisterPostReq, MultipartFile file) throws IOException;
 
-	Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable);
+	Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable, List<Long> categoryList);
 
 	DebateRes search(long debateId);
 

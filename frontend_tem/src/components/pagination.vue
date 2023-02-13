@@ -6,10 +6,10 @@
             <li class="page-item prev">
                 <a class="page-link" href="javascript:void(0);" tabindex="-1"><i class="fas fa-angle-left"></i></a>
             </li>
-            <li class="page-item first-page active" v-if="data.totalPages==0" id="page-item-1">
+            <li class="page-item first-page active" v-if="store.state.debate.totalPages==0" id="page-item-1">
                 <a class="page-link" href="javascript:void(0);">1</a>
             </li>
-            <li class="page-item" v-for="(page, index) in data.totalPages" :id="'page-item-'+(index+1)" @click ="loadDebateList">
+            <li class="page-item" v-for="(page, index) in store.state.debate.totalPages" :id="'page-item-'+(index+1)" @click ="loadDebateList(index+1)">
                 <a class="page-link" href="javascript:void(0);">{{ index+1 }}</a>
             </li>
             <li class="page-item next">
@@ -21,7 +21,7 @@
 <!-- /Blog pagination -->
 </template>
 <script>
-  import {onMounted, reactive} from 'vue'
+  import {onMounted, reactive, watch} from 'vue'
   import {useStore} from "vuex";
   
   export default {
@@ -30,28 +30,34 @@
       const store = useStore();
       const data = reactive({
         selectedPageIndex : store.state.debate.selectedPageIndex,
-        totalPages : store.state.debate.totalElements,
+        totalPages : store.state.debate.totalPages,
         totalElements : store.state.debate.totalElements,
         pageNumber : store.state.debate.pageNumber, 
-        size : store.state.debate.size,
         numberOfElements : store.state.debate.numberOfElements,
       })
 
-      // TODO : 테스트용 데이터 지우기
-       //   data.totalPages = 5;
-     //   data.selectedPageIndex = 2;
       onMounted(() => {
         document.getElementById('page-item-'+data.selectedPageIndex).className = 'page-item active';
       })
 
-      const loadDebateList = async () => {
-        await store.dispatch("debate/searchDebateList", {
-          condition: data.selectedOptionName,
-          keyword: data.keyword,
-          page : data.pageNumber,
-        })
+      watch(
+		  // pretend you have a getData getter in store
+		  () => store.getters["debate/getPageNumber"],
+		  (val, oldVal) => {
+			console.log("val : "+val);
+			console.log("oldVal : "+oldVal);
+		  }
+	  )
+
+      const loadDebateList = async (num) => {
+        for(var i = 1 ; i <= store.state.debate.totalPages; i++){
+            document.getElementById('page-item-'+i).className = 'page-item';
+        }
+        document.getElementById('page-item-'+num).className = 'page-item active';
+        store.commit('debate/SET_SELECTED_PAGE_INDEX', num);
+        await store.dispatch("debate/searchDebateList", {page : num-1})
       }
-      return {data, loadDebateList};
+      return {data, loadDebateList, store};
     },
   
     computed: {

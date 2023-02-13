@@ -27,8 +27,8 @@ const debate = {
         totalPages : 0, // 페이지로 제공되는 총 페이지 수
         totalElements : 0, // 모든 페이지에 존재하는 총 원소 수
         pageNumber : '', // 페이지 번호 (0번부터 시작)
-        size : 0, // 한 페이지당 요청되는 크기
         numberOfElements : 0, // 현재 페이지에 보여지는 수.
+        offset : 0,
 
     },
     getters: {
@@ -82,26 +82,35 @@ const debate = {
         SET_PAGE_NUMBER : (state, pageNumber) => {
             state.pageNumber = pageNumber;
         },
-        SET_SIZE : (state, size) => {
-            state.size = size;
-        },
         SET_NUMBER_OF_ELEMENTS : (state, numberOfElements) => {
             state.numberOfElements = numberOfElements;
         },
+        SET_SELECTED_PAGE_INDEX : (state, pageIndex) => {
+            state.selectedPageIndex = pageIndex;
+        },
+        SET_OFFSET : (state, offset) => {
+            state.setOffset = offset;
+        }
     },
     actions: {
-        async searchDebateList({state, commit}, condition) {
-            condition.categoryList = state.selectedCategoryIdList;
-            console.log(state.selectedCategoryIdList);
-            console.log(condition.categoryList);
-            await searchAll(condition, ({data}) => {
+        async searchDebateList({state, commit}, search) {
+            search.condition = state.selectedOptionName;
+            search.keyword = state.keyword;
+            if(search.page == undefined){
+                search.page = 0;
+                console.log(search.page);
+            }
+            search.categoryList = state.selectedCategoryIdList;
+            console.log(search.page);
+            await searchAll(search, ({data}) => {
                 if (data.message === "Success") {
-                    console.log(data.data.content);
+                    console.log(data.data);
                     commit("SET_DEBATE_LIST", data.data.content);
-                    commit("SET_TOTAL_PAGE", data.data.totalPages);
+                    commit("SET_TOTAL_PAGES", data.data.totalPages);
+                    commit("SET_TOTAL_ELEMENTS", data.data.totalElements);
                     commit("SET_PAGE_NUMBER", data.data.pageable.pageNumber);
-                    commit("SET_SIZE", data.data.size);
                     commit("SET_NUMBER_OF_ELEMENTS", data.data.numberOfElements);
+                    commit("SET_OFFSET", data.data.pageable.offset);
                 }
             }, (error) => {
                 console.log("문제가 발생하였습니다.")
@@ -137,10 +146,6 @@ const debate = {
         async getCategoryList({state, commit}){
             await getCategoryList(
                 ({data}) => {
-                    console.log('카테고리 정보 받아오기!!!!!!!!!!!');
-                    console.log(data);
-                    console.log(data.data);
-
                     commit("SET_CATEGORY_LIST", data.data);
                 },
                 (error) => {

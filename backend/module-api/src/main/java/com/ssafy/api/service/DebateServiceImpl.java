@@ -60,8 +60,8 @@ public class DebateServiceImpl implements DebateService {
     }
 
     @Override
-    public Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable) {
-        Page<Debate> debates = debateRepository.findDebateBySearchCondition(keyword, condition, pageable);
+    public Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable, List<Long> categoryList) {
+        Page<Debate> debates = debateRepository.findDebateBySearchCondition(keyword, condition, pageable, categoryList);
         return new DebateRes().toDtoList(debates);
     }
 

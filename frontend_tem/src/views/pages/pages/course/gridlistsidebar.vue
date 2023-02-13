@@ -19,7 +19,7 @@
                             </div>
                             <div v-for="category in data.categories">
                                 <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" :value="category.id" @click="setSelectedCategories()">
+                                    <input type="checkbox" name="select_specialist" checked :value="category.id" @click="setSelectedCategories()">
                                     <span class="checkmark"></span> {{ category.codeName }}
                                 </label>
                             </div>
@@ -70,8 +70,9 @@ export default {
             });
             console.log(check_val);
 
-            // store.commit('debate/SET_SELECTED_CATEGORY_LIST', check_val);
             store.dispatch('debate/setSelectedCategoryList', check_val);
+            store.dispatch("debate/searchDebateList", {});
+
         }
         
       return {data, setSelectedCategories}
