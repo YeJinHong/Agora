@@ -2,26 +2,36 @@ package com.ssafy.api.controller;
 
 
 import com.ssafy.api.request.UserDebateRegisterPostReq;
+import com.ssafy.api.response.DebateRes;
 import com.ssafy.api.service.UserDebateService;
+import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
+import com.ssafy.common.model.response.BaseResponseDataBody;
 import com.ssafy.entity.rdbms.UserDebate;
+import com.ssafy.repository.UserDebateRepository;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
+
+import java.util.Map;
 
 @Api(value = "유저-토론 API", tags = {"UserDebate"})
 @RestController
-@RequestMapping("/api/v1/userDebates/")
+@RequestMapping("/api/v1/userDebates")
 @RequiredArgsConstructor
 public class UserDebateController {
 
     private final UserDebateService userDebateService;
+    private final UserDebateRepository userDebateRepository;
 
     @PostMapping()
     @ApiOperation(value = "유저 토론 생성")
@@ -33,4 +43,13 @@ public class UserDebateController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
+    @GetMapping()
+    @ApiOperation(value = "유저 토론 조회")
+    public ResponseEntity<?> getUserDebateHistory(
+            @ApiIgnore Authentication authentication) {
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+
+        Map userDebate = userDebateService.getUserDebate(userDetails.getUser());
+        return ResponseEntity.status(201).body(userDebate);
+    }
 }

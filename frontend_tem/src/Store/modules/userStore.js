@@ -76,7 +76,9 @@ const userStore = {
                     }
                 },
                 (error) => {
-                    console.log(error);
+                    if(error.response.status==500){
+                        alert("존재하지 않은 아이디 입니다.")
+                    }
                 }
             )
         },
