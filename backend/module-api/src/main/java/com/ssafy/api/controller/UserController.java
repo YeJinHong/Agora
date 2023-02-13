@@ -86,7 +86,7 @@ public class UserController {
 		String userId = userDetails.getUsername();
 		User user = userService.getUserByUserEmail(userId);
 		UserRes userRes = new UserRes().of(user);
-		if(user.getFileManager() != null) {
+		if(user.getFileManager().getFiles().size()>=1) {
 			userRes.setProfileUrl((userFileManagerService.getProfileUrl(user.getFileManager())).getSavedPath());
 		}
 		System.out.println(userRes.getProfileUrl());

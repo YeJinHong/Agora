@@ -3,6 +3,7 @@ import {searchAll, getCategoryList} from "../../api/Debate";
 const debate = {
     namespaced: true,
     state: {
+        debateId : '',
         keyword :"",
         condition: "",
         selectedOptionName : "",
@@ -22,6 +23,9 @@ const debate = {
         selectedDebateId : "",
     },
     getters: {
+        getDebateId : () => {
+            return state.debateId;
+        },
         isDocumentBox: () => {
             return state.document_box;
         },
@@ -42,6 +46,9 @@ const debate = {
         }
     },
     mutations: {
+        SET_DEBATE_ID : (state, debateId) => {
+            state.debateId = debateId;
+        },
         SET_DEBATE_LIST: (state, debateList) => {
             state.debateList = [];
             debateList.forEach((debate) => {
@@ -113,12 +120,12 @@ const debate = {
                 }
             )
         },
+        documentBox(state) {
+            state.document_box = !state.document_box
+        },
         setSelectedDebateId({commit}, debateId){
             commit("SET_SELECTED_DEBATE_ID", debateId);
         }
-    },
-    documentBox(state) {
-        state.document_box = !state.document_box
     }
 }
 

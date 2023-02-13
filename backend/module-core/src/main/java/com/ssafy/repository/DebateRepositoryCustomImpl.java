@@ -41,15 +41,14 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
         return new PageImpl<Debate>(debates, pageable, query.fetch().size());
     }
 
-
     private BooleanExpression eqKeyword(String keyword, String condition){
         if(keyword == null || keyword.isEmpty() || condition == null || condition.isEmpty()){
             return null;
         }
         if(condition.equals("owner")){
-            return debate.owner.userEmail.eq(keyword);
+            return debate.owner.userEmail.containsIgnoreCase(keyword);
         }else{
-            return debate.title.containsIgnoreCase("keyword");
+            return debate.title.containsIgnoreCase(keyword);
         }
     }
 }
