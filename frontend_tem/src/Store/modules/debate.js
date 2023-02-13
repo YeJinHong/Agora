@@ -4,7 +4,7 @@ const state = {
     micro_phone: true,
     chat_box: false,
     document_box: false,
-    middle_box: true,
+    middle_box: false,
     chatList: [],
     chatSocket: null,
     stompClient: null,

@@ -2,10 +2,14 @@
   <div>
     <div id="room">
       <h2 id="room-header"></h2>
-      <div id="participants">
-        <div id="participants-agree"></div>
+      <div
+          :class="[middle_box ? 'participant-box' : 'participant-box_2']"
+          id="participants">
+        <div id="participants-agree"
+             :class="[middle_box ? 'A_box' : 'A_box_2']"></div>
         <div id="moderator"></div>
-        <div id="participants-opp" style="float: right;"></div>
+        <div id="participants-opp"
+             :class="[middle_box ? 'B_box' : 'B_box_2']"></div>
       </div>
       <div id="timer" style="font-size: 20px"></div>
       <div id="screen"></div>
@@ -45,6 +49,9 @@ import Participant from "../../../assets/js/participant.js";
 export default {
   name: 'debate2',
   components: {},
+  computed: {
+    ...mapState('debate', {middle_box: 'middle_box'})
+  },
   props: {
     call: JSON
   },
@@ -52,7 +59,7 @@ export default {
     const store = useStore();
     const data = reactive({
       ws: store.getters["debate/getWebRtcSocket"],
-      participants: [],
+      participants: {},
       name: '',
       title: '',
       position: ''
@@ -97,7 +104,7 @@ export default {
             console.log(parsedMessage.userName, "parsedMessage.userName");
             const test = data.participants[parsedMessage.userName];
             console.log(test, "test");
-            console.log("test.rtcPeer",test.rtcPeer);
+            console.log("test.rtcPeer", test.rtcPeer);
             data.participants[parsedMessage.userName].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
               if (error) {
                 console.error("Error adding candidate: " + error);
@@ -154,7 +161,7 @@ export default {
       sendMessage(message);
     }
 
-    const onIceCandidate =  (candidate) => {
+    const onIceCandidate = (candidate) => {
       let message = {
         id: 'onIceCandidate',
         candidate: candidate,
@@ -169,7 +176,6 @@ export default {
     }
 
     const onExistingParticipants = (msg) => {
-
       let constraints = {
         audio: true,
         video: {
@@ -181,115 +187,50 @@ export default {
         }
       };
 
-      if (false) {
-        console.log('share screen:', data.name, data.position)
-        let participant = new Participant(data.name, data.position, true);
-        data.participants[data.name] = participant;
-        let video = participant.getVideoElement();
+      console.log(data.name + " registered in room " + data.title);
+      let participant = new Participant(data.name, data.position, msg.isScreen);
+      data.participants[data.name] = participant;
+      let video = participant.getVideoElement();
 
-        if (navigator.getDisplayMedia || navigator.mediaDevices.getDisplayMedia) {
-          if (navigator.mediaDevices.getDisplayMedia) {
-            navigator.mediaDevices.getDisplayMedia({video: true, audio: true}).then((stream) => {
-                  video.srcObject = stream;
-                  let options = {
-                    videoStream: stream,
-                    mediaConstraints: constraints,
-                    sendSource: "screen",
-                    onicecandidate: participant.onIceCandidate.bind(participant).then((candidate) => {
-                      let message = {
-                        id: 'onIceCandidate',
-                        candidate: candidate,
-                        userName: data.name
-                      };
-                      sendMessage(message);
-                    }),
-                  };
-                  participant.rtcPeer =
-                      new kurentoUtils.WebRtcPeer.WebRtcPeerSendrecv(options,
-                          (error) => {
-                            if (error) {
-                              return console.error(error);
-                            }
-                            this.generateOffer((error, offerSdp, wp) => {
-                              let msg = {
-                                id: "receiveVideoFrom",
-                                sender: data.name,
-                                sdpOffer: offerSdp
-                              };
-                              sendMessage(msg);
-                            })
-                          });
-                  msg.data.forEach(m => {
-                    receiveVideo(m.userName, m.position)
-                  });
-                });
-          }
-        }
-
-      } else {
-        console.log(data.name + " registered in room " + data.title);
-        let participant = new Participant(data.name, data.position, msg.isScreen);
-        data.participants[data.name] = participant;
-        let video = participant.getVideoElement();
-
-        participant.onIceCandidate = (candidate) => {
-          let message = {
-            id: 'onIceCandidate',
-            candidate: candidate,
-            userName: data.name
-          };
-          sendMessage(message);
+      participant.onIceCandidate = (candidate) => {
+        let message = {
+          id: 'onIceCandidate',
+          candidate: candidate,
+          userName: data.name
         };
+        sendMessage(message);
+      };
 
-        let options = {
-          localVideo: video,
-          mediaConstraints: constraints,
-          onicecandidate: participant.onIceCandidate.bind(participant),
-        }
-
-        if (data.position === '청중') {
-          participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
-              (error) => {
-                if (error) {
-                  return console.error(error);
-                }
-                this.generateOffer((error, offerSdp, wp) => {
-                  let msg = {
-                    id: "receiveVideoFrom",
-                    sender: data.name,
-                    sdpOffer: offerSdp
-                  };
-                  sendMessage(msg);
-                })
-              });
-        } else {
-          data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
-            if (error) {
-              return console.error(error);
-            }
-            this.generateOffer((error, offerSdp, wp) => {
-              let msg = {
-                id: "receiveVideoFrom",
-                sender: data.name,
-                sdpOffer: offerSdp
-              };
-              sendMessage(msg);
-            });
-          });
-        }
-
-        msg.data.forEach(m => (receiveVideo(m.userName, m.position, m.isScreen)));
+      let options = {
+        localVideo: video,
+        mediaConstraints: constraints,
+        onicecandidate: onIceCandidate
       }
 
+      data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+        if (error) {
+          return console.error(error);
+        }
+        this.generateOffer((error, offerSdp, wp) => {
+          let msg = {
+            id: "receiveVideoFrom",
+            sender: data.name,
+            sdpOffer: offerSdp
+          };
+          sendMessage(msg);
+        });
+      });
+
+      msg.data.forEach(m => (receiveVideo(m.userName, m.position, m.isScreen)));
     }
 
     const receiveVideoResponse = (result) => {
       console.log(data.participants);
-      // console.log(data.participants[result.userName]);
       data.participants[result.userName].rtcPeer.processAnswer(result.sdpAnswer, function (error) {
         if (error) return console.error(error);
       });
     }
+
     const start = () => {
       let debateId = document.getElementById('debateId').value;
 
@@ -389,16 +330,26 @@ export default {
       data.ws.close();
     }
     const receiveVideo = (name, position, isScreen) => {
-      console.log(name, position , "======================= receiveVideo")
+      console.log(name, position, "======================= receiveVideo")
       var sender = name;
       var participant = new Participant(name, position, isScreen);
       data.participants[name] = participant;
       var video = participant.getVideoElement();
 
-      var options = {
+      participant.onIceCandidate = (candidate) => {
+        let message = {
+          id: 'onIceCandidate',
+          candidate: candidate,
+          userName: name
+        };
+        sendMessage(message);
+      };
+
+      let options = {
         remoteVideo: video,
         onicecandidate: participant.onIceCandidate.bind(participant)
       }
+
       participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
           function (error) {
             if (error) {
@@ -483,16 +434,81 @@ export default {
     }
 
     return {store, data}
-  },
-  // computed: {
-  //   ...
-  //       mapState('debate', {middle_box: 'middle_box'})
-  // },
+  }
 }
 
 </script>
 
 
 <style scoped>
+.participant-box {
+  height: 20vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.participant-box_2 {
+  height: 92vh;
+  width: 90vw;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
+}
+
+.A_box {
+  height: 20vh;
+  width: 40vw;
+  display: flex;
+  flex-direction: row;
+  border: orangered solid 5px;
+}
+
+.A_box_2 {
+  height: 40vh;
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  border: orangered solid 5px;
+  margin: 30px;
+
+}
+
+@media screen and (max-width: 800px) {
+  .A_box {
+    display: none;
+  }
+}
+
+.moderator {
+  width: 20vw;
+}
+
+.B_box {
+  height: 20vh;
+  width: 40vw;
+  display: flex;
+  flex-direction: row;
+  border: navy solid 5px;
+}
+
+.B_box_2 {
+  height: 40vh;
+  width: 20vw;
+  display: flex;
+  flex-direction: column;
+  border: navy solid 5px;
+  margin: 30px;
+}
+
+@media screen and (max-width: 800px) {
+  .B_box {
+    display: none;
+
+  }
+}
 
 </style>
