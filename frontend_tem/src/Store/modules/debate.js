@@ -3,7 +3,7 @@ import {searchAll, getCategoryList} from "../../api/Debate";
 const debate = {
     namespaced: true,
     state: {
-        debateId : '',
+        debateId : 15,
         keyword :"",
         condition: "",
         selectedOptionName : "",
@@ -22,10 +22,10 @@ const debate = {
         categoryList : [],
     },
     getters: {
-        getDebateId : () => {
+        getDebateId : function (state) {
             return state.debateId;
         },
-        isDocumentBox: () => {
+        isDocumentBox: function (state) {
             return state.document_box;
         },
         getDebateList: function (state) {

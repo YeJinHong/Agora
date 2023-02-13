@@ -65,7 +65,7 @@ public class DebateController {
 	@ApiOperation(value = "토론 조회")
 	public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
 												  @RequestParam(required = false) String condition,
-												  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+												  @PageableDefault(sort = "title", direction = Sort.Direction.DESC) Pageable pageable){
 		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable);
 		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
 		return ResponseEntity.status(200).body(response);
@@ -163,7 +163,7 @@ public class DebateController {
         }
         try {
             FileManager fileManager = fileManagerService.getFileManager(debateId);
-            fileService.saveDebateThumbnail(file, fileManager, userEmail);
+            fileService.saveDebateFile(file, fileManager, role, userEmail);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(509).body(BaseResponseBody.of(509, "해당하는 토론이 존재하지 않습니다"));
         } catch (IOException e) {

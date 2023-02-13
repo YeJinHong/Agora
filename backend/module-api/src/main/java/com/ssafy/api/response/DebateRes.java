@@ -1,14 +1,13 @@
 package com.ssafy.api.response;
 
 import com.ssafy.entity.rdbms.Debate;
-import com.ssafy.entity.rdbms.Faq;
-import com.ssafy.entity.rdbms.File;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -91,5 +90,11 @@ public class DebateRes {
         Page<DebateRes> DebateResList = debates.map(DebateRes::of);
         return DebateResList;
     }
+
+//    private static LocalDateTime dateFormatConverter(LocalDateTime date) throws ParseException {
+//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+//        LocalDateTime result = formatter.parse(date)
+//        return result;
+//    }
 
 }
