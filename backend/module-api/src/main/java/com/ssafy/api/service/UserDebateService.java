@@ -2,6 +2,7 @@ package com.ssafy.api.service;
 
 import com.ssafy.api.request.UserDebateRegisterPostReq;
 import com.ssafy.api.response.DebateRes;
+import com.ssafy.api.response.UserDebateHistory;
 import com.ssafy.entity.rdbms.User;
 import com.ssafy.entity.rdbms.UserDebate;
 import org.springframework.data.domain.Page;
@@ -16,5 +17,7 @@ public interface UserDebateService {
     void modifyUserDebateRole(String role);
 
     Map getUserDebate(User user);
+
+    Page<UserDebateHistory> getUserDebatePage(User user, Pageable pageable);
 
 }
