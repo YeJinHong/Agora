@@ -94,6 +94,7 @@ export default {
             receiveVideoResponse(parsedMessage);
             break;
           case 'iceCandidate':
+            console.log(parsedMessage.userName, "                 parsedMessage.userName");
             const test = data.participants[parsedMessage.userName];
             console.log(test, "                          test");
             console.log(test.rtcPeer);
@@ -242,7 +243,7 @@ export default {
         let options = {
           localVideo: video,
           mediaConstraints: constraints,
-          onicecandidate: participant.onIceCandidate.bind(participant, sendMessage()),
+          onicecandidate: participant.onIceCandidate.bind(participant),
         }
 
         if (data.position === '청중') {

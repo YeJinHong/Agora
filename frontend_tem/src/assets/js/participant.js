@@ -87,14 +87,14 @@ function Participant(userName, position, isScreen) {
     }
 
 
-    this.onIceCandidate = function (candidate, callback) {
+    this.onIceCandidate = function (candidate, wp) {
         console.log("Local candidate" + JSON.stringify(candidate));
-        var message = {
-            id: 'onIceCandidate',
-            candidate: candidate,
-            userName: userName
-        };
-        callback.bind(message);
+        // var message = {
+        //     id: 'onIceCandidate',
+        //     candidate: candidate,
+        //     userName: userName
+        // };
+        // sendMessage(message);
     }
 
     Object.defineProperty(this, 'rtcPeer', {writable: true});
