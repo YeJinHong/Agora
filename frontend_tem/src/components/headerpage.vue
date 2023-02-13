@@ -209,11 +209,11 @@
                             <div class="media d-flex">
                                 <div>															
                                     <router-link to="notifications" class="avatar">
-                                        <img class="avatar-img" alt="" src="../assets/img/user/user1.jpg">
+                                        <img class="avatar-img" alt="" :src="data.profileUrl">
                                     </router-link>
                                 </div>
                                 <div class="media-body">
-                                    <h6><router-link to="notifications">John Hammond <span>created</span> Isla Nublar SOC2 compliance report </router-link></h6>
+                                    <h6><router-link to="notifications">{{ data.username }} <span>created</span> Isla Nublar SOC2 compliance report </router-link></h6>
                                     <p>Last Wednesday at 11:15 AM</p>
                                 </div>
                             </div>
@@ -225,7 +225,7 @@
         <li class="nav-item user-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
                 <span class="user-img">
-                    <img src="../assets/img/user/user11.jpg" alt="">
+                    <img :src="data.profileUrl" alt="">
                     <span class="status online"></span>
                 </span>
             </a>
@@ -235,8 +235,8 @@
                         <img src="../assets/img/user/user11.jpg" alt="User Image" class="avatar-img rounded-circle">
                     </div>
                     <div class="user-text">
-                        <h6>Rolands R</h6>
-                        <p class="text-muted mb-0">Student</p>
+                        <h6>{{data.username}}</h6>
+                        <p class="text-muted mb-0">{{ data.position}}</p>
                     </div>
                 </div>
                 <router-link class="dropdown-item" to="setting-edit-profile"><i class="feather-user me-1"></i> Profile</router-link>
@@ -260,6 +260,10 @@ import {useRouter} from "vue-router";
       setup() {
         const store = useStore();
         const router = useRouter();
+        const data = reactive({
+          // username: store.state.userStore.userInfo.name,
+          // position: store.state.userStore.userInfo.position,
+        });
         const logout = async () => {
           await store.dispatch("userStore/userLogout");
           moveHome();
@@ -268,7 +272,7 @@ import {useRouter} from "vue-router";
         const moveHome = () => {
           router.push('/');
         }
-        return {logout};
+        return {data,logout};
       },
 
       components: {

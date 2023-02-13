@@ -26,6 +26,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  * 토론 관련 API 요청 처리를 위한 컨트롤러 정의.
@@ -60,24 +61,23 @@ public class DebateController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
-    @GetMapping()
-    @ApiOperation(value = "토론 조회")
-    public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
-                                                                           @RequestParam(required = false) String condition,
-                                                                           @PageableDefault(sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
+	@GetMapping()
+	@ApiOperation(value = "토론 조회")
+	public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
+												  @RequestParam(required = false) String condition,
+												  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable);
+		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
+		return ResponseEntity.status(200).body(response);
+	}
 
-        Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable);
-        BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
-        return ResponseEntity.status(201).body(response);
-    }
-
-    @GetMapping("/{debateId}")
-    @ApiOperation(value = "토론 아이디 조회")
-    public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId) {
-        DebateRes debate = debateService.search(debateId);
-        BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
-        return ResponseEntity.status(201).body(response);
-    }
+	@GetMapping("/{debateId}")
+	@ApiOperation(value = "토론 아이디 조회")
+	public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId){
+		DebateRes debate = debateService.search(debateId);
+		BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
+		return ResponseEntity.status(200).body(response);
+	}
 
     @PatchMapping("/{debateId}")
     @ApiOperation(value = "토론 수정")
