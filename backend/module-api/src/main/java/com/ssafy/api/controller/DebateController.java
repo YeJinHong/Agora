@@ -27,7 +27,7 @@ import java.util.Optional;
  */
 @Api(value = "토론 API", tags = {"Debate"})
 @RestController
-@RequestMapping("/api/v1/debates/")
+@RequestMapping("/api/v1/debates")
 @RequiredArgsConstructor
 public class DebateController {
 
@@ -50,7 +50,7 @@ public class DebateController {
 												  @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
 		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable);
 		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
-		return ResponseEntity.status(201).body(response);
+		return ResponseEntity.status(200).body(response);
 	}
 
 	@GetMapping("/{debateId}")
@@ -58,7 +58,7 @@ public class DebateController {
 	public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId){
 		DebateRes debate = debateService.search(debateId);
 		BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
-		return ResponseEntity.status(201).body(response);
+		return ResponseEntity.status(200).body(response);
 	}
 
 	@PatchMapping("/{debateId}")
