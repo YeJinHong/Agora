@@ -13,7 +13,7 @@
 							<coursefilter></coursefilter>
 							
 							<div class="row">
-								<div class="col-lg-4 col-md-6 d-flex" v-for="(debate, index) in data.debate_list">
+								<div class="col-lg-4 col-md-6 d-flex" v-for="(debate, index) in store.state.debate.debateList">
 									<div class="course-box course-design d-flex " >
 										<div class="product">
 											<div class="product-img">
@@ -29,7 +29,7 @@
 													<div class="course-group-img d-flex">
 														<router-link to="instructor-profile"><img src="../../../../assets/img/user/user1.jpg" alt="" class="img-fluid"></router-link>
 														<div class="course-name">
-															<h4><router-link to="instructor-profile">{{ debate.ownerId }}</router-link></h4>
+															<h4><router-link to="instructor-profile">{{ debate.ownerName }}</router-link></h4>
 															<p>{{ debate.ownerDepartment }}</p>
 														</div>
 													</div>
@@ -37,7 +37,7 @@
 														<a href="javascript:;"><i class="fa-regular fa-heart"></i></a>
 													</div>
 												</div>
-												<h3 class="title"><router-link to="course-details">{{ debate.title }}</router-link></h3>
+												<h3 class="title"><router-link to="course-details">[No.{{debate.debateId}}] <br/> {{ debate.title }}</router-link></h3>
 												<div class="course-info align-items-center">
 													<div class="rating-img d-flex align-items-center pb-2">
 														<img src="../../../../assets/img/icon/icon-01.svg" alt="">
@@ -47,9 +47,6 @@
 														<img src="../../../../assets/img/icon/icon-02.svg" alt="">
 														<p>{{ debate.callStartTime }} ~ {{ debate.callEndTime }}</p>
 													</div>
-												</div>
-												<div class="all-btn all-category d-flex align-items-center">
-													<router-link to="checkout" class="btn btn-primary">상세 보기</router-link>
 												</div>
 											</div>
 										</div>
@@ -93,7 +90,7 @@ export default {
         keyword: "반려동물",
       })
     }
-    return {data}
+    return {store, data}
   },
 }
 </script>

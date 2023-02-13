@@ -7,7 +7,13 @@ const userStore = {
     state: {
         isLogin: false,
         isLoginError: false,
-        userInfo: null,
+        // userInfo : null,
+        // TODO : 임시 데이터 삭제
+        userInfo: {
+            // 
+            name : "김임시",
+            position : "임시고등학교"
+        },
         isValidToken: false,
     },
     getters: {

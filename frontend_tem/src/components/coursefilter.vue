@@ -11,7 +11,8 @@
                            class="list-view"><i class="feather-list"></i></router-link>
             </div>
             <div class="show-result">
-              <h4>Showing  {{store.state.debate.offset + 1}} - {{ store.state.debate.offset + store.state.debate.numberOfElements}} of {{ store.state.debate.totalElements }} results</h4>
+              <h4 v-if = "store.state.debate.totalElements == 0">Showing 0 - 0 of 0 results </h4>
+              <h4 v-else >Showing  {{store.state.debate.offset + 1}} - {{ store.state.debate.offset + 1 + store.state.debate.numberOfElements}} of {{ store.state.debate.totalElements }} results</h4>
             </div>
           </div>
         </div>
@@ -21,7 +22,7 @@
               <div class="row gx-2 align-items-center">
                 <div class="col-md-3 col-lg-3 col-item">
                   <div class="form-group select-form mb-0">
-                    <select class="form-control" v-model="store.state.debate.selectedOptionName">
+                    <select class="form-control" v-model="data.condition">
                         <option value="" selected>검색 조건 선택</option>
                       <option v-for="(item, index) in conditions"
                               :key="index"
@@ -34,7 +35,7 @@
                 <div class="col-md-7 col-item">
                   <div class=" search-group">
                     <i class="feather-search"></i>
-                    <input type="text" class="form-control" v-model = "store.state.debate.keyword" placeholder="제목 혹은 작성자 명으로 검색">
+                    <input type="text" class="form-control" v-model = "data.keyword" placeholder="제목 혹은 작성자 명으로 검색">
                   </div>
                 </div>
                 <div class="btn btn-primary col-md-2  col-item"  @click ="loadDebateList" > 검색 </div>
@@ -48,7 +49,7 @@
     <!-- /Filter -->
   </template>
   <script>
-  import Vue, {onMounted, reactive, watch} from 'vue'
+  import {onMounted, reactive} from 'vue'
   import {useStore} from "vuex";
   
   export default {
@@ -58,6 +59,8 @@
     setup() {
       const store = useStore();
       const data = reactive({
+        keyword : store.state.debate.keyword,
+        condition : store.state.debate.condition,
         totalElements : store.state.debate.totalElements,
         pageNumber : store.state.debate.pageNumber, 
         numberOfElements : store.state.debate.numberOfElements,
@@ -67,6 +70,8 @@
       })
 
       const loadDebateList = async () => {
+        store.commit('debate/SET_KEYWORD', data.keyword);
+        store.commit('debate/SET_CONDITION', data.condition);
         await store.dispatch("debate/searchDebateList", {})
       }
 
@@ -80,7 +85,7 @@
     },
     data() {
       return {
-        conditions: [{name: "ownerName", text: "개설자"}, {name: "title", text: "제목"}],
+        conditions: [{name: "owner", text: "개설자"}, {name: "title", text: "제목"}],
       }
     },
     mounted() {

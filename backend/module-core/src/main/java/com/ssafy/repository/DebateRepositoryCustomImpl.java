@@ -48,7 +48,7 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
             return null;
         }
         if(condition.equals("owner")){
-            return debate.owner.userEmail.containsIgnoreCase(keyword);
+            return debate.owner.name.containsIgnoreCase(keyword);
         }else{
             return debate.title.containsIgnoreCase(keyword);
         }

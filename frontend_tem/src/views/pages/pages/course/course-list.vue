@@ -26,13 +26,10 @@
 						</div>
 					  </div>
 					  <div class="product-content">
-						<div class="head-course-title">
+						<div class="head-course-title pt-2 pb-2">
 						  <h3 class="title">
-							<router-link to="course-details">{{ debate.title }}</router-link>
+							<router-link to="course-details">[No.{{debate.debateId}}] {{ debate.title }}</router-link>
 						  </h3>
-						  <div class="all-btn all-category d-flex align-items-center">
-							<router-link to="checkout" class="btn btn-primary">상세 보기</router-link>
-						  </div>
 						</div>
 						<div class="course-info border-bottom-0 pb-0 align-items-center">
 							<div class="rating-img d-flex align-items-center pb-2">
@@ -97,7 +94,6 @@
 	  const router = useRouter();
 	  const data = reactive({
 		debate_list : [],
-		
 	  })
 	  
 	  watch(

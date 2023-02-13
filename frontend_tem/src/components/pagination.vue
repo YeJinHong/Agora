@@ -21,7 +21,7 @@
 <!-- /Blog pagination -->
 </template>
 <script>
-  import {onMounted, reactive, watch} from 'vue'
+  import {onMounted, reactive, onUpdated} from 'vue'
   import {useStore} from "vuex";
   
   export default {
@@ -29,7 +29,6 @@
     setup() {
       const store = useStore();
       const data = reactive({
-        selectedPageIndex : store.state.debate.selectedPageIndex,
         totalPages : store.state.debate.totalPages,
         totalElements : store.state.debate.totalElements,
         pageNumber : store.state.debate.pageNumber, 
@@ -37,26 +36,25 @@
       })
 
       onMounted(() => {
-        document.getElementById('page-item-'+data.selectedPageIndex).className = 'page-item active';
+        document.getElementById('page-item-1').className = 'page-item active';
       })
 
-      watch(
-		  // pretend you have a getData getter in store
-		  () => store.getters["debate/getPageNumber"],
-		  (val, oldVal) => {
-			console.log("val : "+val);
-			console.log("oldVal : "+oldVal);
-		  }
-	  )
+      onUpdated(()=>{
+        setSelectedPageNumber(store.getters["debate/getPageNumber"] + 1);
+      });
 
       const loadDebateList = async (num) => {
+        setSelectedPageNumber(num);
+        await store.dispatch("debate/searchDebateList", {page : num-1})
+      }
+
+      const setSelectedPageNumber = (num) => {
         for(var i = 1 ; i <= store.state.debate.totalPages; i++){
             document.getElementById('page-item-'+i).className = 'page-item';
         }
-        document.getElementById('page-item-'+num).className = 'page-item active';
-        store.commit('debate/SET_SELECTED_PAGE_INDEX', num);
-        await store.dispatch("debate/searchDebateList", {page : num-1})
+        document.getElementById('page-item-'+num).className = 'page-item active'; 
       }
+
       return {data, loadDebateList, store};
     },
   
