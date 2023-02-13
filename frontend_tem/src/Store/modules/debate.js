@@ -3,6 +3,7 @@ import {searchAll, getCategoryList} from "../../api/Debate";
 const debate = {
     namespaced: true,
     state: {
+        debateId : '',
         keyword :"",
         condition: "",
         selectedOptionName : "",
@@ -21,6 +22,9 @@ const debate = {
         categoryList : [],
     },
     getters: {
+        getDebateId : () => {
+            return state.debateId;
+        },
         isDocumentBox: () => {
             return state.document_box;
         },
@@ -38,6 +42,9 @@ const debate = {
         },
     },
     mutations: {
+        SET_DEBATE_ID : (state, debateId) => {
+            state.debateId = debateId;
+        },
         SET_DEBATE_LIST: (state, debateList) => {
             state.debateList = [];
             debateList.forEach((debate) => {
@@ -105,10 +112,10 @@ const debate = {
                     console.log('카테고리 정보 조회중 에러 발생');
                 }
             )
+        },
+        documentBox(state) {
+            state.document_box = !state.document_box
         }
-    },
-    documentBox(state) {
-        state.document_box = !state.document_box
     }
 }
 
