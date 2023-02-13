@@ -108,6 +108,7 @@ export default {
     api.defaults.headers["authorization"] = "Bearer " + sessionStorage.getItem("access-token");
     const state = reactive({
       debate: {
+        id : '',
         title: '',
         description: '',
         category: '',
@@ -123,6 +124,11 @@ export default {
       },
     });
 
+    onMounted( () => {
+      state.debate.id = store.getters["debate/getDebateId"];
+      console.log(state.debate.id);
+    })
+
     onMounted(() => {
       api.get(`/codes/category`)
           .then((data) => {
@@ -137,11 +143,10 @@ export default {
     })
 
     onMounted(() => {
-      api.get(`/debates/`)
+      api.get(`/debates/` + state.debate.id)
           .then((data) => {
-            let result = data["data"].data;
+            let result = data.data;
             console.log(result);
-            state.option.categories = result;
           })
           .catch((error) => {
             console.log(error);

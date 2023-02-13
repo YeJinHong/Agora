@@ -96,6 +96,7 @@ import wishlist from '../views/pages/pages/wishlist.vue'
 import withdrawalinstructor from '../views/pages/instructor/withdrawal-instructor.vue'
 import changePasswordEmail from '../views/pages/pages/change-password-email.vue'
 import debateRegist from '../views/pages/debate/debateConfiguration.vue'
+import debateModify from '../views/pages/debate/debateConfigurationModify.vue'
 import debatemain from '../views/pages/debate/debatemain.vue'
 import debatewaiting from "../views/pages/debate/debatewaiting.vue";
 import debate from "../views/pages/debate/debate.vue";
@@ -582,10 +583,14 @@ const routes = [
     component: changePasswordEmail
   },
   {
-
     path:'/debate-regist',
     name: 'debate-regist',
     component: debateRegist
+  },
+  {
+    path:'/debate-modify',
+    name: 'debate-modify',
+    component: debateModify
   },
   {
     path: '/debatemain',

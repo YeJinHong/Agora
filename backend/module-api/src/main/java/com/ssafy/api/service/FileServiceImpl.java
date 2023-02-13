@@ -31,6 +31,7 @@ public class FileServiceImpl implements FileService {
     private String filePath;
 
     @Override
+    @Transactional
     public File saveDebateThumbnail(MultipartFile file, FileManager fileManager, String ownerEmail) throws IOException {
 
         if (fileManager.getFiles().size() >= 1) {
@@ -51,6 +52,7 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
+    @Transactional
     public File saveDebateFile(MultipartFile file, FileManager fileManager, String role, String ownerEmail) throws IOException {
         String fileName = UUID.randomUUID().toString();
         String saveFileName = fileName + "_" + role;
