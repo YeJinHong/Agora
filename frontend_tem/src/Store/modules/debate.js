@@ -7,6 +7,7 @@ const debate = {
         condition: "",
         selectedOptionName : "",
         selectedCategoryIdList : "",
+        categoryList : [],
         debateList: [],
         participant: 0,
         participant_list: false,
@@ -18,7 +19,7 @@ const debate = {
         chatSocket: null,
         stompClient: null,
         webRtcSocket: null,
-        categoryList : [],
+        selectedDebateId : "",
     },
     getters: {
         isDocumentBox: () => {
@@ -36,6 +37,9 @@ const debate = {
         getSelectedCategoryList : function(state){
             return state.selectedCategoryIdList;
         },
+        getSelectedDebateId : function(state){
+            return state.selectedDebateId;
+        }
     },
     mutations: {
         SET_DEBATE_LIST: (state, debateList) => {
@@ -49,6 +53,9 @@ const debate = {
         },
         SET_SELECTED_CATEGORY_LIST : (state, categoryList) => {
             state.selectedCategoryIdList = categoryList;
+        },
+        SET_SELECTED_DEBATE_ID : (state, debateId) => {
+            state.selectedDebateId = debateId;
         }
     },
     actions: {
@@ -105,6 +112,9 @@ const debate = {
                     console.log('카테고리 정보 조회중 에러 발생');
                 }
             )
+        },
+        setSelectedDebateId({commit}, debateId){
+            commit("SET_SELECTED_DEBATE_ID", debateId);
         }
     },
     documentBox(state) {

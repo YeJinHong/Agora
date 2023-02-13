@@ -18,7 +18,7 @@
 					<div class="product">
 					  <div class="product-img">
 						<router-link to="course-details">
-						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg">
+						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg" @click="setSelectedDebateId(debate.id)">
 						</router-link>
 						<div class="price">
 						  <!-- <h3>$300 <span>$99.00</span></h3> -->
@@ -98,7 +98,7 @@
 	  const data = reactive({
 		debate_list : [],
 	  })
-  
+	  
 	  watch(
 		  // pretend you have a getData getter in store
 		  () => store.getters["debate/getDebateList"],
@@ -106,8 +106,17 @@
 			data.debate_list = store.getters["debate/getDebateList"];
 		  }
 	  )
+
+	  // TODO : 토론 목록에서 Debate ID 정보가 추가로 필요함.
+	  function setSelectedDebateId(debate_id){
+		console.log(debate_id);
+		console.log(debate_id == undefined);
+		console.log(debate_id == '');
+		if(debate_id == undefined) debate_id = 3;
+		store.dispatch('debate/setSelectedDebateId', debate_id)
+	}
   
-	  return {data}
+	  return {data, setSelectedDebateId}
 	},
 	data() {
 	  return {
@@ -117,7 +126,9 @@
 	mounted() {
   
 	},
-	methods: {},
+	methods: {
+		
+	},
   
   }
   </script>

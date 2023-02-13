@@ -128,21 +128,25 @@
 
 <script>    
 import { apiInstance } from "/api/index.js";      
+import {useStore} from "vuex";
+import {reactive} from 'vue'
 
 const api = apiInstance();
 
 export default {
     setup(){
-		
+		const store = useStore();
+		const data = reactive({
+			debate_id : store.state.debate.selectedDebateId,
+		});
+
+		return {data};
     },
     data(){
         return {
-			// TODO : list에서 해당 토론 클릭시 debate_id Store에 저장. 해당 값 가져오기.
-			// 혹은 DebateStore에 해당 selected_debate로 객체 저장.
-			debate_id : 1,
 			debate : {},
 
-			// TODO : 현재 페이지 진입시 debate_id를 통해서 상세정보 요청.	
+			// TODO : 현재 페이지 진입시 debate_id를 통해서 상세정보 요청. 혹은 기존 토론 정보 조회 개선.
 			debate_detail : { 	  
 				category : "정치",
 				enroll_count : 6,
@@ -160,7 +164,7 @@ export default {
     },
     methods: {
 		async getDebateInfo(){
-			await api.get('/debates/'+this.debate_id)
+			await api.get('/debates/'+this.data.debate_id)
             .then((response) => {
                 if(response.status == 200){
                     this.debate = response.data.data;
@@ -182,7 +186,7 @@ export default {
 			}
 		},
         async getVoteResult(){
-            api.get('/vote/debates/'+this.debate_id)
+            api.get('/vote/debates/'+this.data.debate_id)
             .then((response) => {
                 if(response.status == 200){
                     console.log(response);
