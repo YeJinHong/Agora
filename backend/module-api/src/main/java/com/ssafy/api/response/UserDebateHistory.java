@@ -15,13 +15,16 @@ public class UserDebateHistory {
 
     private final long debateId;
 
+    private final String role;
+
     private final long activeTime;
 
     @Builder
-    public UserDebateHistory(LocalDateTime date, String title, Long debateId, long activeTime) {
+    public UserDebateHistory(LocalDateTime date, String title, Long debateId, String role, long activeTime) {
         this.date = date.format(DateTimeFormatter.ISO_DATE);
         this.title = title;
         this.debateId = debateId;
+        this.role = role;
         this.activeTime = activeTime;
     }
 }
