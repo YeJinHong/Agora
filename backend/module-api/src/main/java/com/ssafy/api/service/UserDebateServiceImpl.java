@@ -79,8 +79,22 @@ public class UserDebateServiceImpl implements UserDebateService {
         return variables;
     }
 
+    @Override
+    public Page<UserDebateHistory> getUserDebatePage(User user, Pageable pageable) {
+        Page<UserDebate> allByUserIdOrderByPage = userDebateRepository.findAllByUserIdOrderByPage(user.getId(), pageable);
 
+            Page<UserDebateHistory> userDebateHistory = allByUserIdOrderByPage.map(debate ->
+                    UserDebateHistory.builder()
+                            .title(debate.getDebate().getTitle())
+                            .debateId(debate.getDebate().getId())
+                            .role(debate.getRole())
+                            .activeTime(Duration.between(debate.getDebate().getCallStartTime(), debate.getDebate().getCallEndTime()).toMinutes())
+                            .date(debate.getDebate().getCallEndTime())
+                            .build());
 
+            return userDebateHistory;
+
+    }
 
 
     private UserDebate makeUserDebate(UserDebateRegisterPostReq userDebateReq, User user, Debate debate) {
