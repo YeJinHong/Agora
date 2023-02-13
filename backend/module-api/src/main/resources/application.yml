@@ -66,8 +66,9 @@ spa:
   default-file: /dist/index.html
 
 file:
-  path: C:\Users\multicampus\Desktop
-  path-certificate: C:\Users\multicampus\Desktop\ssafy\Agora_Debate\backend\module-api\src\main\resources
+  path: /home/docker/agora/volume-data/files
+  path-certificate: /home/docker/agora/volume-data/files
+
   
 common-code:
   evaluation-question-parent-id : 1
