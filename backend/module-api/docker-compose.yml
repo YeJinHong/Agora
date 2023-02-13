@@ -5,10 +5,4 @@ services:
       context: .
     container_name: agora-back-module-api
     ports:
-      - "8088:8088"
-    networks:
-      - agora_network
-    
-networks:
-  agora_network:
-    external: true
+      - "8082:8082"
