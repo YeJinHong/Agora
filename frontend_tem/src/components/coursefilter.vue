@@ -76,6 +76,7 @@
         await store.dispatch("debate/searchDebateList", {
           condition: data.selectedOptionName,
           keyword: data.keyword,
+          page : data.pageNumber,
         })
       }
       return {data, loadDebateList};

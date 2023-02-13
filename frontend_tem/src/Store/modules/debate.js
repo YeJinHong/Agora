@@ -26,7 +26,7 @@ const debate = {
         selectedPageIndex : 1,
         totalPages : 0, // 페이지로 제공되는 총 페이지 수
         totalElements : 0, // 모든 페이지에 존재하는 총 원소 수
-        pageNumber : 0, // 페이지 번호 (0번부터 시작)
+        pageNumber : '', // 페이지 번호 (0번부터 시작)
         size : 0, // 한 페이지당 요청되는 크기
         numberOfElements : 0, // 현재 페이지에 보여지는 수.
 
