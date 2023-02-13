@@ -80,6 +80,7 @@ public class CertificateServiceImpl implements CertificateService {
                              return UserDebateHistory.builder()
                                                      .date(debate.getInsertedTime())
                                                      .title(debate.getTitle())
+                                                     .role(x.getRole())
                                                      .debateId(debate.getId())
                                                      .activeTime(activeTime)
                                                      .build();
