@@ -51,6 +51,9 @@ export default {
     })
     return {store, data}
   },
+  props: {
+    call: JSON,
+  },
   data() {
     return {
       participants: {},
@@ -90,14 +93,14 @@ export default {
             break;
           case 'newParticipantArrived':
             console.log('newArrived')
-            onNewParticipant(parsedMessage);
+            this.onNewParticipant(parsedMessage);
             break;
           case 'participantLeft':
-            onParticipantLeft(parsedMessage);
+            this.onParticipantLeft(parsedMessage);
             break;
           case 'receiveVideoAnswer':
             console.log(this.participants)
-            receiveVideoResponse(parsedMessage);
+            this.receiveVideoResponse(parsedMessage);
             break;
           case 'iceCandidate':
             console.log('iceCandidate', parsedMessage)
@@ -132,12 +135,12 @@ export default {
     },
     register() {
       console.log('register')
-      this.name = '김피먹';
-      this.title = '아고라 완성 가능??';
-      let debateId = 1;
-      this.position = '찬성'
-      let roomType = '시간총량제';
-      let time = 100;
+      this.name = this.call.name;
+      this.title = this.call.title;
+      let debateId = this.call.debateId;
+      this.position = this.call.position;
+      let roomType = this.call.roomType;
+      let time = this.call.time;
 
       this.sendMessage({
         id: 'createRoom',
@@ -241,7 +244,14 @@ export default {
                 if (error) {
                   return console.error(error);
                 }
-                this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+                this.generateOffer(participant.offerToReceiveVideo.bind(participant)).then(() => {
+                  let msg = {
+                    id: "receiveVideoFrom",
+                    sender: this.userName,
+                    sdpOffer: this.sdpOffer
+                  };
+                  this.sendMessage(msg);
+                });
               });
         } else {
           participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,

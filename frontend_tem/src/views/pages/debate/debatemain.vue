@@ -3,7 +3,9 @@
     <sidebox class="side-box"></sidebox>
     <documentbox></documentbox>
     <div class="main-wrapper">
-      <debate2></debate2>
+      <debate2
+      :call = "call">
+      </debate2>
       <middlebox v-if="middle_box === true"></middlebox>
     </div>
     <uibar></uibar>
@@ -26,7 +28,9 @@ import debate2 from "./debate2.vue";
 export default {
   components: {Documentbox, Sidebox, participant, middlebox, participant_list, chat, uibar, debate2},
   data() {
-    return {}
+    return {
+      call: ''
+    }
   },
   computed: {
     ...mapState('debate', {participant_list: 'participant_list'}),
@@ -36,6 +40,7 @@ export default {
   },
   mounted() {
     console.log(this.$route.query)
+    this.call = this.$route.query
   }
 
 
