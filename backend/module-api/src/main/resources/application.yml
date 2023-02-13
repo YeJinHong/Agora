@@ -40,7 +40,7 @@ spring:
             enable: true
 
 jwt:
-  accessTokenExpiration: '1800000'
+  accessTokenExpiration: '18000000000' #'1800000'
   refreshTokenExpiration: '604800000'
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
 
@@ -57,7 +57,7 @@ server:
       charset: UTF-8
     contextPath: /
   address: localhost
-  port: '8088'
+  port: '8082'
   compression:
     enabled: 'true'
     mime-types: application/json,application/xml,text/html,text/xml,text/plain,application/javascript,text/css
@@ -67,7 +67,7 @@ spa:
 
 file:
   path: C:\Users\multicampus\Desktop
-  path-certificate: /Users/bellroot/Documents/ssafy/S08P12C205/backend/module-api/src/main/resources
+  path-certificate: C:\Users\multicampus\Desktop\ssafy\Agora_Debate\backend\module-api\src\main\resources
   
 common-code:
   evaluation-question-parent-id : 1

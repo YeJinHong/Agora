@@ -1,8 +1,14 @@
 package com.ssafy.api.response;
 
+import com.ssafy.entity.rdbms.Faq;
+import com.ssafy.entity.rdbms.UserDebate;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -27,4 +33,5 @@ public class UserDebateHistory {
         this.role = role;
         this.activeTime = activeTime;
     }
+
 }
