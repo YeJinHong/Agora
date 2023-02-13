@@ -40,7 +40,7 @@ spring:
             enable: true
 
 jwt:
-  accessTokenExpiration: '1800000'
+  accessTokenExpiration: '18000000000' #'1800000'
   refreshTokenExpiration: '604800000'
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
 
@@ -66,7 +66,7 @@ spa:
 
 file:
   path: C:\Users\multicampus\Desktop
-  path-certificate: /Users/bellroot/Documents/ssafy/S08P12C205/backend/module-api/src/main/resources
+  path-certificate: C:\Users\multicampus\Desktop\ssafy\Agora_Debate\backend\module-api\src\main\resources
   
 common-code:
   evaluation-question-parent-id : 1
