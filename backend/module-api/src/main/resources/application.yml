@@ -66,8 +66,8 @@ spa:
   default-file: /dist/index.html
 
 file:
-  path: /home/docker/agora/volume-data/files
-  path-certificate: /home/docker/agora/volume-data/files
+  path: /usr/local/share
+  path-certificate: /usr/local/share
 
   
 common-code:
