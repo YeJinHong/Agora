@@ -63,7 +63,7 @@ public class DebateRes {
     private String debateModeOption;
 
     @ApiModelProperty(name = "토론 옵션")
-    private List<File> fileList;
+    private List<FileRes> fileList;
 
     public static DebateRes of(Debate debate) {
         DebateRes res = new DebateRes();
@@ -82,7 +82,7 @@ public class DebateRes {
         res.setDebateMode(debate.getDebateMode());
         res.setModeratorOnOff(debate.getModeratorOnOff());
         res.setDebateModeOption(debate.getDebateModeOption());
-        res.setFileList(debate.getFileManager().getFiles());
+        res.setFileList(new FileRes().toDtoList(debate.getFileManager().getFiles()));
         return res;
     }
     public Page<DebateRes> toDtoList(Page<Debate> debates) {
