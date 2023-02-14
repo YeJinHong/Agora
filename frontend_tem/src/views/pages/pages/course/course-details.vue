@@ -167,6 +167,7 @@ export default {
             .then((response) => {
                 if(response.status == 200){
                     data.debate = response.data.data;
+					store.commit('debate/SET_DEBATE_INFO', response.data.data);
                     console.log('특정 토론 정보 조회 완료');
 					console.log(data.debate);
 					checkState();

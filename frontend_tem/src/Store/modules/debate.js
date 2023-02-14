@@ -3,6 +3,7 @@ import {searchAll, getCategoryList} from "../../api/Debate";
 const state = {
     // 상세 정보 조회용
     debateId : '',
+    debateInfo : {},
 
     // 토론 목록 검색용 1
     keyword :"",
@@ -90,7 +91,9 @@ const mutations = {
     SET_OFFSET : (state, offset) => {
         state.offset = offset;
     },
-
+    SET_DEBATE_INFO : (state, debate) => {
+        state.debateInfo = debate;
+    },
     participantList(state) {
         if (state.chat_box === true) {
             state.chat_box = false
