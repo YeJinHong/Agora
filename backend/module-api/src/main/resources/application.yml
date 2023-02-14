@@ -40,7 +40,7 @@ spring:
             enable: true
 
 jwt:
-  accessTokenExpiration: '1800000'
+  accessTokenExpiration: '18000000000' #'1800000'
   refreshTokenExpiration: '604800000'
   secret: dyAeHubOOc8KaOfYB6XEQoEj1QzRlVgtjNL8PYs1A1tymZvvqkcEU7L1imkKHeDa
 
@@ -56,7 +56,6 @@ server:
       force: 'true'
       charset: UTF-8
     contextPath: /
-  address: localhost
   port: '8082'
   compression:
     enabled: 'true'
@@ -66,8 +65,9 @@ spa:
   default-file: /dist/index.html
 
 file:
-  path: C:\Users\multicampus\Desktop
-  path-certificate: /Users/bellroot/Documents/ssafy/S08P12C205/backend/module-api/src/main/resources
+  path: /usr/local/share
+  path-certificate: /usr/local/share
+
   
 common-code:
   evaluation-question-parent-id : 1

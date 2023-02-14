@@ -5,4 +5,4 @@ services:
       context: .
     container_name: agora-back-module-chat
     ports:
-      - "8082:8080"
+      - "8084:8084"

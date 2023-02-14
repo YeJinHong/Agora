@@ -17,7 +17,7 @@
 								<div class="card-body">
 									<h5 class="subs-title">Overview</h5>
 									<h6>토론 설명</h6>
-									<p>{{ debate_detail.description }}</p>
+									<p>{{ debate.description }}</p>
 									<br/>
 									<h6>관련 칼럼</h6>
 									<ul class="mb-0">
@@ -127,33 +127,27 @@
 </template>
 
 <script>    
-
 import { apiInstance } from "/api/index.js";      
+import {useStore} from "vuex";
+import {reactive} from 'vue'
 
 const api = apiInstance();
 
 export default {
     setup(){
-		
+		const store = useStore();
+		const data = reactive({
+			debate_id : store.state.debate.selectedDebateId,
+		});
+
+		return {data};
     },
     data(){
         return {
-			debate : {
-				debate_id : 1,
-				debate_mode : "CEDA",
-				debate_title : "반려동물 보유세 필요한가?",
-				call_start_time : "2023-01-11 13:00:00",
-				call_end_time : "2023-01-11 16:00:00",
-				thumbnail_url : "../../../../assets/img/course/testImg.jpg",
-				owner_email : "ssafy@naver.com",
-				owner_name : "김싸피",	
-				owner_profile : "../../../../assets/img/user/temp_user1.png",
-				owner_department_position : "싸피고등학교 선생님",
-				state : "inactive",
-				},
-			// TODO : 현재 페이지 진입시 debate_id를 통해서 상세정보 요청.	
-			debate_detail : {
-				description : "시대가 변하면서 가족 형태가 달라지고 있다. 대가족에서 핵가족으로의 변화를 거쳐, 2020년에는 1인 가구가 전체 가구의 31%를 차지하게 되었다. 가족 구성원이 적어지면서 나타난 변화는 반려동물을 보유한 가구의 증가다. 농림축산식품부에서는 2018년을 기준으로, 전국 가구의 29.5%에 해당하는 511만 가구가 반려동물 키우고 있다고 밝혔다. 파악하지 못한 가구를 더하면 그보다 더 많을 것으로 추정된다. 문제는 급증하는 반려동물 가구와 달리, 제도적 준비가 되어 있지 않다는 점이다. 반려동물이 거리에서 타인을 공격하거나 층간 소음을 일으키는 등의 문제는 일상적으로 일어나고 있다. 하지만 형식적인 절차나 권고만 있을 뿐 명확한 조항이나 예방 대책은 미흡하다. 또한, 반려동물 입양이 펫숍이나 지인을 통해 이루어지는 상황이라 현황 파악이 어렵고, 자연히 책임의식도 떨어진다. 유기되는 반려동물은 해마다 증가하고 있는데, 2018년에는 121,077마리에 달했다. 이러한 문제를 해결하기 위하여, 반려동물의 사적 거래를 금지하고 국가에서 관리하는 제도적 준비가 필요하다. 자연히 재원 마련을 위해 반려동물 가구를 대상으로 동물 등록세를 징수해야 하는지가 논란이 되고 있다",
+			debate : {},
+
+			// TODO : 현재 페이지 진입시 debate_id를 통해서 상세정보 요청. 혹은 기존 토론 정보 조회 개선.
+			debate_detail : { 	  
 				category : "정치",
 				enroll_count : 6,
 			},
@@ -166,15 +160,33 @@ export default {
         }
     },
     mounted(){
-        if(this.debate.state == 'closed'){
-			this.getVoteResult();
-			this.getDebateFiles();
-			this.getSummary();
-		}
+		this.getDebateInfo();
     },
     methods: {
+		async getDebateInfo(){
+			await api.get('/debates/'+this.data.debate_id)
+            .then((response) => {
+                if(response.status == 200){
+                    this.debate = response.data.data;
+                    console.log('특정 토론 정보 조회 완료');
+					this.checkState();
+                } else {
+                    console.log(response);
+                    console.log('정상 조회 실패')
+                }
+            }).catch((error)=>{
+                console.log(error);
+            });
+		},
+		async checkState(){
+			if(this.debate.state == 'closed'){
+				this.getVoteResult();
+				this.getDebateFiles();
+				this.getSummary();
+			}
+		},
         async getVoteResult(){
-            api.get('/vote/debates/'+this.debate.debate_id)
+            api.get('/vote/debates/'+this.data.debate_id)
             .then((response) => {
                 if(response.status == 200){
                     console.log(response);

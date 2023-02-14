@@ -7,7 +7,13 @@ const userStore = {
     state: {
         isLogin: false,
         isLoginError: false,
-        userInfo: null,
+        // userInfo : null,
+        // TODO : 임시 데이터 삭제
+        userInfo: {
+            // 
+            name : "김임시",
+            position : "임시고등학교"
+        },
         isValidToken: false,
     },
     getters: {
@@ -76,7 +82,9 @@ const userStore = {
                     }
                 },
                 (error) => {
-                    console.log(error);
+                    if(error.response.status==500){
+                        alert("존재하지 않은 아이디 입니다.")
+                    }
                 }
             )
         },
