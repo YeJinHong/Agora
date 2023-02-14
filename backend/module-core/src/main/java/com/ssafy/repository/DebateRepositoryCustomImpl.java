@@ -33,7 +33,7 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
     public Page<Debate> findDebateBySearchCondition(String keyword, String condition, Pageable pageable, List<Long> categoryList) {
 
         JPAQuery<Debate> query = jpaQueryFactory.selectFrom(debate)
-                    .where(eqKeyword(keyword, condition), (debate.category.in(categoryList)));
+                    .where(eqKeyword(keyword, condition), inCategoryList(categoryList));
 
         List<Debate> debates = Objects.requireNonNull(this.getQuerydsl())
                 .applyPagination(pageable, query)
@@ -42,6 +42,14 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
         return new PageImpl<Debate>(debates, pageable, query.fetchCount());
 
     }
+
+    private BooleanExpression inCategoryList(List<Long> categoryList){
+        if(categoryList == null)
+            return null;
+        else
+            return debate.category.in(categoryList);
+    }
+
 
     private BooleanExpression eqKeyword(String keyword, String condition){
         if(keyword == null || keyword.isEmpty() || condition == null || condition.isEmpty()){
