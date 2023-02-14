@@ -70,7 +70,7 @@
 									<div class="card">
 										<div class="card-body">
 											<a class="video-thumbnail" data-fancybox="">
-												<img class="" src="../../../../assets/img/video.jpg" alt="">
+												<img class="" src="../../../../assets/img/course/testImg.jpg" alt="">
 												<!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
 											</a>
 											<div class="video-details">
@@ -82,10 +82,12 @@
 														<a href="javascript:;" class="btn btn-wish w-100"><i class="feather-share-2"></i> 공유하기 </a>
 													</div>
 												</div>
-												<router-link to="checkout" class="btn btn-enroll w-100" v-if="data.debate.state == 'active'"> 지금 입장하기 </router-link>
+												<button class="btn btn-primary w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('찬성')"> 찬성측으로 입장하기 </button>
+												<button class="btn btn-info w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('반대')"> 반대측으로 입장하기 </button>
+												<button class="btn btn-dark w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('사회자')"> 사회자로 입장하기 </button>
 												<router-link to="checkout" class="btn btn-enroll w-100 disabled" v-else-if="data.debate.state == 'inactive'" > 토론 준비 중 </router-link>
 												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="data.debate.state == 'in ready'" > 대기열 입장 </router-link>
-												<router-link to="checkout" class="btn btn-dark w-100 disabled" v-else-if="data.debate.state == 'closed'"> 종료됨 </router-link>
+												<router-link to="checkout" class="btn btn-dark w-100 disabled" v-else> 종료됨 </router-link> <!-- state : closed -->
 											</div>
 										</div>
 									</div>
@@ -127,12 +129,14 @@
 import { apiInstance } from "/api/index.js";      
 import {useStore} from "vuex";
 import {onMounted, reactive} from 'vue'
+import { useRouter} from 'vue-router'
 
 const api = apiInstance();
 
 export default {
     setup(){
 		const store = useStore();
+		const router = useRouter();
 		const data = reactive({
 			// debateId : store.getters["debate/getDebateId"], 
 			debateId : store.state.debate.debateId,
@@ -154,8 +158,6 @@ export default {
 
 		onMounted(()=>{
 			// data.debateId = store.getters["debate/getDebateId"];
-			console.log(store.state.debate.debateId);
-			console.log(data.debateId);	
 			getDebateInfo();
 		})
 
@@ -175,6 +177,21 @@ export default {
             }).catch((error)=>{
                 console.log(error);
             });
+		}
+		
+		const setDebateLink = (position) => {
+			const debate_link = {
+				name : 'debatemain',
+				query : {
+					debateId : data.debateId,
+					name : store.getters["user/checkUserInfo"],
+					title : data.debate.title,
+					position : position,
+					roomType : data.debate.debateMode,
+					time : 100,
+				},
+			}
+			router.push(debate_link);
 		}
 
 		const checkState = async () => {
@@ -232,7 +249,7 @@ export default {
 		}
 
 
-		return {store, data};
+		return {store, data, setDebateLink};
     },    
 }
 </script>
