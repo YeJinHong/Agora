@@ -9,6 +9,7 @@ const state = {
     chatSocket: null,
     stompClient: null,
     webRtcSocket: null,
+    participantInfo: null,
 };
 
 const getters = {
@@ -42,6 +43,9 @@ const mutations = {
     },
     documentBox(state) {
         state.document_box = !state.document_box
+    },
+    participantInfo(state, data) {
+        state.participantInfo = data
     }
 };
 
