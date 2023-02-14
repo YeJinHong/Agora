@@ -82,7 +82,9 @@ const debate = {
         documentBox(state) {
             state.document_box = !state.document_box
         },
-
+        participantInfo(state, data) {
+            state.participantInfo = data
+        }
     },
     actions: {
         async searchDebateList({state, commit}, condition) {
@@ -143,6 +145,6 @@ const debate = {
             state.document_box = !state.document_box
         }
     }
-}
+};
 
 export default debate;

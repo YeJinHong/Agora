@@ -32,7 +32,8 @@ export default {
     const api = Axios.create({
       baseURL: "http://i8c205.p.ssafy.io:8084/kafka",
     });
-    return {store, chatSocket, stompClient, chatList, api}
+    const participantInfo = store.state.debate.participantInfo
+    return {store, chatSocket, stompClient, chatList, api, participantInfo}
   },
   data() {
     return {
@@ -48,7 +49,7 @@ export default {
         let chatMessage = {
           'content': this.content,
           'roomId': 1,
-          'author': '김피먹'
+          'author': this.participantInfo.name
         }
         console.log(chatMessage)
         // this.stompClient.send("/pub/message", JSON.stringify(chatMessage), {})
