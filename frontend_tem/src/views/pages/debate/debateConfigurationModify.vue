@@ -53,12 +53,13 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">사회자 여부</label>
-                    <div>
-                      <input type="radio" name="select_specialist" v-model="state.debate.moderateOnOff" value="true">
-                      <span class="checkmark"></span> 사회자 참여
-                      <input type="radio" name="select_specialist" v-model="state.debate.moderateOnOff" value="false">
-                      <span class="checkmark"></span> 사회자 불참
-                    </div>
+                    <select class="form-control" v-model="state.debate.moderateOnOff" name="sellist3">
+                      <option value="">Choose Option</option>
+                      <option v-for="(item, index) in state.option.moderateOnOff"
+                              :key="index"
+                              :value="item.value">{{ item.name }}
+                      </option>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="start-time">토론 시작 시간</label>
@@ -80,7 +81,7 @@
                   </div>
                 </div>
                 <div class="submit-ticket">
-                  <button type="button" class="btn btn-primary" @click.prevent="modifyDebateConfig">생성</button>
+                  <button type="button" class="btn btn-primary" @click.prevent="modifyDebateConfig">수정</button>
                 </div>
               </div>
             </div>
@@ -121,6 +122,7 @@ export default {
       option: {
         categories: null,
         modes: ['CEDA', '시간총량제'],
+        moderateOnOff: [{name: "참여", value: true}, {name: "불참", value: false}],
       },
     });
 
@@ -165,10 +167,13 @@ export default {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', file);
-      api.post('/debates/thumbnail/' + state.debate.id, formData)
-          .then(() => {
-            alert("썸네일 수정 완료");
-          }).catch(() => {
+      api.patch('/debates/thumbnail/' + state.debate.id, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(() => {
+        alert("썸네일 수정 완료");
+      }).catch(() => {
         alert("썸네일 수정 실패");
       })
     }
@@ -178,12 +183,12 @@ export default {
         title: state.debate.title,
         description: state.debate.description,
         category: state.debate.category,
-        moderateOnOff: state.debate.moderateOnOff,
+        moderatorOnOff: state.debate.moderateOnOff,
         debateMode: state.debate.mode,
         callStartTime: state.debate.callStartTime,
         callEndTime: state.debate.callEndTime,
       }
-      api.patch(`/` + state.debate.id, req)
+      api.patch(`/debates/` + state.debate.id, req)
           .then(() => {
             router.push("/")
           }).catch((error) => {

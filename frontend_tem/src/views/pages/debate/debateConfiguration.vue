@@ -45,7 +45,7 @@
                   <div class="form-group">
                     <label class="form-label">토론 모드</label>
                     <select class="form-control" v-model="state.debate.mode" name="sellist2">
-                      <option value="">Choose Category</option>
+                      <option value="">Choose Mode</option>
                       <option v-for="(item) in state.option.modes"
                               :value="item">{{ item }}
                       </option>
@@ -53,12 +53,13 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">사회자 여부</label>
-                    <div>
-                      <input type="radio" name="select_specialist" v-model="state.debate.moderateOnOff" value="true">
-                      <span class="checkmark"></span> 사회자 참여
-                      <input type="radio" name="select_specialist" v-model="state.debate.moderateOnOff" value="false">
-                      <span class="checkmark"></span> 사회자 불참
-                    </div>
+                    <select class="form-control" v-model="state.debate.moderateOnOff" name="sellist3">
+                      <option value="">Choose Option</option>
+                      <option v-for="(item, index) in state.option.moderateOnOff"
+                              :key="index"
+                              :value="item.value">{{ item.name }}
+                      </option>
+                    </select>
                   </div>
                   <div class="form-group">
                     <label for="start-time">토론 시작 시간</label>
@@ -77,6 +78,13 @@
                     <div>
                       <input type="file" id="thumbnail" class="btn btn-outline-dark">
                     </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="thumbnail">토론 참가자</label>
+                    <div class="ticket-btn-grp">
+                      <router-link to="index">Back to Home</router-link>
+                    </div>
+
                   </div>
                 </div>
                 <div class="submit-ticket">
@@ -119,7 +127,8 @@ export default {
       },
       option: {
         categories: null,
-        modes: ['CEDA', '시간총량제'],
+        modes: ["CEDA", "시간총량제"],
+        moderateOnOff: [{name: "참여", value: true}, {name: "불참", value: false}],
       },
     });
 
