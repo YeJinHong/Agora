@@ -13,6 +13,7 @@
       </li>
 
 
+      <!-- TODO : class 설정으로 인해 토론 메뉴와 HelpDesk 메뉴가 동시에 색이 변함. -->
       <li class="has-submenu" :class=" PagesMenu ? 'active' : 'notactive'">
         <a href="javascript:void(0);">토론 <i class="fas fa-chevron-down"></i></a>
         <ul class="submenu">

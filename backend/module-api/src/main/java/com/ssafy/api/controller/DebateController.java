@@ -17,6 +17,7 @@ import com.ssafy.entity.rdbms.File;
 import com.ssafy.entity.rdbms.FileManager;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -33,12 +34,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletRequest;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -76,27 +78,32 @@ public class DebateController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
-    @GetMapping()
-    @ApiOperation(value = "토론 조회")
-    public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
-                                                                           @RequestParam(required = false) String condition,
-                                                                           @RequestParam(required = false) List<Long> categoryList,
-                                                                           @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        System.out.println(keyword);
-        System.out.println(condition);
-        System.out.println(categoryList);
-        Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable, categoryList);
-        BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
-        return ResponseEntity.status(200).body(response);
-    }
+	@GetMapping()
+	@ApiOperation(value = "토론 조회")
+	public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
+																		   @RequestParam(required = false) String condition,
+																		   @RequestParam(required = false) List<Long> categoryList,
+																		   @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
 
-    @GetMapping("/{debateId}")
-    @ApiOperation(value = "토론 아이디 조회")
-    public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId) {
-        DebateRes debate = debateService.search(debateId);
-        BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
-        return ResponseEntity.status(200).body(response);
-    }
+		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable, categoryList);
+
+//		 토론 목록 페이지 로드시 너무 느린 문제 발생
+				for(DebateRes debate : debates){
+					updateDebateState(debate);
+				}
+
+		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
+		return ResponseEntity.status(200).body(response);
+	}
+
+	@GetMapping("/{debateId}")
+	@ApiOperation(value = "토론 아이디 조회")
+	public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId){
+		DebateRes debate = debateService.search(debateId);
+		updateDebateState(debate);
+		BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
+		return ResponseEntity.status(200).body(response);
+	}
 
     @PatchMapping("/{debateId}")
     @ApiOperation(value = "토론 수정")
@@ -182,22 +189,6 @@ public class DebateController {
         } catch (FileNotFoundException e) {
             return ResponseEntity.status(509).body(BaseResponseBody.of(509, "해당하는 파일이 존재하지 않습니다"));
         }
-
-
-//        try {
-//            Resource resource = new UrlResource(path.toUri());
-//            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
-//            if(contentType == null) {
-//                contentType = "application/octet-stream";
-//            }
-//            return ResponseEntity.ok()
-//                    .contentType(MediaType.parseMediaType(contentType))
-//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-//                    .body(resource);
-//        } catch (Exception e) {
-//            return ResponseEntity.status(509).body(BaseResponseBody.of(509, "해당하는 파일이 존재하지 않습니다"));
-//        }
-
     }
 
     @PatchMapping("/files/{debateId}")
@@ -248,4 +239,31 @@ public class DebateController {
         debateService.deleteDebate(debateId);
         return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
     }
+
+	private void updateDebateState(DebateRes debate){
+		// 현재 시간에 따른 state 갱신 임시코드.
+		String oldState = debate.getState();
+		LocalDateTime callStartTime = debate.getCallStartTime();
+		LocalDateTime callEndTime = debate.getCallEndTime();
+		LocalDateTime now = LocalDateTime.now();
+		if(now.isBefore(callStartTime)){
+			Duration duration = Duration.between(now, callStartTime);
+			Long seconds = duration.getSeconds(); // 남은 시간
+			if(seconds < 60*10){ // 5분전은 in ready 상태로 조회됨.
+				debate.setState("in ready");
+			} else {
+				debate.setState("inactive");
+			}
+		} else if(now.isAfter(callStartTime) && now.isBefore(callEndTime)){
+			debate.setState("active");
+		} else if(now.isAfter(callEndTime)){
+			debate.setState("closed");
+		}
+
+		if(oldState.equals(debate.getState())) return; // 상태가 같으면 DB를 갱신하지 않는다.
+
+		DebateModifyStatePatchReq debateModifyStatePatchReq = new DebateModifyStatePatchReq();
+		debateModifyStatePatchReq.setState(debate.getState());
+		debateService.updateDebateState(debate.getDebateId(), debateModifyStatePatchReq);
+	}
 }
