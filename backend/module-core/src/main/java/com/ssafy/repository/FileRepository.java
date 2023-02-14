@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface FileRepository extends JpaRepository<File, Long>, FileRepositoryCustom {
 
 
-    @Query("select F from File F where F.deleted = false and F.fileManager = :fileId")
+    @Query("select F from File F where F.deleted = false and F.fileManager.id = :fileId")
     File findProfileImgUrl(@Param("fileId") Long fileId);
 }
