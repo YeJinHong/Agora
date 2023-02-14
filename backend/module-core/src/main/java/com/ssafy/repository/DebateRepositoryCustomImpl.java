@@ -30,25 +30,36 @@ public class DebateRepositoryCustomImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public Page<Debate> findDebateBySearchCondition(String keyword, String condition, Pageable pageable) {
+    public Page<Debate> findDebateBySearchCondition(String keyword, String condition, Pageable pageable, List<Long> categoryList) {
+
         JPAQuery<Debate> query = jpaQueryFactory.selectFrom(debate)
-                .where(eqKeyword(keyword, condition));
+                    .where(eqKeyword(keyword, condition), inCategoryList(categoryList));
 
         List<Debate> debates = Objects.requireNonNull(this.getQuerydsl())
                 .applyPagination(pageable, query)
                 .fetch();
 
-        return new PageImpl<Debate>(debates, pageable, query.fetch().size());
+        return new PageImpl<Debate>(debates, pageable, query.fetchCount());
+
     }
+
+    private BooleanExpression inCategoryList(List<Long> categoryList){
+        if(categoryList == null)
+            return null;
+        else
+            return debate.category.in(categoryList);
+    }
+
 
     private BooleanExpression eqKeyword(String keyword, String condition){
         if(keyword == null || keyword.isEmpty() || condition == null || condition.isEmpty()){
             return null;
         }
         if(condition.equals("owner")){
-            return debate.owner.userEmail.containsIgnoreCase(keyword);
+            return debate.owner.name.containsIgnoreCase(keyword);
         }else{
             return debate.title.containsIgnoreCase(keyword);
         }
     }
+
 }

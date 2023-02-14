@@ -3,7 +3,9 @@
     <sidebox class="side-box"></sidebox>
     <documentbox></documentbox>
     <div class="main-wrapper">
-      <participant></participant>
+      <debate2
+      :call = "call">
+      </debate2>
       <middlebox v-if="middle_box === true"></middlebox>
     </div>
     <uibar></uibar>
@@ -20,12 +22,15 @@ import chat from './chat.vue';
 import {mapState} from 'vuex';
 import Sidebox from "./sidebox.vue";
 import Documentbox from "./documentbox.vue";
+import debate2 from "./debate2.vue";
 
 
 export default {
-  components: {Documentbox, Sidebox, participant, middlebox, participant_list, chat, uibar},
+  components: {Documentbox, Sidebox, participant, middlebox, participant_list, chat, uibar, debate2},
   data() {
-    return {}
+    return {
+      call: ''
+    }
   },
   computed: {
     ...mapState('debate', {participant_list: 'participant_list'}),
@@ -34,7 +39,8 @@ export default {
 
   },
   mounted() {
-
+    console.log(this.$route.query)
+    this.call = this.$route.query
   }
 
 

@@ -77,34 +77,34 @@ import Stomp from 'webstomp-client'
 import SockJS from 'sockjs-client'
 
 export default {
-  name: "debate",
-  data() {
-    return {
-      data : {
-      title : "",
-      roomType:"",
-      time : "",
-      debateId: "",
-      userName: "",
-      position : ""
-      },
-
-    }
-  },
-  mounted() {
-      room.connect();
-  },
-  methods: {
-    connect() {
-      room.registerRoom(this.data);
-    },
-
-    leaveRoom() {
-      room.leaveRoom();
-    },
-    muteAudio() {
-      room.muteAudio(this.data.userName)
-    }
-  }
+//   name: "debate",
+//   data() {
+//     return {
+//       data : {
+//       title : "",
+//       roomType:"",
+//       time : "",
+//       debateId: "",
+//       userName: "",
+//       position : ""
+//       },
+//
+//     }
+//   },
+//   mounted() {
+//       room.connect();
+//   },
+//   methods: {
+//     connect() {
+//       room.registerRoom(this.data);
+//     },
+//
+//     leaveRoom() {
+//       room.leaveRoom();
+//     },
+//     muteAudio() {
+//       room.muteAudio(this.data.userName)
+//     }
+//   }
 }
 </script>

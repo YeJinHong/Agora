@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -64,9 +65,13 @@ public class DebateController {
 	@GetMapping()
 	@ApiOperation(value = "토론 조회")
 	public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
-												  @RequestParam(required = false) String condition,
-												  @PageableDefault(sort = "title", direction = Sort.Direction.DESC) Pageable pageable){
-		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable);
+																		   @RequestParam(required = false) String condition,
+																		   @RequestParam(required = false) List<Long> categoryList,
+																		   @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+		System.out.println(keyword);
+		System.out.println(condition);
+		System.out.println(categoryList);
+		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable, categoryList);
 		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
 		return ResponseEntity.status(200).body(response);
 	}

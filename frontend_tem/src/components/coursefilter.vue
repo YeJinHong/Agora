@@ -11,7 +11,8 @@
                            class="list-view"><i class="feather-list"></i></router-link>
             </div>
             <div class="show-result">
-              <h4>Showing 1-9 of 50 results</h4>
+              <h4 v-if = "store.state.debate.totalElements == 0">Showing 0 - 0 of 0 results </h4>
+              <h4 v-else >Showing  {{store.state.debate.offset + 1}} - {{ store.state.debate.offset + 1 + store.state.debate.numberOfElements}} of {{ store.state.debate.totalElements }} results</h4>
             </div>
           </div>
         </div>
@@ -21,8 +22,7 @@
               <div class="row gx-2 align-items-center">
                 <div class="col-md-3 col-lg-3 col-item">
                   <div class="form-group select-form mb-0">
-  <!--                    <vue-select :options="conditions" label="name"></vue-select>-->
-                    <select class="form-control" v-model="data.selectedOptionName">
+                    <select class="form-control" v-model="data.condition">
                         <option value="" selected>검색 조건 선택</option>
                       <option v-for="(item, index) in conditions"
                               :key="index"
@@ -49,7 +49,7 @@
     <!-- /Filter -->
   </template>
   <script>
-  import Vue, {onMounted, reactive, watch} from 'vue'
+  import {onMounted, reactive} from 'vue'
   import {useStore} from "vuex";
   
   export default {
@@ -59,21 +59,23 @@
     setup() {
       const store = useStore();
       const data = reactive({
-        keyword :store.state.debate.keyword,
-        condition: store.state.debate.condition,
-        selectedOptionName : store.state.debate.selectedOptionName,
+        keyword : store.state.debate.keyword,
+        condition : store.state.debate.condition,
+        totalElements : store.state.debate.totalElements,
+        pageNumber : store.state.debate.pageNumber, 
+        numberOfElements : store.state.debate.numberOfElements,
       })
       onMounted(() => {
         loadDebateList();
       })
 
       const loadDebateList = async () => {
-        await store.dispatch("debate/searchDebateList", {
-          condition: data.selectedOptionName,
-          keyword: data.keyword,
-        })
+        store.commit('debate/SET_KEYWORD', data.keyword);
+        store.commit('debate/SET_CONDITION', data.condition);
+        await store.dispatch("debate/searchDebateList", {})
       }
-      return {data, loadDebateList};
+
+      return {data, loadDebateList, store};
     },
   
     computed: {
@@ -83,8 +85,7 @@
     },
     data() {
       return {
-        conditions: [{name: "ownerName", text: "개설자"}, {name: "title", text: "제목"}],
-        options: ["개설자", "제목"],
+        conditions: [{name: "owner", text: "개설자"}, {name: "title", text: "제목"}],
       }
     },
     mounted() {

@@ -3,11 +3,11 @@ import {searchAll, getCategoryList} from "../../api/Debate";
 const debate = {
     namespaced: true,
     state: {
-        debateId : 15,
-        keyword :"",
+        debateId: "",
+        keyword: "",
         condition: "",
-        selectedOptionName : "",
-        selectedCategoryIdList : "",
+        selectedOptionName: "",
+        selectedCategoryIdList: "",
         debateList: [],
         participant: 0,
         participant_list: false,
@@ -19,10 +19,10 @@ const debate = {
         chatSocket: null,
         stompClient: null,
         webRtcSocket: null,
-        categoryList : [],
+        categoryList: [],
     },
     getters: {
-        getDebateId : function (state) {
+        getDebateId: function (state) {
             return state.debateId;
         },
         isDocumentBox: function (state) {
@@ -31,18 +31,21 @@ const debate = {
         getDebateList: function (state) {
             return state.debateList;
         },
-        getKeyword : function (state){
+        getKeyword: function (state) {
             return state.keyword;
         },
-        getCategoryList : function(state){
+        getCategoryList: function (state) {
             return state.categoryList;
         },
-        getSelectedCategoryList : function(state){
+        getSelectedCategoryList: function (state) {
             return state.selectedCategoryIdList;
         },
+        getWebRtcSocket: (state) => {
+            return state.webRtcSocket;
+        }
     },
     mutations: {
-        SET_DEBATE_ID : (state, debateId) => {
+        SET_DEBATE_ID: (state, debateId) => {
             state.debateId = debateId;
         },
         SET_DEBATE_LIST: (state, debateList) => {
@@ -51,12 +54,35 @@ const debate = {
                 state.debateList.push(debate);
             });
         },
-        SET_CATEGORY_LIST : (state, categoryList) => {
+        SET_CATEGORY_LIST: (state, categoryList) => {
             state.categoryList = categoryList;
         },
-        SET_SELECTED_CATEGORY_LIST : (state, categoryList) => {
+        SET_SELECTED_CATEGORY_LIST: (state, categoryList) => {
             state.selectedCategoryIdList = categoryList;
-        }
+        },
+        participantList(state) {
+            if (state.chat_box === true) {
+                state.chat_box = false
+                state.participant_list = !state.participant_list
+            } else {
+                state.participant_list = !state.participant_list
+            }
+        },
+        microPhone(state) {
+            state.micro_phone = !state.micro_phone
+        },
+        chatBox(state) {
+            if (state.participant_list === true) {
+                state.participant_list = false
+                state.chat_box = !state.chat_box
+            } else {
+                state.chat_box = !state.chat_box
+            }
+        },
+        documentBox(state) {
+            state.document_box = !state.document_box
+        },
+
     },
     actions: {
         async searchDebateList({state, commit}, condition) {
@@ -91,7 +117,7 @@ const debate = {
                 state.chat_box = !state.chat_box
             }
         },
-        setSelectedCategoryList({state, commit}, categoryList){
+        setSelectedCategoryList({state, commit}, categoryList) {
             state.selectedCategoryIdList = "";
             categoryList.forEach((category) => {
                 state.selectedCategoryIdList = state.selectedCategoryIdList + category + ', ';
@@ -99,7 +125,7 @@ const debate = {
             console.log(state.selectedCategoryIdList);
             commit("SET_SELECTED_CATEGORY_LIST", categoryList);
         },
-        async getCategoryList({state, commit}){
+        async getCategoryList({state, commit}) {
             await getCategoryList(
                 ({data}) => {
                     console.log('카테고리 정보 받아오기!!!!!!!!!!!');
