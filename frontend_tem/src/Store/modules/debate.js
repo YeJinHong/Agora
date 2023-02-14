@@ -141,7 +141,7 @@ const actions = {
                 console.log(data.data.content);
             }
         }, (error) => {
-            console.log("문제가 발생하였습니다.")
+            console.log("토론 목록 조회 중 문제가 발생하였습니다.")
         })
     },
     // 토론 카테고리 검색 API 요청
