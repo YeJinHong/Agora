@@ -3,7 +3,7 @@ import {searchAll, getCategoryList} from "../../api/Debate";
 const state = {
     // 상세 정보 조회용
     debateId : '',
-    debateInfo : {},
+    debateInfo : {debateId : 3, title : "환승이별 vs 잠수이별"}, // TODO : 더미데이터 삭제
 
     // 토론 목록 검색용 1
     keyword :"",
