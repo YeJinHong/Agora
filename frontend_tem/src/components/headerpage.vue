@@ -239,7 +239,7 @@
                         <p class="text-muted mb-0">{{data.position}}</p>
                     </div>
                 </div>
-                <router-link class="dropdown-item" to="setting-edit-profile"><i class="feather-user me-1" ></i> Profile</router-link>
+                <router-link class="dropdown-item" to="setting-edit-profile"><i class="feather-user me-1" ></i> MyPage</router-link>
                 <router-link class="dropdown-item" to="setting-student-subscription"><i class="feather-star me-1"></i> Subscription</router-link>
                 <router-link class="dropdown-item" to="/" @click="logout" ><i class="feather-log-out me-1"></i>Logout</router-link>
             </div>
@@ -255,25 +255,23 @@ import {useRouter} from "vue-router";
         const store = useStore();
         const router = useRouter();
         const data = reactive({
-          username: store.state.userStore.userInfo.name,
-          position: store.state.userStore.userInfo.position,
+          username: store.getters["userStore/checkUserInfo"].name,
+          position: store.getters["userStore/checkUserInfo"].position,
         });
         const logout = async () => {
           await store.dispatch("userStore/userLogout");
+
           moveHome();
         }
 
         const moveHome = () => {
-          router.push('/');
+          router.push('/login');
         }
         return {data,logout};
       },
 
       components: {
           
-      },
-      mounted() {
-      
       },
      
     }
