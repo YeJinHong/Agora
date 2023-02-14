@@ -125,7 +125,7 @@ public class Participant implements Closeable {
         final WebRtcEndpoint incoming = incomingMedia.remove(senderName);
 
         log.debug("PARTICIPANT {}: removing endpoint for {}", this.name, senderName);
-        incoming.release(new Continuation<Void>() {
+         incoming.release(new Continuation<Void>() {
             @Override
             public void onSuccess(Void result) throws Exception {
                 log.trace("PARTICIPANT {}: Released successfully incoming EP for {}",
