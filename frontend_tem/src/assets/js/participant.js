@@ -8,6 +8,7 @@ function Participant(userName, position, isScreen) {
     // container.className = isPresentMainParticipant() ? PARTICIPANT_CLASS : PARTICIPANT_MAIN_CLASS;
     container.className = PARTICIPANT_CLASS;
     container.id = userName;
+
     let span = document.createElement('span');
     let video = document.createElement('video');
     video.id = 'video-' + userName;

@@ -37,6 +37,7 @@
       </div>
     </div>
   </div>
+
 </template>
 
 
@@ -69,7 +70,7 @@ export default {
     })
 
     const makeWebsocket = () => {
-      data.ws = new WebSocket('wss://localhost:8443/groupcall');
+      data.ws = new WebSocket('wss://localhost:8086/groupcall');
       data.ws.onopen = () => {
         console.log('WebSocket connection established');
         register()
@@ -177,7 +178,7 @@ export default {
 
     const onExistingParticipants = (msg) => {
       let constraints = {
-        audio: true,
+        audio: false,
         video: {
           mandatory: {
             maxWidth: 320,
@@ -190,6 +191,8 @@ export default {
       console.log(data.name + " registered in room " + data.title);
       let participant = new Participant(data.name, data.position, msg.isScreen);
       data.participants[data.name] = participant;
+      participant.constraints = constraints;
+
       let video = participant.getVideoElement();
 
       participant.onIceCandidate = (candidate) => {
@@ -208,6 +211,13 @@ export default {
       }
 
       data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+        console.log('이젠여기', options)
+        console.log('이젠여기2',data.participants[data.name])
+        console.log('이젠여기333',data.participants)
+        store.commit("debate/participantRegister", data.participants)
+        store.commit("debate/Register", data.name)
+        console.log('이젠여기3',store.state.debate.participant)
+
         if (error) {
           return console.error(error);
         }
@@ -223,6 +233,7 @@ export default {
 
       msg.data.forEach(m => (receiveVideo(m.userName, m.position, m.isScreen)));
     }
+
 
     const receiveVideoResponse = (result) => {
       console.log(data.participants);
@@ -336,6 +347,7 @@ export default {
       data.participants[name] = participant;
       var video = participant.getVideoElement();
 
+
       participant.onIceCandidate = (candidate) => {
         let message = {
           id: 'onIceCandidate',
@@ -376,7 +388,6 @@ export default {
     //     });
     //   }
     // }
-
     const onParticipantLeft = (request) => {
       console.log('Participant ' + request.name + ' left');
       var participant = data.participants[request.name];
@@ -392,29 +403,29 @@ export default {
       data.ws.send(jsonMessage);
       console.log(data.ws)
     }
-    const videoOnOff = () => {
-      if (data.participants[name].rtcPeer.videoEnabled) {
-        // 끌때
-        data.participants[name].rtcPeer.videoEnabled = false;
-        document.getElementById("vidOn").style.display = "";
-        document.getElementById("vidOff").style.display = "none";
-      } else {
-        data.participants[name].rtcPeer.videoEnabled = true;
-        document.getElementById("vidOn").style.display = "none";
-        document.getElementById("vidOff").style.display = "";
-      }
-    }
-    const audioOnOff = () => {
-      if (data.participants[name].rtcPeer.audioEnabled) {
-        data.participants[name].rtcPeer.audioEnabled = false;
-        document.getElementById("audOn").style.display = "";
-        document.getElementById("audOff").style.display = "none";
-      } else {
-        data.participants[name].rtcPeer.audioEnabled = true;
-        document.getElementById("audOn").style.display = "none";
-        document.getElementById("audOff").style.display = "";
-      }
-    }
+    // const videoOnOff = () => {
+    //   if (data.participants[data.name].rtcPeer.videoEnabled) {
+    //     // 끌때
+    //     data.participants[name].rtcPeer.videoEnabled = false;
+    //     document.getElementById("vidOn").style.display = "";
+    //     document.getElementById("vidOff").style.display = "none";
+    //   } else {
+    //     data.participants[name].rtcPeer.videoEnabled = true;
+    //     document.getElementById("vidOn").style.display = "none";
+    //     document.getElementById("vidOff").style.display = "";
+    //   }
+    // }
+    // const audioOnOff = () => {
+    //   if (data.participants[name].rtcPeer.audioEnabled) {
+    //     data.participants[name].rtcPeer.audioEnabled = false;
+    //     document.getElementById("audOn").style.display = "";
+    //     document.getElementById("audOff").style.display = "none";
+    //   } else {
+    //     data.participants[name].rtcPeer.audioEnabled = true;
+    //     document.getElementById("audOn").style.display = "none";
+    //     document.getElementById("audOff").style.display = "";
+    //   }
+    // }
     const sendSystemComment = () => {
       let debateId = document.getElementById('debateId').value;
 
@@ -509,6 +520,11 @@ export default {
     display: none;
 
   }
+}
+
+.btn {
+  color: red;
+  background-color: red;
 }
 
 </style>
