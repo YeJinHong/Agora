@@ -61,7 +61,8 @@ export default {
                 check_val.push(iVal.value);
             });
 
-            store.dispatch('debate/setSelectedCategoryList', check_val);
+            store.commit("debate/SET_SELECTED_CATEGORY_LIST", check_val);
+            // store.dispatch('debate/setSelectedCategoryList', check_val);
             store.dispatch("debate/searchDebateList", {});
 
         }
