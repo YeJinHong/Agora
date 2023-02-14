@@ -67,6 +67,8 @@ spa:
 file:
   path: /usr/local/share
   path-certificate: /usr/local/share
+  path-dev: C:\Users\multicampus\Desktop
+  path-certificate-dev: C:\Users\multicampus\Desktop\ssafy\Agora_Debate\backend\module-api\src\main\resources
 
   
 common-code:

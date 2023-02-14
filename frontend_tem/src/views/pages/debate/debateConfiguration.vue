@@ -79,13 +79,6 @@
                       <input type="file" id="thumbnail" class="btn btn-outline-dark">
                     </div>
                   </div>
-                  <div class="form-group">
-                    <label for="thumbnail">토론 참가자</label>
-                    <div class="ticket-btn-grp">
-                      <router-link to="index">Back to Home</router-link>
-                    </div>
-
-                  </div>
                 </div>
                 <div class="submit-ticket">
                   <button type="button" class="btn btn-primary" @click.prevent="saveDebateConfig">생성</button>
@@ -144,13 +137,6 @@ export default {
             alert("error : " + error.code);
           })
     })
-
-    const uploadImg = async (event) => {
-      const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append('file', file);
-      const response = await api.post('/debates/thumbnail/', formData);
-    }
 
     const saveDebateConfig = () => {
       const file = document.getElementById("thumbnail");

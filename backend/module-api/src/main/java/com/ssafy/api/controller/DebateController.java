@@ -4,6 +4,8 @@ import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.api.response.DebateRes;
+import com.ssafy.api.response.FileDownloadRes;
+import com.ssafy.api.response.FileRes;
 import com.ssafy.api.service.DebateService;
 import com.ssafy.api.service.FileManagerService;
 import com.ssafy.api.service.FileService;
@@ -11,20 +13,32 @@ import com.ssafy.common.auth.CustomUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
 import com.ssafy.common.model.response.BaseResponseDataBody;
 import com.ssafy.entity.rdbms.Debate;
+import com.ssafy.entity.rdbms.File;
 import com.ssafy.entity.rdbms.FileManager;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.CacheControl;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -53,36 +67,36 @@ public class DebateController {
         if (userDetails == null) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "접근 권한이 없습니다."));
         }
-        try{
+        try {
             Debate debate = debateService.createDebate(debateRegisterPostReq, file);
-        }catch (IOException e) {
+        } catch (IOException e) {
             return ResponseEntity.status(511).body(BaseResponseBody.of(511, "잘못된 파일입니다."));
         }
 
         return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Success"));
     }
 
-	@GetMapping()
-	@ApiOperation(value = "토론 조회")
-	public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
-																		   @RequestParam(required = false) String condition,
-																		   @RequestParam(required = false) List<Long> categoryList,
-																		   @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
-		System.out.println(keyword);
-		System.out.println(condition);
-		System.out.println(categoryList);
-		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable, categoryList);
-		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
-		return ResponseEntity.status(200).body(response);
-	}
+    @GetMapping()
+    @ApiOperation(value = "토론 조회")
+    public ResponseEntity<BaseResponseDataBody<Page<DebateRes>>> searchAll(@RequestParam(required = false) String keyword,
+                                                                           @RequestParam(required = false) String condition,
+                                                                           @RequestParam(required = false) List<Long> categoryList,
+                                                                           @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        System.out.println(keyword);
+        System.out.println(condition);
+        System.out.println(categoryList);
+        Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable, categoryList);
+        BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
+        return ResponseEntity.status(200).body(response);
+    }
 
-	@GetMapping("/{debateId}")
-	@ApiOperation(value = "토론 아이디 조회")
-	public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId){
-		DebateRes debate = debateService.search(debateId);
-		BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
-		return ResponseEntity.status(200).body(response);
-	}
+    @GetMapping("/{debateId}")
+    @ApiOperation(value = "토론 아이디 조회")
+    public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId) {
+        DebateRes debate = debateService.search(debateId);
+        BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
+        return ResponseEntity.status(200).body(response);
+    }
 
     @PatchMapping("/{debateId}")
     @ApiOperation(value = "토론 수정")
@@ -93,7 +107,7 @@ public class DebateController {
         DebateRes debateRes = debateService.search(debateId);
         String checkUserEmail = debateRes.getOwnerEmail();
 
-        if(!checkUserEmail.equals(userEmail)){
+        if (!checkUserEmail.equals(userEmail)) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "접근 권한이 없습니다."));
         }
         try {
@@ -134,7 +148,7 @@ public class DebateController {
         DebateRes debateRes = debateService.search(debateId);
         String checkUserEmail = debateRes.getOwnerEmail();
 
-        if(!checkUserEmail.equals(userEmail)){
+        if (!checkUserEmail.equals(userEmail)) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "접근 권한이 없습니다."));
         }
         try {
@@ -148,33 +162,73 @@ public class DebateController {
         return ResponseEntity.status(201).body(BaseResponseBody.of(200, "썸네일 업로드 성공"));
     }
 
+    @GetMapping("/downloads/{fileId}")
+    @ApiOperation(value = "토론 파일 다운로드")
+    public ResponseEntity<?> downloadDebateFile(@PathVariable String fileId) {
+
+        long id = Long.valueOf(fileId);
+        File file = fileService.searchById(id);
+
+        Path path = Paths.get(file.getSavedPath()).toAbsolutePath().normalize();
+
+        try {
+            InputStreamResource resource = new InputStreamResource(new FileInputStream(path.toString()));
+            String fileName = file.getOriginFileName() + file.getExtension();
+            return ResponseEntity.ok()
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .cacheControl(CacheControl.noCache())
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName)
+                    .body(resource);
+        } catch (FileNotFoundException e) {
+            return ResponseEntity.status(509).body(BaseResponseBody.of(509, "해당하는 파일이 존재하지 않습니다"));
+        }
+
+
+//        try {
+//            Resource resource = new UrlResource(path.toUri());
+//            String contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+//            if(contentType == null) {
+//                contentType = "application/octet-stream";
+//            }
+//            return ResponseEntity.ok()
+//                    .contentType(MediaType.parseMediaType(contentType))
+//                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+//                    .body(resource);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(509).body(BaseResponseBody.of(509, "해당하는 파일이 존재하지 않습니다"));
+//        }
+
+    }
+
     @PatchMapping("/files/{debateId}")
-    @ApiOperation(value = "토론 파일 등록")
+    @ApiOperation(value = "토론 파일 업로드")
     @ApiResponses({
             @ApiResponse(code = 200, message = "성공"),
             @ApiResponse(code = 509, message = "토론 없음"),
             @ApiResponse(code = 404, message = "사용자 없음"),
             @ApiResponse(code = 511, message = "파일 입출력 오류")
     })
-    public ResponseEntity<?> uploadDebateFile(@PathVariable long debateId, MultipartFile file, String role, @ApiIgnore Authentication authentication) {
+    public ResponseEntity<?> uploadDebateFile(@PathVariable long debateId, MultipartFile file, @RequestParam String role, @ApiIgnore Authentication authentication) {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String userEmail = userDetails.getUsername();
 
         DebateRes debateRes = debateService.search(debateId);
         String checkUserEmail = debateRes.getOwnerEmail();
 
-        if(!checkUserEmail.equals(userEmail)){
+        if (!checkUserEmail.equals(userEmail)) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "접근 권한이 없습니다."));
         }
         try {
             FileManager fileManager = fileManagerService.getFileManager(debateId);
-            fileService.saveDebateFile(file, fileManager, role, userEmail);
+            File newFile = fileService.saveDebateFile(file, fileManager, role, userEmail);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(509).body(BaseResponseBody.of(509, "해당하는 토론이 존재하지 않습니다"));
         } catch (IOException e) {
             return ResponseEntity.status(511).body(BaseResponseBody.of(511, "잘못된 파일 입니다"));
         }
-        return ResponseEntity.status(201).body(BaseResponseBody.of(200, "썸네일 업로드 성공"));
+        List<FileRes> files = debateService.search(debateId).getFileList();
+        List<FileDownloadRes> result = new FileDownloadRes().toDtoList(files);
+        return ResponseEntity.status(201).body(result);
     }
 
     @DeleteMapping("/{id}")
@@ -188,7 +242,7 @@ public class DebateController {
         DebateRes debateRes = debateService.search(debateId);
         String checkUserEmail = debateRes.getOwnerEmail();
 
-        if(!checkUserEmail.equals(userEmail)){
+        if (!checkUserEmail.equals(userEmail)) {
             return ResponseEntity.status(401).body(BaseResponseBody.of(401, "접근 권한이 없습니다."));
         }
         debateService.deleteDebate(debateId);

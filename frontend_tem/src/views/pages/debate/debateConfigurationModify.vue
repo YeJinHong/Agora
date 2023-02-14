@@ -163,7 +163,7 @@ export default {
           })
     })
 
-    const uploadImg = async (event) => {
+    const uploadImg = (event) => {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', file);
