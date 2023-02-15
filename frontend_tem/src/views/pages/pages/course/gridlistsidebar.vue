@@ -19,8 +19,8 @@
                             </div>
                             <div v-for="(category, index) in store.state.debate.categoryList">
                                 <label class="custom_check">
-                                    <input type="checkbox" name="select_specialist" :checked="selectedCategoryIdList.includes(category.id)" :value="category.id" @click="setSelectedCategories()">
-                                    <span class="checkmark"></span> {{ category.codeName }}
+                                    <input type="checkbox" name="select_specialist" :checked="store.state.debate.selectedCategoryIdList.includes(category.id)" :value="category.id" @click="setSelectedCategories()">
+                                    <span class="checkmark"></span> {{ category.codeName }} / {{ store.state.debate.selectedCategoryIdList }} / {{ category.id }} / {{ store.state.debate.selectedCategoryIdList.includes(category.id) }}
                                 </label>
                             </div>
                             
@@ -45,7 +45,6 @@ const api = apiInstance();
 export default {
     setup(){
         const store = useStore();
-        const selectedCategoryIdList = store.state.debate.selectedCategoryIdList;
         
         // 처음 페이지로드시, 전체 카테고리를 선택 카테고리로 지정
         // 만약 이미 선택된 카테고리 정보가 있다면, 해당 정보를 바탕으로 radiobox 지정.
@@ -54,13 +53,18 @@ export default {
         })
         const getCategories = async ()=> {
             await store.dispatch("debate/getCategoryList");
+            console.log('카테고리 조회 후 선택 된 카테고리 확인');
+            console.log(store.state.debate.selectedCategoryIdList);
+            
+            // 정해진 카테고리 목록을 바탕으로 토론 조회
+           await store.dispatch("debate/searchDebateList", {}); 
         }
 
         const setSelectedCategories = ()=>{
 
             let check_val = [];
             $("input:checkbox[name=select_specialist]:checked").each(function(i, iVal){
-                check_val.push(iVal.value);
+                check_val.push(iVal.value*1);
             });
 
             store.commit("debate/SET_SELECTED_CATEGORY_LIST", check_val);
@@ -69,7 +73,7 @@ export default {
 
         }
         
-        return {store, setSelectedCategories, selectedCategoryIdList}
+        return {store, setSelectedCategories}
     },
 }
 </script>

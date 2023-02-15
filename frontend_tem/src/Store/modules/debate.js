@@ -11,7 +11,7 @@ const state = {
     // 토론 목록 검색용 1
     keyword :"",
     condition: "",
-    selectedCategoryIdList : [],
+    selectedCategoryIdList : -1,
     categoryList : [],
     debateList: [],
 
@@ -106,6 +106,11 @@ const mutations = {
     SET_DEBATE_INFO : (state, debate) => {
         state.debateInfo = debate;
     },
+    INIT_SEARCH_CONDITION : (state) => {
+        state.keyword = '';
+        state.condition = '';
+        state.selectedCategoryIdList = -1;
+    },
     //토론메인창 UI
     Register(state, name) {
         state.my_name = name
@@ -172,6 +177,7 @@ const actions = {
             search.page = 0;
         }
         search.categoryList = state.selectedCategoryIdList;
+        console.log(state.selectedCategoryIdList);
         await searchAll(search, ({data}) => {
             if (data.message === "Success") {
                 commit("SET_DEBATE_LIST", data.data.content);
@@ -187,11 +193,12 @@ const actions = {
         })
     },
     // 토론 카테고리 검색 API 요청
-    async getCategoryList({commit}){
+    async getCategoryList({state, commit}){
         await getCategoryList(
             ({data}) => {
                 commit("SET_CATEGORY_LIST", data.data); 
-                // 처음 카테고리 로드 시에는 전체 검색으로 설정
+                // 처음 카테고리 로드 시에만 전체 검색으로 설정
+                if(state.selectedCategoryIdList != -1) return;
                 var list = [];
                 for(var i = 0; i < data.data.length; i++){
                     list[i] = data.data[i].id;

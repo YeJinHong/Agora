@@ -125,7 +125,7 @@
   
   import {apiInstance} from "/api/index.js";
   import {useStore} from "vuex";
-  import {reactive, watch} from "vue";
+  import {reactive, watch, onMounted} from "vue";
   import {useRouter} from "vue-router";
   
   const api = apiInstance();
@@ -145,6 +145,7 @@
 			data.debate_list = store.getters["debate/getDebateList"];
 		  }
 	  )
+
 
 	  function setDebateId(debateId){
 		console.log(debateId);

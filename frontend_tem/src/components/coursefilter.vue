@@ -10,7 +10,7 @@
             </div>
             <div class="show-result">
               <h4 v-if = "store.state.debate.totalElements == 0">Showing 0 - 0 of 0 results </h4>
-              <h4 v-else >Showing  {{store.state.debate.offset + 1}} - {{ store.state.debate.offset + 1 + store.state.debate.numberOfElements}} of {{ store.state.debate.totalElements }} results</h4>
+              <h4 v-else >Showing  {{store.state.debate.offset + 1}} - {{ store.state.debate.offset + store.state.debate.numberOfElements}} of {{ store.state.debate.totalElements }} results</h4>
             </div>
           </div>
         </div>
@@ -47,7 +47,7 @@
     <!-- /Filter -->
   </template>
   <script>
-  import {onMounted, reactive} from 'vue'
+  import {onMounted, reactive, onUpdated} from 'vue'
   import {useStore} from "vuex";
   
   export default {
@@ -63,10 +63,12 @@
         pageNumber : store.state.debate.pageNumber, 
         numberOfElements : store.state.debate.numberOfElements,
       })
-      onMounted(() => {
-        loadDebateList();
+      // onMounted(() => {
+      //   loadDebateList();
+      // })
+      onUpdated(() => {
         setHowToShow(store.state.debate.howToShow);
-      })
+      });
 
       const loadDebateList = async () => {
         store.commit('debate/SET_KEYWORD', data.keyword);
@@ -75,6 +77,7 @@
       }
 
       const setHowToShow = (howToShow) => {
+        console.log(howToShow);
         document.getElementById('grid').className = "noactive grid-view";
         document.getElementById('list').className = "noactive list-view";
 
