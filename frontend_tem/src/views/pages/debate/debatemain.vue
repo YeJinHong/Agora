@@ -2,7 +2,6 @@
   <div class="main">
     <sidebox
         class="side-box">
-
     </sidebox>
     <documentbox></documentbox>
     <div class="main-wrapper">
@@ -40,13 +39,8 @@ export default {
       call: ''
     }
   },
-  setup() {
-    const store = useStore()
-
-    return {store}
-  },
   computed: {
-    ...mapState('debate', {participant_list: 'participant_list'}),
+    ...mapState('debate', {participant_list_btn: 'participant_list_btn'}),
     ...mapState('debate', {chat_box: 'chat_box'}),
     ...mapState('debate', {middle_box: 'middle_box'}),
   },

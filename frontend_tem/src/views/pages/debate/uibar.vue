@@ -62,7 +62,7 @@
     </div>
 </template>
 
-<script>
+<script>``
 import {mapActions, useStore} from 'vuex';
 import { mapState, mapMutations } from 'vuex';
 import debatewaiting from "./debatewaiting.vue";
