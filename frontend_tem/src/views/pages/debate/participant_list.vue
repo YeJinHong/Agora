@@ -32,7 +32,7 @@ export default {
 <style scoped>
 .side-element {
   width: 400px;
-  height: 100%;
+  height: 92vh;
   background-color: #0B0B0B;
   color: whitesmoke;
   padding: 10px;
