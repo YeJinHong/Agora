@@ -169,15 +169,19 @@ public class FileController {
         DebateRes debate = debateService.search(debateId);
         Path path = null;
         String fileName = null;
-
-        List<FileRes> files = debate.getFileList()
-                .stream()
-                .filter(file -> file.getSavedFileName().contains("thumbnail") && !file.isDeleted())
-                .collect(Collectors.toList());
-        if (files.size() != 0) {
-            FileRes file = files.get(0);
-            path = Paths.get(files.get(0).getSavedPath()).toAbsolutePath().normalize();
-            fileName = file.getOriginFileName() + file.getExtension();
+        if (debate.getFileList() != null) {
+            List<FileRes> files = debate.getFileList()
+                    .stream()
+                    .filter(file -> file.getSavedFileName().contains("thumbnail") && !file.isDeleted())
+                    .collect(Collectors.toList());
+            if (files.size() != 0) {
+                FileRes file = files.get(0);
+                path = Paths.get(files.get(0).getSavedPath()).toAbsolutePath().normalize();
+                fileName = file.getOriginFileName() + file.getExtension();
+            } else {
+                path = Paths.get(defaultThumbnail).toAbsolutePath().normalize();
+                fileName = "agora.png";
+            }
         } else {
             path = Paths.get(defaultThumbnail).toAbsolutePath().normalize();
             fileName = "agora.png";
