@@ -114,6 +114,7 @@ import  Vue, { reactive, computed, ref, onMounted } from 'vue';
 import { useStore } from 'vuex';
 import http from '../../../api/http';
 import {useRouter, useRoute} from 'vue-router';
+import {apiInstance} from "../../../api";
 
 export default {
   name: "register",
@@ -121,6 +122,7 @@ export default {
   props : {},
   setup(props) {
     const store = useStore();
+    const api = apiInstance();
     const SignupForm = ref(null);
     const router = useRouter();
     const state = reactive({

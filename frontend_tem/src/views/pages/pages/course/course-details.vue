@@ -70,7 +70,7 @@
 									<div class="card">
 										<div class="card-body">
 											<a class="video-thumbnail" data-fancybox="">
-												<img class="" src="../../../../assets/img/course/testImg.jpg" alt="">
+												<img class="" src="http://localhost:8082/api/v1/files/images/157" alt="">
 												<!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
 											</a>
 											<div class="video-details">
@@ -180,7 +180,31 @@ export default {
             });
 		}
 		
-		const setDebateLink = (position) => {
+		const setDebateLink = async (position) => {
+			//TODO : 입장시 user_debate 테이블에 입장 정보 생성.
+			console.log('찬성측 입장합니다.');
+			await api.post('/userDebates', {
+				debateId : data.debateId,
+				userEmail : store.state.userStore.userInfo.userEmail,
+				role : position,
+			})
+            .then((response) => {
+                if(response.status == 201){
+                    console.log(response);
+                    console.log('토론 참가 신청 완료');
+					moveToDebateMain(position);
+                } else {
+                    console.log(response);
+                    console.log('정상 조회 실패')
+                }
+            }).catch((error)=>{
+                console.log('  참가 신청중 에러 발생  ');
+                console.log(error);
+            });
+
+		}
+
+		const moveToDebateMain = (position) => {
 			const debate_link = {
 				name : 'debatemain',
 				query : {
