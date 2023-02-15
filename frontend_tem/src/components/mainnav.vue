@@ -4,10 +4,6 @@
             <router-link to="/">홈</router-link>
         </li>
 
-      <li v-bind:class="{'active': currentPath === 'debate' || currentPath === 'debate'}">
-        <router-link to="/debate">debate</router-link>
-      </li>
-
 
       <!-- TODO : class 설정으로 인해 토론 메뉴와 HelpDesk 메뉴가 동시에 색이 변함. -->
       <li class="has-submenu" :class=" PagesMenu ? 'active' : 'notactive'">
