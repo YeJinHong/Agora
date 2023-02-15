@@ -25,7 +25,8 @@ const state = {
     // 토론 참여용
     participant: {},
     my_name: null,
-    participant_list: false,
+    participant_list: new Set(),
+    participant_list_btn: false,
     micro_phone: true,
     video: true,
     chat_box: false,
@@ -57,6 +58,9 @@ const getters = {
     getParticipant: () => {
         return state.participant;
     },
+    getParticipants: () => {
+        return state.participant_list
+    }
 };
 
 const mutations = {
@@ -122,17 +126,17 @@ const mutations = {
     participantList(state) {
         if (state.chat_box === true) {
             state.chat_box = false
-            state.participant_list = !state.participant_list
+            state.participant_list_btn = !state.participant_list_btn
         } else {
-            state.participant_list = !state.participant_list
+            state.participant_list_btn = !state.participant_list_btn
         }
     },
     microPhone(state) {
         state.micro_phone = !state.micro_phone
     },
     chatBox(state) {
-        if (state.participant_list === true) {
-            state.participant_list = false
+        if (state.participant_list_btn === true) {
+            state.participant_list_btn = false
             state.chat_box = !state.chat_box
         } else {
             state.chat_box = !state.chat_box
