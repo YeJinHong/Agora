@@ -12,7 +12,10 @@
           <div class="debate-title">{{ data.title }}</div>
         </div>
       </div>
-      <div style="height: 3vh;"></div>
+      <div class="box_1" style="height: 3vh; display: inline-block">
+        <div id="timer-찬성">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
+        <div id="timer-반대">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
+      </div>
       <div
           :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
@@ -75,7 +78,8 @@ export default {
       participants: {},
       name: '',
       title: '',
-      position: ''
+      position: '',
+      time: '00:00',
     })
     onMounted(() => {
       connect();
@@ -126,16 +130,21 @@ export default {
             break;
           case 'timeRemaining':
             let time = parsedMessage.time;
-            if (data.position === '찬성') {
+            if (parsedMessage.position === '찬성') {
               document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
             }
-            else if (data.position === '반대'){
+            else if (parsedMessage.position === '반대'){
               document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
           }
             break;
           case 'pauseSpeaking':``
             time = parsedMessage.time;
-            document.getElementById('timer-' + data.position).innerText = parseInt(time / 60) + ':' + time % 60
+            if (parsedMessage.position === '찬성') {
+              document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
+            }
+            else if (parsedMessage.position === '반대'){
+              document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
+            }
             break
           case 'receiveSystemComment':
             alert(parsedMessage.comment)
@@ -158,14 +167,14 @@ export default {
       let debateId = props.call.debateId;
       data.position = props.call.position;
       let roomType = props.call.roomType;
-      let time = props.call.time;
+      data.time = props.call.time;
 
       sendMessage({
         id: 'createRoom',
         debateId: debateId,
         title: data.title,
         roomType: roomType,
-        time: time
+        time: data.time
       })
 
       let message = {
@@ -176,7 +185,6 @@ export default {
         position: data.position,
       }
       sendMessage(message);
-      console.log('드루와', store)
       store.state.debate.participant_list.add(data.name)
     }
 
@@ -492,7 +500,7 @@ export default {
   display: flex;
   flex-direction: row;
   /*align-items: center;*/
-  /*justify-content: center;*/
+  justify-content: center;
   margin: auto;
 }
 
@@ -598,6 +606,15 @@ export default {
 
 .title {
   text-align: center; /* 제목 가운데 정렬 */
+}
+
+.box_1 {
+  height: 3vh;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 80px;
+  flex-direction: row;
+  width: 100%;
 }
 
 </style>
