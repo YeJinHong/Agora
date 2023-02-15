@@ -1,6 +1,8 @@
 <template>
     <div class="ui_bar">
-        <div class="timer">타이머A</div>
+        <div
+            @click="start"
+            class="timer">타이머A</div>
         <div class="icon">
             <svg
                 @click="participantList"
@@ -88,6 +90,10 @@ export default {
       ...mapMutations('debate',{documentBox:'documentBox'}),
       ...mapActions('debate',{getAudioControl:'getAudioControl'}),
       ...mapActions('debate',{getVideoControl:'getVideoControl'}),
+
+
+
+
 
     },
 }

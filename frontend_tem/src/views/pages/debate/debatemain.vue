@@ -19,7 +19,7 @@ import middlebox from "./middlebox.vue";
 import uibar from "./uibar.vue";
 import participant_list from './participant_list.vue';
 import chat from './chat.vue';
-import {mapState} from 'vuex';
+import {mapState, useStore} from 'vuex';
 import Sidebox from "./sidebox.vue";
 import Documentbox from "./documentbox.vue";
 import debate2 from "./debate2.vue";
@@ -27,6 +27,11 @@ import debate2 from "./debate2.vue";
 
 export default {
   components: {Documentbox, Sidebox, participant, middlebox, participant_list, chat, uibar, debate2},
+  setup() {
+    const store = useStore();
+
+    return {store};
+  },
   data() {
     return {
       call: ''
@@ -41,6 +46,7 @@ export default {
   mounted() {
     console.log(this.$route.query)
     this.call = this.$route.query
+    this.store.commit('debate/participantInfo', this.call)
   }
 
 

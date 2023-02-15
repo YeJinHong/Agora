@@ -11,6 +11,7 @@ const state = {
     chatSocket: null,
     stompClient: null,
     webRtcSocket: null,
+    participantInfo: null,
 };
 
 const getters = {
@@ -66,6 +67,9 @@ const mutations = {
         state.participant[state.my_name].rtcPeer.videoEnabled = !state.participant[state.my_name].rtcPeer.videoEnabled
         state.video = !state.video
 
+    },
+    participantInfo(state, data) {
+        state.participantInfo = data
     }
 };
 

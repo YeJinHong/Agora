@@ -1,13 +1,16 @@
 <template>
+  <button @click="start" value="start">스타트</button>
+  <button @click="stop" value="stop">스탑</button>
   <div>
     <div id="room">
       <h2 id="room-header"></h2>
       <div
-          :class="[middle_box ? 'participant-box' : 'participant-box_2']"
+          :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
         <div id="participants-agree"
              :class="[middle_box ? 'A_box' : 'A_box_2']"></div>
-        <div id="moderator"></div>
+        <div id="moderator"
+              class = moderator></div>
         <div id="participants-opp"
              :class="[middle_box ? 'B_box' : 'B_box_2']"></div>
       </div>
@@ -87,7 +90,6 @@ export default {
       data.ws.onmessage = (message) => {
         let parsedMessage = JSON.parse(message.data);
         console.info('Received message: ' + message.data);
-
         switch (parsedMessage.id) {
           case 'existingParticipants':
             onExistingParticipants(parsedMessage)
@@ -115,7 +117,7 @@ export default {
             break;
           case 'timeRemaining':
             let time = parsedMessage.time;
-            document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
+            document.getElementById('timer' + data.position).innerText = parseInt(time / 60) + ':' + time % 60
             break
           case 'pauseSpeaking':
             time = parsedMessage.time;
@@ -181,7 +183,7 @@ export default {
         audio: false,
         video: {
           mandatory: {
-            maxWidth: 320,
+            maxWidth: 600,
             maxFrameRate: 15,
             minFrameRate: 15
           }
@@ -243,16 +245,18 @@ export default {
     }
 
     const start = () => {
-      let debateId = document.getElementById('debateId').value;
+      let debateId = store.state.debate.participantInfo.debateId
+      let time = store.state.debate.participantInfo.time
 
       sendMessage({
         id: 'startSpeaking',
-        debateId: debateId
+        debateId: debateId,
+        time: time
       });
     }
 
     const stop = () => {
-      let debateId = document.getElementById('debateId').value;
+      let debateId = store.state.debate.participantInfo.debateId
 
       sendMessage({
         id: 'pauseSpeaking',
@@ -444,7 +448,7 @@ export default {
       })
     }
 
-    return {store, data}
+    return {store, data, start, stop}
   }
 }
 
@@ -471,8 +475,8 @@ export default {
 }
 
 .A_box {
-  height: 20vh;
-  width: 40vw;
+  height: 249px;
+  width: 329px;
   display: flex;
   flex-direction: row;
   border: orangered solid 5px;
@@ -499,8 +503,9 @@ export default {
 }
 
 .B_box {
-  height: 20vh;
-  width: 40vw;
+  height: 249px;
+  width: 329px;
+
   display: flex;
   flex-direction: row;
   border: navy solid 5px;
@@ -525,6 +530,17 @@ export default {
 .btn {
   color: red;
   background-color: red;
+}
+
+.moderator {
+  height: 249px;
+  width: 330px;
+  border: purple 5px solid;
+}
+
+#timer {
+  color: red;
+
 }
 
 </style>
