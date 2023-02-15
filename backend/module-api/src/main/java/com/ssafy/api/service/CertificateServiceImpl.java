@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CertificateServiceImpl implements CertificateService {
-
+//    @Value("${file.path-certificate-dev}")
     @Value("${file.path-certificate}")
     private String directoryPath;
 

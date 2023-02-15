@@ -1,10 +1,10 @@
 <template>
-  <button @click="start" value="start">스타트</button>
-  <button @click="stop" value="stop">스탑</button>
+<!--  <button @click="start" value="start">스타트</button>-->
+<!--  <button @click="stop" value="stop">스탑</button>-->
   <div>
     <div id="room">
-      <div style="height: 3vh;"></div>
-<!--      <h2 id="room-header">{{info.title}}</h2>-->
+      <div style="height: 8vh;"></div>
+      <!--      <h2 id="room-header">{{info.title}}</h2>-->
       <div style="padding: 15px;">
         <div class="title-wrapper">
           <img src="../../../assets/img/Agora3.png"/>
@@ -12,10 +12,11 @@
           <div class="debate-title">{{ data.title }}</div>
         </div>
       </div>
-      <div class="box_1" style="height: 3vh; display: inline-block">
+      <div class="box_1" style="height: 3vh; display: inline-block; color: purple;">
         <div id="timer-찬성">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
         <div id="timer-반대">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
       </div>
+        <div style="height: 5vh; margin-bottom: 15px;"></div>
       <div
           :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
@@ -105,7 +106,7 @@ export default {
         console.info('Received message: ' + message.data);
         switch (parsedMessage.id) {
           case 'existingParticipants':
-            onExistingParticipants(parsedMessage)
+            onExistingParticipants(parsedMessage);
             break;
           case 'newParticipantArrived':
             onNewParticipant(parsedMessage);
@@ -239,8 +240,6 @@ export default {
 
       data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
         console.log('이젠여기', options)
-        console.log('이젠여기2', data.participants[data.name])
-        console.log('이젠여기333', data.participants)
         store.commit("debate/participantRegister", data.participants)
         store.commit("debate/Register", data.name)
         console.log('이젠여기3', store.state.debate.participant)
@@ -580,6 +579,7 @@ export default {
 .debate-title {
   font-size: 30px;
   padding: 10px;
+  font-family: 'KIMM_Bold';
 }
 
 .title-wrapper {
@@ -610,11 +610,26 @@ export default {
 
 .box_1 {
   height: 3vh;
-  display: flex;
-  justify-content: space-between;
-  margin: 0 80px;
-  flex-direction: row;
   width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: "LABD";
+  font-size: 50px;
+}
+
+@font-face {
+  font-family: 'KIMM_Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KIMM_Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "LABD";
+  src:url("../../../assets/fonts/LABD.woff") format("woff");
+  font-weight: normal;;
+  font-style: normal;
 }
 
 </style>
