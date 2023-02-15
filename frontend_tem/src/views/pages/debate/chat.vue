@@ -1,5 +1,5 @@
 <template>
-  <div class="side-element" style="overflow: auto;">
+  <div class="side-element">
       <div class="chatList" v-for="(m, idx) in chatList" :key="idx">
         <div class="chatItem msg-box">
           <div class="msg-bg">
@@ -66,9 +66,12 @@ export default {
 <style scoped>
 .side-element {
   width: 400px;
-  height: 100%;
+  height: 92vh;
   background-color: whitesmoke;
   padding: 10px;
+  overflow-y:auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .chatItem {
@@ -89,6 +92,7 @@ export default {
   bottom: 80px;
   padding: 5px 15px 5px 0;
   background: whitesmoke;
+
 }
 
 .msg-box > div {

@@ -1,7 +1,6 @@
 <template>
   <div class="main">
-    <sidebox
-        class="side-box">
+    <sidebox class="side-box">
     </sidebox>
     <documentbox></documentbox>
     <div class="main-wrapper">
@@ -40,6 +39,7 @@ export default {
     }
   },
   computed: {
+    ...mapState('debate', {participant_list_btn: 'participant_list_btn'}),
     ...mapState('debate', {chat_box: 'chat_box'}),
     ...mapState('debate', {middle_box: 'middle_box'}),
   },
@@ -56,13 +56,23 @@ export default {
   height: 100vh;
 }
 
+@keyframes example {
+  from {background-image: url("../../../assets/img/banner.png");}
+  40% {background-image: url("../../../assets/img/bg-banner.png");}
+  70% {background-image: url("../../../assets/img/bg-banner-01.png");}
+  to {background-image: url("../../../assets/img/bg-banner-02.png");}
+}
+
+
 .main-wrapper {
   display: flex;
   flex-direction: column;
   overflow: hidden;
   height: 92vh;
   width: 100%;
-  background-image: url("../../../assets/img/banner.png");
+  animation-name: example;
+  animation-duration: 8s;
+  animation-iteration-count: infinite;
 }
 
 @media screen and (max-width: 800px) {

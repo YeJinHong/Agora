@@ -3,6 +3,8 @@
   <button @click="stop" value="stop">스탑</button>
   <div>
     <div id="room">
+      <div style="height: 3vh;"></div>
+<!--      <h2 id="room-header">{{info.title}}</h2>-->
       <div style="padding: 15px;">
         <div class="title-wrapper">
           <img src="../../../assets/img/Agora3.png"/>
@@ -10,6 +12,7 @@
           <div class="debate-title">{{ data.title }}</div>
         </div>
       </div>
+      <div style="height: 3vh;"></div>
       <div
           :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
@@ -46,7 +49,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 
@@ -60,6 +62,7 @@ export default {
   name: 'debate2',
   components: {},
   computed: {
+    ...mapState('debate', {info: 'participantInfo'}),
     ...mapState('debate', {middle_box: 'middle_box'})
   },
   props: {
@@ -123,11 +126,16 @@ export default {
             break;
           case 'timeRemaining':
             let time = parsedMessage.time;
-            document.getElementById('timer' + data.position).innerText = parseInt(time / 60) + ':' + time % 60
-            break
-          case 'pauseSpeaking':
+            if (data.position === '찬성') {
+              document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
+            }
+            else if (data.position === '반대'){
+              document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
+          }
+            break;
+          case 'pauseSpeaking':``
             time = parsedMessage.time;
-            document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
+            document.getElementById('timer-' + data.position).innerText = parseInt(time / 60) + ':' + time % 60
             break
           case 'receiveSystemComment':
             alert(parsedMessage.comment)
@@ -462,7 +470,7 @@ export default {
       })
     }
 
-    return {store, data, start, stop}
+    return {store, data, start, stop, connect}
   }
 }
 
@@ -483,8 +491,8 @@ export default {
   width: 90vw;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  /*align-items: center;*/
+  /*justify-content: center;*/
   margin: auto;
 }
 
@@ -554,7 +562,11 @@ export default {
 
 #timer {
   color: red;
+}
 
+#room-header {
+  text-align: center;
+  color: blueviolet;
 }
 
 .debate-title {
@@ -567,11 +579,14 @@ export default {
   background-color: rgba(255, 255, 255, 0.6); /* 배경색상 */
   padding: 10px; /* 제목 주위 여백 */
   text-align: center;
+
 }
+
 
 .title-wrapper img {
   display: inline-block;
   width: 30px;
+
 }
 
 .title-wrapper .title {

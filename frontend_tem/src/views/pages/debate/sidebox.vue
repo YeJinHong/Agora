@@ -2,8 +2,9 @@
   <div
       class="side-box"
       v-if="participant_list_btn === true ||chat_box === true">
-    <div class="box1" v-if="middle_box === true"></div>
-    <div :class="[ middle_box === true ? 'side-el' : 'side-el-full' ]">
+<!--    <div class="box1" v-if="middle_box === true"></div>-->
+<!--    <div :class="[ middle_box === true ? 'side-el-full' : 'side-el' ]">-->
+    <div class="'side-el-full'">
      <participant_list v-if="participant_list_btn === true"></participant_list>
      <chat v-show="chat_box === true"></chat>
     </div>
