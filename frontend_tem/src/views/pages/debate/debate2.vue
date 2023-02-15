@@ -12,9 +12,9 @@
           <div class="debate-title">{{ data.title }}</div>
         </div>
       </div>
-      <div class="box_1" style="height: 3vh; display: inline-block; color: purple;">
-        <div id="timer-찬성">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
-        <div id="timer-반대">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
+      <div class="box_1" style="color: purple;">
+        <div id="timer-찬성" style="margin-left: 300px;">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
+        <div id="timer-반대" style="margin-right: 300px;">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
       </div>
         <div style="height: 5vh; margin-bottom: 15px;"></div>
       <div
@@ -482,7 +482,6 @@ export default {
 }
 
 </script>
-
 
 <style scoped>
 .participant-box {
