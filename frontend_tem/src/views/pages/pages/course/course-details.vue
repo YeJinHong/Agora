@@ -184,7 +184,6 @@ export default {
 		}
 		
 		const setDebateLink = async (position) => {
-			//TODO : 입장시 user_debate 테이블에 입장 정보 생성.
 			console.log('찬성측 입장합니다.');
 			await api.post('/userDebates', {
 				debateId : data.debateId,
@@ -195,6 +194,7 @@ export default {
                 if(response.status == 201){
                     console.log(response);
                     console.log('토론 참가 신청 완료');
+					store.commit('debate/SET_MYTEAM', position);
 					moveToDebateMain(position);
                 } else {
                     console.log(response);

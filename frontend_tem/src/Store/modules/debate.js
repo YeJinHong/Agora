@@ -23,6 +23,7 @@ const state = {
     offset : 0, // 현재 페이지 시작 인덱스값.
 
     // 토론 참여용
+    myTeam : '',
     participant: {},
     my_name: null,
     participant_list: new Set(),
@@ -114,6 +115,10 @@ const mutations = {
         state.keyword = '';
         state.condition = '';
         state.selectedCategoryIdList = -1;
+    },
+    // 토론 참가시 나의 팀 설정
+    SET_MYTEAM : (state, myTeam) => {
+        state.myTeam = myTeam;
     },
     //토론메인창 UI
     Register(state, name) {
