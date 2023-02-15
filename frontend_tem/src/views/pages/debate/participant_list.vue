@@ -1,6 +1,9 @@
 <template>
   <div class="side-element">
-    참가자 리스트
+    <div style="font-size: 20px">참가자 리스트</div>
+    <div style="padding: 5px 1px" v-for="participantName in participant_list">
+      <div>{{ participantName }}</div>
+    </div>
   </div>
 </template>
 
@@ -11,15 +14,14 @@ export default {
   name: "participant_list",
   setup() {
     const store = useStore();
-    return { store }
+    return {store}
   },
   data() {
-    return {
-    }
+    return {}
   },
-  computed : {
-    ...mapState('debate',{middle_box:'middle_box'}),
-
+  computed: {
+    ...mapState('debate', {middle_box: 'middle_box'}),
+    ...mapState('debate', {participant_list: 'participant_list'})
   },
   mounted() {
   }
