@@ -209,7 +209,7 @@
                             <div class="media d-flex">
                                 <div>
                                     <router-link to="notifications" class="avatar">
-                                        <img class="avatar-img" alt="" :src="data.profileUrl">
+                                        <img class="avatar-img" alt="" :src="'http://localhost:8082/api/v1/users/images/' + data.userEmail">
                                     </router-link>
                                 </div>
                                 <div class="media-body">
@@ -225,14 +225,14 @@
         <li class="nav-item user-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
                 <span class="user-img">
-                    <img :src="data.profileUrl" alt="">
+                    <img :src="'http://localhost:8082/api/v1/users/images/' + data.userEmail" alt="">
                     <span class="status online"></span>
                 </span>
             </a>
             <div class="users dropdown-menu dropdown-menu-right" data-popper-placement="bottom-end" >
                 <div class="user-header">
                     <div class="avatar avatar-sm">
-                        <img src="../assets/img/user/user11.jpg" alt="User Image" class="avatar-img rounded-circle">
+                        <img :src="'http://localhost:8082/api/v1/users/images/' + data.userEmail" alt="User Image" class="avatar-img rounded-circle">
                     </div>
                     <div class="user-text">
                         <h6>{{data.username}}</h6>
@@ -256,7 +256,9 @@ import {useRouter} from "vue-router";
         const router = useRouter();
         const data = reactive({
           username: store.getters["userStore/checkUserInfo"].name,
+          userEmail:store.getters["userStore/checkUserInfo"].userEmail,
           position: store.getters["userStore/checkUserInfo"].position,
+          profile : store.state.userStore.isLogin,
         });
         const logout = async () => {
           await store.dispatch("userStore/userLogout");

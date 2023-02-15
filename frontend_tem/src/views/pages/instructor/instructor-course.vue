@@ -23,7 +23,7 @@
                           <h3>이전 참여 목록</h3>
                         </div>
                         <div v-if="check" style="text-align: end">
-                          <button class="btn btn-primary" @click="certification">증명서 발급하기</button>
+                          <a class="btn btn-primary download-link attach-input" :href="'http://localhost:8082/api/v1/certification/' + userEmail">증명서 발급하기</a>
                         </div>
                       </div>
                       <div class="comman-space pb-0">
@@ -216,11 +216,17 @@
 <script>
 
 import {apiInstance} from "../../../api";
+import {useStore} from "vuex";
+import axios from "axios";
 export default {
  components:{
  },
+
   data() {
-    return {
+    const store = useStore();
+    return{
+      userEmail : store.getters["userStore/checkUserInfo"].userEmail,
+      username : store.getters["userStore/checkUserInfo"].name,
       showModal: false,
       file: null,
       fileData: null,
@@ -256,17 +262,24 @@ export default {
       methods: {
 
         async certification() {
-          const api = apiInstance();
+          const http = axios.create({
+            // baseURL: process.env.VUE_APP_API_BASE_URL,
+            baseURL: "http://localhost:8082/api/v1",
+            // baseURL: "http://i8c205.p.ssafy.io:8082/api/v1",
+            headers: {'Content-Type': 'application/pdf',
+              'charset': 'utf-8'},
+          });
+
           try {
-            api.defaults.headers["authorization"] = "Bearer " + sessionStorage.getItem("access-token");
-            const response = await api.get('/certification');
+            console.log(this.userEmail)
+            const response = await http.get('/certification/'+ this.userEmail);
             console.log(response)
             this.fileData = response.data;
-            const file = new Blob([this.fileData], {type: 'application/octet-stream'});
+            const file = new Blob([this.fileData]);
             const fileURL = URL.createObjectURL(file);
             const link = document.createElement('a');
             link.href = fileURL;
-            link.setAttribute('download', '토론 활동 증명서.pdf');
+            link.setAttribute('download', this.username + '_토론 활동 증명서.pdf');
             document.body.appendChild(link);
             link.click();
             link.remove();
@@ -342,6 +355,9 @@ export default {
 
         async mounted(){
           await this.fetchData(0,10)
+          // const store = useStore();
+          // this.userEmail = store.getters["userStore/checkUserInfo"].userEmail;
+          // this.username = store.getters["userStore/checkUserInfo"].name;
         }
 
 

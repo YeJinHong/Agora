@@ -6,15 +6,15 @@
             <div class="settings-menu p-0">
                 <div class="profile-bg">
 <!--                    <h5>Student여기에 직위</h5>-->
-                    <img src="../views/pages/student/문태호.jpg" alt="">
+                    <img :src="'http://localhost:8082/api/v1/users/images/' + userInfo.userEmail" alt="">
                     <div class="profile-img">
-                        <img src="../views/pages/student/문태호.jpg" alt="">
+                        <img :src="'http://localhost:8082/api/v1/users/images/' + userInfo.userEmail" alt="">
                     </div>
                 </div>
                 <div class="profile-group">
                     <div class="profile-name text-center">
-                        <h4><router-link to="student-profile">여기에 학생 이름</router-link></h4>
-                        <p>직위</p>
+                        <h4><router-link to="student-profile">{{userInfo.username}}</router-link></h4>
+                        <p>{{ userInfo.position }}</p>
                     </div>
 <!--                    <div class="go-dashboard text-center">-->
 <!--                          <router-link to="deposit-student-dashboard" class="btn btn-primary">내 정보 보기</router-link>-->
@@ -112,8 +112,23 @@
 <!-- /sidebar -->
 </template>
 <script>
+    import {useStore} from "vuex";
+    import {useRouter} from "vue-router";
+    import {reactive} from "vue";
+
     export default {
-        computed:{
+      setup() {
+        const store = useStore();
+        const router = useRouter();
+        const userInfo = reactive({
+          username: store.getters["userStore/checkUserInfo"].name,
+          userEmail: store.getters["userStore/checkUserInfo"].userEmail,
+          position: store.getters["userStore/checkUserInfo"].position,
+          profile: store.state.userStore.isLogin,
+        });
+        return {userInfo};
+      },
+      computed:{
             currentPath() {
                 return this.$route.name;
             }
