@@ -152,10 +152,10 @@ export default {
         user_email: state.form.userEmail,
         password: state.form.password
       })
-      moveHome();
+      // await moveHome();
     }
 
-    const moveHome = () => {
+     const moveHome = () => {
       router.push('/');
     }
 

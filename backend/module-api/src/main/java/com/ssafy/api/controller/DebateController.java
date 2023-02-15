@@ -14,6 +14,7 @@ import com.ssafy.entity.rdbms.Debate;
 import com.ssafy.entity.rdbms.FileManager;
 import io.swagger.annotations.*;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.jni.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -25,6 +26,8 @@ import org.springframework.web.multipart.MultipartFile;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.IOException;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -68,10 +71,14 @@ public class DebateController {
 																		   @RequestParam(required = false) String condition,
 																		   @RequestParam(required = false) List<Long> categoryList,
 																		   @PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
-		System.out.println(keyword);
-		System.out.println(condition);
-		System.out.println(categoryList);
+
 		Page<DebateRes> debates = debateService.searchAll(keyword, condition, pageable, categoryList);
+
+//		 토론 목록 페이지 로드시 너무 느린 문제 발생
+				for(DebateRes debate : debates){
+					updateDebateState(debate);
+				}
+
 		BaseResponseDataBody<Page<DebateRes>> response = BaseResponseDataBody.of("Success", 200, debates);
 		return ResponseEntity.status(200).body(response);
 	}
@@ -80,6 +87,7 @@ public class DebateController {
 	@ApiOperation(value = "토론 아이디 조회")
 	public ResponseEntity<BaseResponseDataBody<DebateRes>> search(@PathVariable long debateId){
 		DebateRes debate = debateService.search(debateId);
+		updateDebateState(debate);
 		BaseResponseDataBody<DebateRes> response = BaseResponseDataBody.of("Success", 200, debate);
 		return ResponseEntity.status(200).body(response);
 	}
@@ -193,5 +201,32 @@ public class DebateController {
 		}
 		debateService.deleteDebate(debateId);
 		return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
+	}
+
+	private void updateDebateState(DebateRes debate){
+		// 현재 시간에 따른 state 갱신 임시코드.
+		String oldState = debate.getState();
+		LocalDateTime callStartTime = debate.getCallStartTime();
+		LocalDateTime callEndTime = debate.getCallEndTime();
+		LocalDateTime now = LocalDateTime.now();
+		if(now.isBefore(callStartTime)){
+			Duration duration = Duration.between(now, callStartTime);
+			Long seconds = duration.getSeconds(); // 남은 시간
+			if(seconds < 60*10){ // 5분전은 in ready 상태로 조회됨.
+				debate.setState("in ready");
+			} else {
+				debate.setState("inactive");
+			}
+		} else if(now.isAfter(callStartTime) && now.isBefore(callEndTime)){
+			debate.setState("active");
+		} else if(now.isAfter(callEndTime)){
+			debate.setState("closed");
+		}
+
+		if(oldState.equals(debate.getState())) return; // 상태가 같으면 DB를 갱신하지 않는다.
+
+		DebateModifyStatePatchReq debateModifyStatePatchReq = new DebateModifyStatePatchReq();
+		debateModifyStatePatchReq.setState(debate.getState());
+		debateService.updateDebateState(debate.getDebateId(), debateModifyStatePatchReq);
 	}
 }

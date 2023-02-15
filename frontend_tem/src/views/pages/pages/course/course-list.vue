@@ -18,7 +18,7 @@
 					<div class="product">
 					  <div class="product-img">
 						<router-link to="course-details">
-						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg" @click="setSelectedDebateId(debate.debateId)">
+						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg" @click="setDebateId(debate.debateId)">
 						</router-link>
 						<div class="price">
 						  <!-- <h3>$300 <span>$99.00</span></h3> -->
@@ -83,7 +83,7 @@
   
   import {apiInstance} from "/api/index.js";
   import {useStore} from "vuex";
-  import {computed, onMounted, reactive, watch} from "vue";
+  import {reactive, watch} from "vue";
   import {useRouter} from "vue-router";
   
   const api = apiInstance();
@@ -104,12 +104,13 @@
 		  }
 	  )
 
-	  function setSelectedDebateId(debateId){
+	  function setDebateId(debateId){
+		console.log(debateId);
 		if(debateId == undefined) debateId = 3; // 토론 ID가 없을시 대신 표시될 임시 데이터.
-		store.dispatch('debate/setSelectedDebateId', debateId)
+		store.commit('debate/SET_DEBATE_ID', debateId)
 	}
   
-	  return {data, setSelectedDebateId}
+	  return {data, setDebateId}
 	},
 	data() {
 	  return {
