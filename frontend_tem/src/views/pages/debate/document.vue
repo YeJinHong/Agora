@@ -1,12 +1,13 @@
 <template>
   <div class="form-group">
-    <label for="thumbnail">토론 썸네일</label>
+    <label class="download-link attach-label" for="thumbnail">첨부 파일</label>
     <div>
-      <input type="file" @change="uploadFile" id="thumbnail" class="btn btn-outline-dark">
+      <input accept="image/jpeg, image/png" type="file" @change="uploadFile" id="thumbnail"
+             class="btn btn-outline-dark download-link attach-input">
     </div>
     <div>
       <div v-for="file in state.debate.fileList">
-        <a :href="file.fileDownloadUri">{{ file.fileName }}</a>
+        <a class="download-link attach-input" :href="file.fileDownloadUri">{{ file.fileName }}</a>
       </div>
     </div>
   </div>
@@ -14,7 +15,7 @@
 
 <script>
 import {useStore} from 'vuex';
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, ref} from "vue";
 import {apiInstance} from "../../../api/index";
 
 export default {
@@ -22,6 +23,7 @@ export default {
   setup() {
     const store = useStore();
     const api = apiInstance();
+    const upload = ref(null);
     api.defaults.headers["authorization"] = "Bearer " + sessionStorage.getItem("access-token");
     const state = reactive({
       debate: {
@@ -39,21 +41,36 @@ export default {
       console.log(state.debate.id);
     })
 
+    onMounted(() => {
+      console.log(state.debate.id);
+      api.get("/files/list/" + state.debate.id)
+          .then((data) => {
+            state.debate.fileList = data.data;
+          }).catch((error) => {
+        console.log(error);
+      })
+    })
+
     const uploadFile = (event) => {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('role', state.debate.role);
       formData.append('file', file);
-      api.patch('/debates/files/' + state.debate.id, formData, {
+      api.patch('/files/uploads/' + state.debate.id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then((data) => {
-        console.log(data);
-        state.debate.fileList = data.data;
+        api.get('/files/list/' + state.debate.id)
+            .then((data) => {
+              state.debate.fileList = data.data;
+              document.getElementById("thumbnail").value = "";
+            }).catch((error) => {
+          console.log("show list error : " + error);
+        })
       }).catch((error) => {
-        console.log(error);
-      })
+        console.log("file upload error : " + error);
+      });
     }
     return {store, state, uploadFile}
   },
@@ -69,6 +86,20 @@ export default {
   opacity: 0.8;
   border-radius: 0.1%;
   /*height: ;*/
+}
+
+.download-link {
+  color: white;
+  opacity: 1.0;
+}
+
+.attach-label {
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.attach-input {
+  margin-left: 20px;
 }
 
 </style>

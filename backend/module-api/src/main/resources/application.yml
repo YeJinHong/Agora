@@ -69,6 +69,7 @@ file:
   path-certificate: /usr/local/share
   path-dev: C:\Users\multicampus\Desktop
   path-certificate-dev: C:\Users\multicampus\Desktop\ssafy\Agora_Debate\backend\module-api\src\main\resources
+  default-thumbnail-path : C:\Users\multicampus\Desktop\agora.png
 
   
 common-code:

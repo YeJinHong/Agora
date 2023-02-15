@@ -6,6 +6,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -74,7 +75,7 @@ public class DebateRes {
         res.setInsertedTime(debate.getInsertedTime());
         res.setCallStartTime(debate.getCallStartTime());
         res.setCallEndTime(debate.getCallEndTime());
-        res.setThumbnailUrl(debate.getThumbnailUrl());
+        res.setThumbnailUrl(downloadUrlConvertor(debate.getId()));
         res.setTitle(debate.getTitle());
         res.setDescription(debate.getDescription());
         res.setState(debate.getState());
@@ -91,10 +92,12 @@ public class DebateRes {
         return DebateResList;
     }
 
-//    private static LocalDateTime dateFormatConverter(LocalDateTime date) throws ParseException {
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
-//        LocalDateTime result = formatter.parse(date)
-//        return result;
-//    }
+    private static String downloadUrlConvertor(long debateId) {
+        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/files/images/")
+                .path(Long.toString(debateId))
+                .toUriString();
+        return downloadUri;
+    }
 
 }

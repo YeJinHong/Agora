@@ -167,7 +167,7 @@ export default {
       const file = event.target.files[0];
       const formData = new FormData();
       formData.append('file', file);
-      api.patch('/debates/thumbnail/' + state.debate.id, formData, {
+      api.patch('/files/thumbnail/' + state.debate.id, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

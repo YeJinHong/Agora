@@ -4,7 +4,7 @@ const debate = {
     namespaced: true,
     state: {
         // 상세 정보 조회용
-        debateId : '',
+        debateId : 15,
         debateInfo : {},
         // 토론 목록 검색용 1
         keyword :"",

@@ -163,7 +163,7 @@ export default {
       })
     }
 
-    return {state, saveDebateConfig, uploadImg}
+    return {state, saveDebateConfig}
   },
   // methods: {
   //   // saveDebateConfig() {

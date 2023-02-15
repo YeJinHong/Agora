@@ -70,7 +70,7 @@
 									<div class="card">
 										<div class="card-body">
 											<a class="video-thumbnail" data-fancybox="">
-												<img class="" src="../../../../assets/img/course/testImg.jpg" alt="">
+												<img class="" src="http://localhost:8082/api/v1/files/images/157" alt="">
 												<!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
 											</a>
 											<div class="video-details">

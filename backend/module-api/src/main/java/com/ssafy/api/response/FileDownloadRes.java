@@ -32,7 +32,7 @@ public class FileDownloadRes {
         String fileName = fileRes.getOriginFileName() + fileRes.getExtension();
         String id = Long.toString(fileRes.getFileId());
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/v1/debates/downloads/")
+                .path("/api/v1/files/downloads/")
                 .path(id)
                 .toUriString();
         res.setFileName(fileName);
