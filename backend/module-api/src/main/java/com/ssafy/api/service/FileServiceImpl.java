@@ -28,8 +28,8 @@ public class FileServiceImpl implements FileService {
     private final FileManagerRepository fileManagerRepository;
 
 
-@Value("${file.path-dev}")
-//    @Value("${file.path}")
+//  @Value("${file.path-dev}")
+    @Value("${file.path}")
     private String filePath;
 
     @Override
