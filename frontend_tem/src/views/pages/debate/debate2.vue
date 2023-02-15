@@ -1,6 +1,6 @@
 <template>
-<!--  <button @click="start" value="start">스타트</button>-->
-<!--  <button @click="stop" value="stop">스탑</button>-->
+    <button @click="start" value="start">스타트</button>
+    <button @click="stop" value="stop">스탑</button>
   <div>
     <div id="room">
       <div style="height: 8vh;"></div>
@@ -13,10 +13,10 @@
         </div>
       </div>
       <div class="box_1" style="color: purple;">
-        <div style="margin-left: 300px;">00:00</div>
-        <div style="margin-right: 300px;">00:00</div>
+        <div id="timer-찬성" style="margin-left: 300px;">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
+        <div id="timer-반대" style="margin-right: 300px;">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
       </div>
-        <div style="height: 5vh; margin-bottom: 15px;"></div>
+      <div style="height: 5vh; margin-bottom: 15px;"></div>
       <div
           :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
@@ -56,6 +56,7 @@
 </template>
 
 
+
 <script>
 import {mapState, useStore} from "vuex";
 import kurentoUtils from "kurento-utils";
@@ -67,7 +68,8 @@ export default {
   components: {},
   computed: {
     ...mapState('debate', {info: 'participantInfo'}),
-    ...mapState('debate', {middle_box: 'middle_box'})
+    ...mapState('debate', {middle_box: 'middle_box'}),
+    ...mapState('debate', {micro_phone:'micro_phone'}),
   },
   props: {
     call: JSON
@@ -79,10 +81,13 @@ export default {
       participants: {},
       name: '',
       title: '',
-      position: ''
+      position: '',
+      time: '00:00',
+      micro_phone:'',
     })
     onMounted(() => {
       connect();
+      audio();
     })
 
     const makeWebsocket = () => {
@@ -96,6 +101,14 @@ export default {
         console.error('WebSocket connection error:', error);
       };
     }
+
+    const audio = () => {
+    let mp = this.computed.micro_phone()
+      data.micro_phone = mp
+      console.log(data.micro_phone)
+    }
+
+
 
     const connect = async () => {
       await makeWebsocket()
@@ -130,16 +143,21 @@ export default {
             break;
           case 'timeRemaining':
             let time = parsedMessage.time;
-            if (data.position === '찬성') {
+            if (parsedMessage.position === '찬성') {
               document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
             }
-            else if (data.position === '반대'){
+            else if (parsedMessage.position === '반대'){
               document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
-          }
+            }
             break;
           case 'pauseSpeaking':``
             time = parsedMessage.time;
-            document.getElementById('timer-' + data.position).innerText = parseInt(time / 60) + ':' + time % 60
+            if (parsedMessage.position === '찬성') {
+              document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
+            }
+            else if (parsedMessage.position === '반대'){
+              document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
+            }
             break
           case 'receiveSystemComment':
             alert(parsedMessage.comment)
@@ -162,14 +180,14 @@ export default {
       let debateId = props.call.debateId;
       data.position = props.call.position;
       let roomType = props.call.roomType;
-      let time = props.call.time;
+      data.time = props.call.time;
 
       sendMessage({
         id: 'createRoom',
         debateId: debateId,
         title: data.title,
         roomType: roomType,
-        time: time
+        time: data.time
       })
 
       let message = {
@@ -180,7 +198,6 @@ export default {
         position: data.position,
       }
       sendMessage(message);
-      console.log('드루와', store)
       store.state.debate.participant_list.add(data.name)
     }
 
@@ -270,6 +287,7 @@ export default {
       let debateId = store.state.debate.participantInfo.debateId
       let time = store.state.debate.participantInfo.time
 
+
       sendMessage({
         id: 'startSpeaking',
         debateId: debateId,
@@ -313,6 +331,8 @@ export default {
         title: title,
         position: data.position,
       }
+
+
       // name = 'screen_' + name;
       sendMessage(message);
       document.getElementById("button-share-on").style.display = "none";
@@ -405,16 +425,16 @@ export default {
           });
     }
 
-    // const callResponse = (message) => {
-    //   if (message.response !== 'accepted') {
-    //     console.info('Call not accepted by peer. Closing call');
-    //     stop();
-    //   } else {
-    //     webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
-    //       if (error) return console.error(error);
-    //     });
-    //   }
-    // }
+// const callResponse = (message) => {
+//   if (message.response !== 'accepted') {
+//     console.info('Call not accepted by peer. Closing call');
+//     stop();
+//   } else {
+//     webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
+//       if (error) return console.error(error);
+//     });
+//   }
+// }
     const onParticipantLeft = (request) => {
       console.log('Participant ' + request.userName + ' left');
       var participant = data.participants[request.userName];
@@ -431,29 +451,29 @@ export default {
       data.ws.send(jsonMessage);
       console.log(data.ws)
     }
-    // const videoOnOff = () => {
-    //   if (data.participants[data.name].rtcPeer.videoEnabled) {
-    //     // 끌때
-    //     data.participants[name].rtcPeer.videoEnabled = false;
-    //     document.getElementById("vidOn").style.display = "";
-    //     document.getElementById("vidOff").style.display = "none";
-    //   } else {
-    //     data.participants[name].rtcPeer.videoEnabled = true;
-    //     document.getElementById("vidOn").style.display = "none";
-    //     document.getElementById("vidOff").style.display = "";
-    //   }
-    // }
-    // const audioOnOff = () => {
-    //   if (data.participants[name].rtcPeer.audioEnabled) {
-    //     data.participants[name].rtcPeer.audioEnabled = false;
-    //     document.getElementById("audOn").style.display = "";
-    //     document.getElementById("audOff").style.display = "none";
-    //   } else {
-    //     data.participants[name].rtcPeer.audioEnabled = true;
-    //     document.getElementById("audOn").style.display = "none";
-    //     document.getElementById("audOff").style.display = "";
-    //   }
-    // }
+// const videoOnOff = () => {
+//   if (data.participants[data.name].rtcPeer.videoEnabled) {
+//     // 끌때
+//     data.participants[name].rtcPeer.videoEnabled = false;
+//     document.getElementById("vidOn").style.display = "";
+//     document.getElementById("vidOff").style.display = "none";
+//   } else {
+//     data.participants[name].rtcPeer.videoEnabled = true;
+//     document.getElementById("vidOn").style.display = "none";
+//     document.getElementById("vidOff").style.display = "";
+//   }
+// }
+// const audioOnOff = () => {
+//   if (data.participants[name].rtcPeer.audioEnabled) {
+//     data.participants[name].rtcPeer.audioEnabled = false;
+//     document.getElementById("audOn").style.display = "";
+//     document.getElementById("audOff").style.display = "none";
+//   } else {
+//     data.participants[name].rtcPeer.audioEnabled = true;
+//     document.getElementById("audOn").style.display = "none";
+//     document.getElementById("audOff").style.display = "";
+//   }
+// }
     const sendSystemComment = () => {
       let debateId = document.getElementById('debateId').value;
 
@@ -472,12 +492,12 @@ export default {
       })
     }
 
+
     return {store, data, start, stop, connect}
   }
 }
 
 </script>
-
 
 <style scoped>
 .participant-box {
@@ -595,7 +615,7 @@ export default {
 .title-wrapper .title {
   display: inline-block;
   font-size: 20px;
-  /*color: #FF4667;*/
+  /*/color: #FF4667;/*/
   color: #392C7D;
 }
 

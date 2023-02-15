@@ -67,10 +67,7 @@ const debate = {
         getPageNumber : function(state){
             return state.pageNumber;
         },
-        getParticipant: () => {
-            return state.participant;
-        },
-        getParticipants: () => {
+        getParticipants: (state) => {
             return state.participant_list
         }
     },
@@ -149,8 +146,8 @@ const debate = {
         },
         //음성,영상제어
         audioControl(state) {
-            console.log('뮤테이션')
-            console.log(state.participant[state.my_name].rtcPeer)
+            // console.log('뮤테이션')
+            // console.log(state.participant[state.my_name].rtcPeer)
             state.participant[state.my_name].rtcPeer.audioEnabled = !state.participant[state.my_name].rtcPeer.audioEnabled
             state.micro_phone = !state.micro_phone
         },
