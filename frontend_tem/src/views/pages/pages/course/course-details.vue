@@ -167,7 +167,10 @@ export default {
             .then((response) => {
                 if(response.status == 200){
                     data.debate = response.data.data;
-					store.commit('debate/SET_DEBATE_INFO', response.data.data);
+					data.debate.callEndTime = data.debate.callEndTime.substr(0, 19);
+                    data.debate.callStartTime = data.debate.callStartTime.substr(0, 19);
+                    data.debate.insertedTime = data.debate.insertedTime.substr(0, 19);
+					store.commit('debate/SET_DEBATE_INFO', data.debate);
                     console.log('특정 토론 정보 조회 완료');
 					console.log(data.debate);
 					checkState();

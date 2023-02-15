@@ -19,6 +19,7 @@
 					  <div class="product-img">
 						<router-link to="course-details">
 						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg" @click="setDebateId(debate.debateId)">
+						  <!-- <img class="img-fluid" alt="" src="https://robohash.org/competition" @click="setDebateId(debate.debateId)"> -->
 						</router-link>
 						<div class="price">
 						  <!-- <h3>$300 <span>$99.00</span></h3> -->
@@ -43,10 +44,8 @@
 						</div>
 						<div class="course-group d-flex mb-0">
 						  <div class="course-group-img d-flex">
-							<!-- <router-link to="instructor-profile"><img :src="debate.owner_profile" alt="" class="img-fluid"></router-link> -->
 							<router-link to="instructor-profile"><img src="../../../../assets/img/user/temp_user2.png"
 																	  alt="" class="img-fluid"></router-link>
-							<!-- <router-link to="instructor-profile"><img :src="debate.owner_profile" alt="" class="img-fluid"></router-link> -->
   
 							<div class="course-name">
 							  <h4>

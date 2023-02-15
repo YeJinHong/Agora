@@ -159,7 +159,7 @@ const mutations = {
     },
     participantInfo(state, data) {
         state.participantInfo = data
-    }
+    },
 };
 
 const actions = {
@@ -190,7 +190,17 @@ const actions = {
                 commit("SET_PAGE_NUMBER", data.data.pageable.pageNumber);
                 commit("SET_NUMBER_OF_ELEMENTS", data.data.numberOfElements);
                 commit("SET_OFFSET", data.data.pageable.offset);
-                console.log(data.data.content);
+
+
+                // 밀리센컨드까지 시간이 출력되는 문제제거용
+                for(var idx = 0; idx < state.debateList.length; idx++){
+                    var debate = state.debateList[idx];
+                    debate.callEndTime = debate.callEndTime.substr(0, 19);
+                    debate.callStartTime = debate.callStartTime.substr(0, 19);
+                    debate.insertedTime = debate.insertedTime.substr(0, 19);
+                    state.debateList[idx] = debate; 
+                }
+                console.log(state.debateList);
             }
         }, (error) => {
             console.log("토론 목록 조회 중 문제가 발생하였습니다.")

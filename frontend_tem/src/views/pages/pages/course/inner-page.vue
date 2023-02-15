@@ -35,10 +35,10 @@
                         <img src="../../../../assets/img/icon/timer-icon.svg" alt="">
                         <p>{{ debate.callStartTime }} ~ {{ debate.callEndTime }}</p>
                     </div>
-                    <div class="cou-info">
+                    <!-- <div class="cou-info">
                         <img src="../../../../assets/img/icon/people.svg" alt="">
                         <p>{{ debate_detail.enroll_count }} 명 참여중</p>
-                    </div>
+                    </div> -->
                 </div>							
             </div>
         </div>

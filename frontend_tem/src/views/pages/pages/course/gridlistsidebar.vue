@@ -20,7 +20,7 @@
                             <div v-for="(category, index) in store.state.debate.categoryList">
                                 <label class="custom_check">
                                     <input type="checkbox" name="select_specialist" :checked="store.state.debate.selectedCategoryIdList.includes(category.id)" :value="category.id" @click="setSelectedCategories()">
-                                    <span class="checkmark"></span> {{ category.codeName }} / {{ store.state.debate.selectedCategoryIdList }} / {{ category.id }} / {{ store.state.debate.selectedCategoryIdList.includes(category.id) }}
+                                    <span class="checkmark"></span> {{ category.codeName }}
                                 </label>
                             </div>
                             
@@ -53,8 +53,6 @@ export default {
         })
         const getCategories = async ()=> {
             await store.dispatch("debate/getCategoryList");
-            console.log('카테고리 조회 후 선택 된 카테고리 확인');
-            console.log(store.state.debate.selectedCategoryIdList);
             
             // 정해진 카테고리 목록을 바탕으로 토론 조회
            await store.dispatch("debate/searchDebateList", {}); 
