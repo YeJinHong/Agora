@@ -74,19 +74,19 @@
 												<!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
 											</a>
 											<div class="video-details">
-												<div class="row gx-2">
+												<!-- <div class="row gx-2">
 													<div class="col-md-6">
 														<router-link to="course-wishlist" class="btn btn-wish w-100"><i class="feather-heart"></i> 위시리스트에 넣기 </router-link>
 													</div>
 													<div class="col-md-6">
 														<a href="javascript:;" class="btn btn-wish w-100"><i class="feather-share-2"></i> 공유하기 </a>
 													</div>
-												</div>
+												</div> -->
 												<button class="btn btn-primary w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('찬성')"> 찬성측으로 입장하기 </button>
 												<button class="btn btn-info w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('반대')"> 반대측으로 입장하기 </button>
 												<button class="btn btn-dark w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('사회자')"> 사회자로 입장하기 </button>
-												<router-link to="checkout" class="btn btn-enroll w-100 disabled" v-else-if="data.debate.state == 'inactive'" > 토론 준비 중 </router-link>
-												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="data.debate.state == 'in ready'" > 대기열 입장 </router-link>
+												<router-link to="checkout" class="btn btn-enroll w-100 disabled" v-else-if="data.debate.state == 'inactive'" > 아직 시작되지 않은 토론이에요 </router-link>
+												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="data.debate.state == 'in ready'" > 토론이 곧 시작됩니다 </router-link>
 												<router-link to="checkout" class="btn btn-dark w-100 disabled" v-else> 종료됨 </router-link> <!-- state : closed -->
 											</div>
 										</div>

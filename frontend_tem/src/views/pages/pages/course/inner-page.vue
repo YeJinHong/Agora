@@ -22,7 +22,7 @@
                             <span class="d-inline-block average-rating"><span>4.5</span> (15)</span>
                         </div> -->
                     </div>
-                    <span class="web-badge mb-3">  category : {{ debate_detail.category }}</span>
+                    <span class="web-badge mb-3">  Mode : {{ debate.debateMode }}</span>
                 </div>
                 <h2>{{ debate.title }}</h2>
                 <!-- <p>토론 내용 한줄 요약 - (현재 적당한 데이터 없음)</p> -->
