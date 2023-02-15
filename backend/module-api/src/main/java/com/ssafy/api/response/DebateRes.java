@@ -2,6 +2,7 @@ package com.ssafy.api.response;
 
 import com.ssafy.entity.rdbms.Debate;
 import com.ssafy.entity.rdbms.Faq;
+import com.ssafy.entity.rdbms.File;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -9,14 +10,21 @@ import lombok.Setter;
 import org.springframework.data.domain.Page;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Getter
 @Setter
 @ApiModel("DebateResponse")
 public class DebateRes {
+    @ApiModelProperty(name = "토론 아이디")
+    private long debateId;
 
-    @ApiModelProperty(name = "방장의 고유 ID")
-    private long ownerId;
+    @ApiModelProperty(name = "방장의 이메일")
+    private String ownerEmail;
+
+    @ApiModelProperty(name = "방장의 이름")
+    private String ownerName;
 
     @ApiModelProperty(name = "방장의 소속")
     private String ownerDepartment;
@@ -54,9 +62,14 @@ public class DebateRes {
     @ApiModelProperty(name = "토론 옵션")
     private String debateModeOption;
 
+    @ApiModelProperty(name = "토론 옵션")
+    private List<FileRes> fileList;
+
     public static DebateRes of(Debate debate) {
         DebateRes res = new DebateRes();
-        res.setOwnerId(debate.getOwner().getId());
+        res.setDebateId(debate.getId());
+        res.setOwnerEmail(debate.getOwner().getUserEmail());
+        res.setOwnerName(debate.getOwner().getName());
         res.setOwnerDepartment(debate.getOwner().getDepartment());
         res.setCategory(debate.getCategory());
         res.setInsertedTime(debate.getInsertedTime());
@@ -69,10 +82,13 @@ public class DebateRes {
         res.setDebateMode(debate.getDebateMode());
         res.setModeratorOnOff(debate.getModeratorOnOff());
         res.setDebateModeOption(debate.getDebateModeOption());
+        if(debate.getFileManager() != null){
+            res.setFileList(new FileRes().toDtoList(debate.getFileManager().getFiles()));
+        }
         return res;
     }
     public Page<DebateRes> toDtoList(Page<Debate> debates) {
-        Page<DebateRes> DebateResList = debates.map(debate -> DebateRes.of(debate));
+        Page<DebateRes> DebateResList = debates.map(DebateRes::of);
         return DebateResList;
     }
 

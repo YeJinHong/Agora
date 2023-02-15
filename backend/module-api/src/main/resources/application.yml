@@ -56,7 +56,6 @@ server:
       force: 'true'
       charset: UTF-8
     contextPath: /
-  address: localhost
   port: '8082'
   compression:
     enabled: 'true'

@@ -3,8 +3,8 @@
     <div class="main-wrapper">
         
         <layouts2></layouts2>
-        <coursedetails :debate="debate"></coursedetails>
-        <inner-page :debate="debate" :debate_detail="debate_detail"></inner-page>
+        <coursedetails :debate="data.debate"></coursedetails>
+        <inner-page :debate="data.debate" :debate_detail="data.debate_detail"></inner-page>
             <!-- Course Content -->
 			<section class="page-content course-sec">
 				<div class="container">
@@ -17,7 +17,7 @@
 								<div class="card-body">
 									<h5 class="subs-title">Overview</h5>
 									<h6>토론 설명</h6>
-									<p>{{ debate.description }}</p>
+									<p>{{ data.debate.description }}</p>
 									<br/>
 									<h6>관련 칼럼</h6>
 									<ul class="mb-0">
@@ -29,7 +29,7 @@
 							</div>
 							<!-- /Overview -->
 							
-							<div class="card overview-sec" v-if="Object.keys(vote_result).length != 0">
+							<div class="card overview-sec" v-if="Object.keys(data.vote_result).length != 0">
 								<div class="card-body">
 									<h5 class="subs-title">토론 투표 결과</h5>
 									<h6>이 토론의 MVP</h6>
@@ -39,7 +39,7 @@
 											<!-- <router-link to="instructor-profile"><img :src="vote_result.mvp_profile" alt="img" class="img-fluid"></router-link> -->
 										</div>
 										<div class="instructor-detail">
-											<h5><router-link to="instructor-profile">{{ vote_result.mvp_name }} </router-link></h5>
+											<h5><router-link to="instructor-profile">{{ data.vote_result.mvp_name }} </router-link></h5>
 										</div>
 									</div>
 									<br/>
@@ -51,13 +51,10 @@
 								</div>
 							</div>
 
-
-							
-
-							<div class="card overview-sec" v-if="summary != ''"> 
+							<div class="card overview-sec" v-if="data.summary != ''"> 
 								<div class="card-body">
 									<h5 class="subs-title"> Summary </h5>
-									<p> {{ summary }} </p>
+									<p> {{ data.summary }} </p>
 								</div>
 							</div>
 
@@ -73,7 +70,7 @@
 									<div class="card">
 										<div class="card-body">
 											<a class="video-thumbnail" data-fancybox="">
-												<img class="" src="../../../../assets/img/video.jpg" alt="">
+												<img class="" src="../../../../assets/img/course/testImg.jpg" alt="">
 												<!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
 											</a>
 											<div class="video-details">
@@ -85,10 +82,12 @@
 														<a href="javascript:;" class="btn btn-wish w-100"><i class="feather-share-2"></i> 공유하기 </a>
 													</div>
 												</div>
-												<router-link to="checkout" class="btn btn-enroll w-100" v-if="debate.state == 'active'"> 지금 입장하기 </router-link>
-												<router-link to="checkout" class="btn btn-enroll w-100 disabled" v-else-if="debate.state == 'inactive'" > 토론 준비 중 </router-link>
-												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="debate.state == 'in ready'" > 대기열 입장 </router-link>
-												<router-link to="checkout" class="btn btn-dark w-100 disabled" v-else-if="debate.state == 'closed'"> 종료됨 </router-link>
+												<button class="btn btn-primary w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('찬성')"> 찬성측으로 입장하기 </button>
+												<button class="btn btn-info w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('반대')"> 반대측으로 입장하기 </button>
+												<button class="btn btn-dark w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('사회자')"> 사회자로 입장하기 </button>
+												<router-link to="checkout" class="btn btn-enroll w-100 disabled" v-else-if="data.debate.state == 'inactive'" > 토론 준비 중 </router-link>
+												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="data.debate.state == 'in ready'" > 대기열 입장 </router-link>
+												<router-link to="checkout" class="btn btn-dark w-100 disabled" v-else> 종료됨 </router-link> <!-- state : closed -->
 											</div>
 										</div>
 									</div>
@@ -97,12 +96,12 @@
 								
 								
 								<!-- Features -->
-								<div class="card feature-sec" v-if="Object.keys(debate_files).length != 0">
+								<div class="card feature-sec" v-if="Object.keys(data.debate_files).length != 0">
 									<div class="card-body">
 										<div class="cat-title">
 											<h4> 사용된 파일 </h4>
 										</div>
-										<div class="perspective wrapper pb-2" v-for="(perspective, index) in debate_files" :key ="index">
+										<div class="perspective wrapper pb-2" v-for="(perspective, index) in data.debate_files" :key ="index">
 											<h6 ><img src="../../../../assets/img/icon/chapter.svg" class="me-2" alt=""><strong>{{ perspective.perspective_name }}</strong></h6>
 											<ul class="mb-0">
 												<li v-for="file in perspective.files">{{ file.file_name }}</li>
@@ -128,44 +127,50 @@
 
 <script>    
 import { apiInstance } from "/api/index.js";      
+import {useStore} from "vuex";
+import {onMounted, reactive} from 'vue'
+import { useRouter} from 'vue-router'
 
 const api = apiInstance();
 
 export default {
     setup(){
-		
-    },
-    data(){
-        return {
-			// TODO : list에서 해당 토론 클릭시 debate_id Store에 저장. 해당 값 가져오기.
-			// 혹은 DebateStore에 해당 selected_debate로 객체 저장.
-			debate_id : 1,
+		const store = useStore();
+		const router = useRouter();
+		const data = reactive({
+			// debateId : store.getters["debate/getDebateId"], 
+			debateId : store.state.debate.debateId,
 			debate : {},
 
-			// TODO : 현재 페이지 진입시 debate_id를 통해서 상세정보 요청.	
+			// TODO : 현재 페이지 진입시 debateId를 통해서 상세정보 요청. 혹은 기존 토론 정보 조회 개선.
 			debate_detail : { 	  
 				category : "정치",
 				enroll_count : 6,
 			},
 
-
 			// TODO : 종료된 토론(state==closed)에 대해서만 데이터를 로드한다. 일부 API 구현 필요.
 			vote_result : {}, 
 			debate_files : [],
 			summary : '',
-        }
-    },
-    mounted(){
-		this.getDebateInfo();
-    },
-    methods: {
-		async getDebateInfo(){
-			await api.get('/debates/'+this.debate_id)
+		});
+		
+
+
+		onMounted(()=>{
+			// data.debateId = store.getters["debate/getDebateId"];
+			getDebateInfo();
+		})
+
+		const getDebateInfo  = async () => {
+			console.log(data.debateId);
+			await api.get('/debates/'+data.debateId)
             .then((response) => {
                 if(response.status == 200){
-                    this.debate = response.data.data;
+                    data.debate = response.data.data;
+					store.commit('debate/SET_DEBATE_INFO', response.data.data);
                     console.log('특정 토론 정보 조회 완료');
-					this.checkState();
+					console.log(data.debate);
+					checkState();
                 } else {
                     console.log(response);
                     console.log('정상 조회 실패')
@@ -173,20 +178,37 @@ export default {
             }).catch((error)=>{
                 console.log(error);
             });
-		},
-		async checkState(){
-			if(this.debate.state == 'closed'){
-				this.getVoteResult();
-				this.getDebateFiles();
-				this.getSummary();
+		}
+		
+		const setDebateLink = (position) => {
+			const debate_link = {
+				name : 'debatemain',
+				query : {
+					debateId : data.debateId,
+					name : store.getters["user/checkUserInfo"],
+					title : data.debate.title,
+					position : position,
+					roomType : data.debate.debateMode,
+					time : 100,
+				},
 			}
-		},
-        async getVoteResult(){
-            api.get('/vote/debates/'+this.debate_id)
+			router.push(debate_link);
+		}
+
+		const checkState = async () => {
+			if(data.debate.state == 'closed'){
+				getVoteResult();
+				getDebateFiles();
+				getSummary();
+			}
+		}
+
+		const getVoteResult = async () => {
+            api.get('/vote/debates/'+data.debateId)
             .then((response) => {
                 if(response.status == 200){
                     console.log(response);
-                    this.vote_result = response.data;
+                    data.vote_result = response.data;
                     console.log('특정 토론 청중 평가 결과 로드 완료');
                     
                 } else {
@@ -196,10 +218,11 @@ export default {
             }).catch((error)=>{
                 console.log(error);
             });
-        },
-		async getDebateFiles(){
+        }
+
+		const getDebateFiles = async () => {
 			// 토론의 각 패널에서 사용된(업로드된) 파일들
-			this.debate_files = [
+			data.debate_files = [
 				{
 					perspective_id : 143,
 					perspective_name : "반려동물 보유세는 필요하다.",
@@ -218,13 +241,16 @@ export default {
 				}, 
 
 			];
-		},
-		async getSummary(){
-			this.summary = 
+		}
+
+		const getSummary = async ()=>{
+			data.summary = 
 			'이건 대충 적은 요약글입니다. 적을 내용이 없어서 한겨레 자율주행 뉴스 글을 막 끌고 왔습니다. 어쩌구 저쩌구 '+
 			'전문가들이 레벨 4∼5 수준의 자율주행 기술 구현이 시기상조라고 보는 데에는 몇가지 이유가 있다. 우선 막대한 비용이다. 김일평 삼성화재 자동차보험전략팀장은 “스마트 도로 시설, 모바일 네트워크 등 자율주행 인프라 구축에 천문학적 비용이 필요하다. 이 때문에 완전 자율주행차 시대는 굉장히 늦게 올 것”이라고 내다봤다. 실제 자율주행 기술이 상용화하려면 도로 위의 많은 변수를 통제해야 한다. 자율주행차에 적합한 전용 도로를 깔고 도로를 주행하는 차량 대부분이 사람의 개입을 최소화한 자율차여야 안정적인 기술 구현이 가능하다.'
 		}
-    },
-    
+
+
+		return {store, data, setDebateLink};
+    },    
 }
 </script>

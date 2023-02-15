@@ -4,9 +4,7 @@ import com.ssafy.api.request.DebateModifyPatchReq;
 import com.ssafy.api.request.DebateModifyStatePatchReq;
 import com.ssafy.api.request.DebateRegisterPostReq;
 import com.ssafy.api.response.DebateRes;
-import com.ssafy.entity.rdbms.Debate;
-import com.ssafy.entity.rdbms.Perspective;
-import com.ssafy.entity.rdbms.User;
+import com.ssafy.entity.rdbms.*;
 import com.ssafy.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -14,7 +12,12 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -33,24 +36,32 @@ public class DebateServiceImpl implements DebateService {
 
     private final DebateResultRepository debateResultRepository;
 
-    private final DebateRepositoryCustomImpl debateRepositoryCustom;
-
     private final PerspectiveServiceImpl perspectiveService;
+
+    private final FileManagerService fileManagerService;
+
+    private final FileService fileService;
 
     @Override
     @Transactional
-    public Debate createDebate(DebateRegisterPostReq debateRegisterPostReq) {
-        User owner = userRepository.findById(debateRegisterPostReq.getOwnerId())
+    public Debate createDebate(DebateRegisterPostReq debateRegisterPostReq, MultipartFile file) throws IOException {
+        User owner = userRepository.findByUserEmail(debateRegisterPostReq.getOwnerId())
                 .orElseThrow(NoSuchElementException::new);
         Debate debate = makeDebate(debateRegisterPostReq, owner);
         Debate savedDebate = debateRepository.save(debate);
 
+        if (file != null) {
+            FileManager fileManager = fileManagerService.getFileManager(savedDebate.getId());
+            File newFile = fileService.saveDebateThumbnail(file, fileManager, owner.getUserEmail());
+        }
+
         perspectiveService.createPerspective(debateRegisterPostReq.getPerspectiveNames(), savedDebate);
         return savedDebate;
     }
+
     @Override
-    public Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable) {
-        Page<Debate> debates = debateRepository.findDebateBySearchCondition(keyword, condition, pageable);
+    public Page<DebateRes> searchAll(String keyword, String condition, Pageable pageable, List<Long> categoryList) {
+        Page<Debate> debates = debateRepository.findDebateBySearchCondition(keyword, condition, pageable, categoryList);
         return new DebateRes().toDtoList(debates);
     }
 
@@ -59,6 +70,7 @@ public class DebateServiceImpl implements DebateService {
         Debate debate = debateRepository.findById(debateId).orElseThrow(NoSuchElementException::new);
         return DebateRes.of(debate);
     }
+
 
     @Override
     public void updateDebate(long debateId, DebateModifyPatchReq debateModifyReq) {
@@ -82,18 +94,19 @@ public class DebateServiceImpl implements DebateService {
     }
 
     private Debate makeDebate(DebateRegisterPostReq debateRegisterPostReq, User owner) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
         Debate debate = new Debate();
         debate.setOwner(owner);
         debate.setCategory(debateRegisterPostReq.getCategory());
         debate.setTitle(debateRegisterPostReq.getTitle());
         debate.setDescription(debateRegisterPostReq.getDescription());
         debate.setModeratorOnOff(debateRegisterPostReq.getModeratorOnOff());
-        debate.setDebateMode(debate.getDebateMode());
+        debate.setDebateMode(debateRegisterPostReq.getDebateMode());
         debate.setThumbnailUrl(debateRegisterPostReq.getThumbnailUrl());
-        debate.setState(debate.getState());
+        debate.setState(debateRegisterPostReq.getState());
         debate.setInsertedTime(debateRegisterPostReq.getInsertedTime());
-        debate.setCallStartTime(debateRegisterPostReq.getCallStartTime());
-        debate.setCallEndTime(debateRegisterPostReq.getCallEndTime());
+        debate.setCallStartTime(LocalDateTime.parse(debateRegisterPostReq.getCallStartTime(), formatter));
+        debate.setCallEndTime(LocalDateTime.parse(debateRegisterPostReq.getCallEndTime(), formatter));
         debate.setDebateModeOption(debateRegisterPostReq.getDebateModeOption());
         return debate;
     }

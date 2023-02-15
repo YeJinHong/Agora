@@ -50,8 +50,6 @@ export default {
   align-items: center;
   justify-content: center;
   margin: auto;
-
-
 }
 
 .A_box {

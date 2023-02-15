@@ -7,10 +7,4 @@ services:
     volumes:
       - /home/docker/agora/volume-data/files:/usr/local/share
     ports:
-      - "8088:8088"
-    networks:
-      - agora_network
-    
-networks:
-  agora_network:
-    external: true
+      - "8082:8082"
