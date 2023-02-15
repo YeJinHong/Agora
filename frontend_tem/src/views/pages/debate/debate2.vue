@@ -13,8 +13,8 @@
         </div>
       </div>
       <div class="box_1" style="color: purple;">
-        <div id="timer-찬성" style="margin-left: 300px;">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
-        <div id="timer-반대" style="margin-right: 300px;">{{parseInt(parseInt(data.time) / 60) + ':' + data.time % 60}}</div>
+        <div id="timer-찬성" style="margin-left: 300px;">{{addZeros(parseInt(parseInt(data.time) / 60), 2) + ':' + addZeros(data.time % 60, 2)}}</div>
+        <div id="timer-반대" style="margin-right: 300px;">{{addZeros(parseInt(parseInt(data.time) / 60), 2) + ':' + addZeros(data.time % 60, 2)}}</div>
       </div>
         <div style="height: 5vh; margin-bottom: 15px;"></div>
       <div
@@ -132,19 +132,19 @@ export default {
           case 'timeRemaining':
             let time = parsedMessage.time;
             if (parsedMessage.position === '찬성') {
-              document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
+              document.getElementById('timer-' + '찬성').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
             }
             else if (parsedMessage.position === '반대'){
-              document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
+              document.getElementById('timer-' + '반대').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
           }
             break;
           case 'pauseSpeaking':``
             time = parsedMessage.time;
             if (parsedMessage.position === '찬성') {
-              document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
+              document.getElementById('timer-' + '찬성').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
             }
             else if (parsedMessage.position === '반대'){
-              document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
+              document.getElementById('timer-' + '반대').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
             }
             break
           case 'receiveSystemComment':
@@ -159,6 +159,17 @@ export default {
         }
       }
       console.log('connect done')
+    }
+
+    const addZeros = (num, digit) => { // 자릿수 맞춰주기
+      let zero = '';
+      num = num.toString();
+      if (num.length < digit) {
+        for (let i = 0; i < digit - num.length; i++) {
+          zero += '0';
+        }
+      }
+      return zero + num;
     }
 
     const register = () => {
@@ -477,7 +488,7 @@ export default {
       })
     }
 
-    return {store, data, start, stop, connect}
+    return {store, data, start, stop, connect, addZeros}
   }
 }
 
