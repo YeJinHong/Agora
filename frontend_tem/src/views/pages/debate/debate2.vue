@@ -4,14 +4,22 @@
   <div>
     <div id="room">
       <div style="height: 3vh;"></div>
-      <h2 id="room-header">{{info.title}}</h2>
+<!--      <h2 id="room-header">{{info.title}}</h2>-->
+      <div style="padding: 15px;">
+        <div class="title-wrapper">
+          <img src="../../../assets/img/Agora3.png"/>
+          <h2 class="title">토론 주제</h2>
+          <div class="debate-title">{{ data.title }}</div>
+        </div>
+      </div>
+      <div style="height: 3vh;"></div>
       <div
           :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
         <div id="participants-agree"
              :class="[middle_box ? 'A_box' : 'A_box_2']"></div>
         <div id="moderator"
-              class = moderator></div>
+             class=moderator></div>
         <div id="participants-opp"
              :class="[middle_box ? 'B_box' : 'B_box_2']"></div>
       </div>
@@ -168,6 +176,8 @@ export default {
         position: data.position,
       }
       sendMessage(message);
+      console.log('드루와', store)
+      store.state.debate.participant_list.add(data.name)
     }
 
     const onIceCandidate = (candidate) => {
@@ -181,6 +191,7 @@ export default {
 
     const onNewParticipant = (request) => {
       console.log('리퀘스트', request)
+      store.state.debate.participant_list.add(request.userName)
       receiveVideo(request.userName, request.position, request.isScreen);
     }
 
@@ -220,11 +231,11 @@ export default {
 
       data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
         console.log('이젠여기', options)
-        console.log('이젠여기2',data.participants[data.name])
-        console.log('이젠여기333',data.participants)
+        console.log('이젠여기2', data.participants[data.name])
+        console.log('이젠여기333', data.participants)
         store.commit("debate/participantRegister", data.participants)
         store.commit("debate/Register", data.name)
-        console.log('이젠여기3',store.state.debate.participant)
+        console.log('이젠여기3', store.state.debate.participant)
 
         if (error) {
           return console.error(error);
@@ -239,7 +250,10 @@ export default {
         });
       });
 
-      msg.data.forEach(m => (receiveVideo(m.userName, m.position, m.isScreen)));
+      msg.data.forEach(m => {
+        receiveVideo(m.userName, m.position, m.isScreen)
+        store.state.debate.participant_list.add(m.userName)
+      });
     }
 
 
@@ -287,6 +301,7 @@ export default {
         }
       }
       delete data.participants[data.name];
+      store.state.debate.participant_list.delete(data.name)
       document.getElementById("video-" + name).parentElement.remove();
 
       var message = {
@@ -399,11 +414,12 @@ export default {
     //   }
     // }
     const onParticipantLeft = (request) => {
-      console.log('Participant ' + request.name + ' left');
-      var participant = data.participants[request.name];
+      console.log('Participant ' + request.userName + ' left');
+      var participant = data.participants[request.userName];
+      document.getElementById('video-' + request.userName).remove();
       participant.dispose();
-      document.getElementById('video-' + request.name).remove();
-      delete data.participants[request.name];
+      delete data.participants[request.userName];
+      store.state.debate.participant_list.delete(request.userName)
     }
     const sendMessage = (message) => {
       console.log(data.ws)
@@ -551,6 +567,37 @@ export default {
 #room-header {
   text-align: center;
   color: blueviolet;
+}
+
+.debate-title {
+  font-size: 30px;
+  padding: 10px;
+}
+
+.title-wrapper {
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.6); /* 배경색상 */
+  padding: 10px; /* 제목 주위 여백 */
+  text-align: center;
+
+}
+
+
+.title-wrapper img {
+  display: inline-block;
+  width: 30px;
+
+}
+
+.title-wrapper .title {
+  display: inline-block;
+  font-size: 20px;
+  /*color: #FF4667;*/
+  color: #392C7D;
+}
+
+.title {
+  text-align: center; /* 제목 가운데 정렬 */
 }
 
 </style>
