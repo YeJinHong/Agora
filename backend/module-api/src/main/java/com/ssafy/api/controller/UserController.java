@@ -265,7 +265,7 @@ public ResponseEntity<BaseResponseBody> checkEmail(@RequestBody UserEmailReq use
 		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
 		File profileUrl = userFileManagerService.getProfileUrl(userFileManagerService.getFileManager(userDetails.getUsername()));
 
-		return new UrlResource("file:" + profileUrl.getSavedPath());
+		return new UrlResource("file:" + Paths.get(profileUrl.getSavedPath()).toAbsolutePath().normalize());
 	}
 
 
