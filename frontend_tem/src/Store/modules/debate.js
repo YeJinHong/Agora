@@ -5,10 +5,13 @@ const state = {
     debateId : '',
     debateInfo : {debateId : 3, title : "환승이별 vs 잠수이별"}, // TODO : 더미데이터 삭제
 
+    // 토론 목록 표시 방법용
+    howToShow : 'list',
+
     // 토론 목록 검색용 1
     keyword :"",
     condition: "",
-    selectedCategoryIdList : [],
+    selectedCategoryIdList : -1,
     categoryList : [],
     debateList: [],
 
@@ -20,12 +23,15 @@ const state = {
     offset : 0, // 현재 페이지 시작 인덱스값.
 
     // 토론 참여용
-    participant: 0,
-    participant_list: false,
+    participant: {},
+    my_name: null,
+    participant_list: new Set(),
+    participant_list_btn: false,
     micro_phone: true,
+    video: true,
     chat_box: false,
     document_box: false,
-    middle_box: false,
+    middle_box: true,
     chatList: [],
     chatSocket: null,
     stompClient: null,
@@ -48,6 +54,12 @@ const getters = {
     },
     getPageNumber : function(state){
         return state.pageNumber;
+    },
+    getParticipant: () => {
+        return state.participant;
+    },
+    getParticipants: () => {
+        return state.participant_list
     }
 };
 
@@ -62,6 +74,10 @@ const mutations = {
             state.debateList.push(debate);
         });
     },
+    // 토론 보기 방법
+    SET_HOW_TO_SHOW : (state, howToShow) => {
+        state.howToShow = howToShow;
+    },
     // 토론 검색 기능 관련
     SET_KEYWORD : (state, keyword) => {
         state.keyword = keyword;
@@ -72,8 +88,8 @@ const mutations = {
     SET_CATEGORY_LIST : (state, categoryList) => {
         state.categoryList = categoryList;
     },
-    SET_SELECTED_CATEGORY_LIST : (state, categoryList) => {
-        state.selectedCategoryIdList = categoryList;
+    SET_SELECTED_CATEGORY_LIST : (state, selectedCategoryList) => {
+        state.selectedCategoryIdList = selectedCategoryList;
     },
     // 토론 검색기능 - 페이징 관련
     SET_TOTAL_PAGES : (state, totalPages) => {
@@ -94,20 +110,33 @@ const mutations = {
     SET_DEBATE_INFO : (state, debate) => {
         state.debateInfo = debate;
     },
+    INIT_SEARCH_CONDITION : (state) => {
+        state.keyword = '';
+        state.condition = '';
+        state.selectedCategoryIdList = -1;
+    },
+    //토론메인창 UI
+    Register(state, name) {
+        state.my_name = name
+    },
+    participantRegister(state, participant) {
+        console.log('실행실행')
+        state.participant = participant
+    },
     participantList(state) {
         if (state.chat_box === true) {
             state.chat_box = false
-            state.participant_list = !state.participant_list
+            state.participant_list_btn = !state.participant_list_btn
         } else {
-            state.participant_list = !state.participant_list
+            state.participant_list_btn = !state.participant_list_btn
         }
     },
     microPhone(state) {
         state.micro_phone = !state.micro_phone
     },
     chatBox(state) {
-        if (state.participant_list === true) {
-            state.participant_list = false
+        if (state.participant_list_btn === true) {
+            state.participant_list_btn = false
             state.chat_box = !state.chat_box
         } else {
             state.chat_box = !state.chat_box
@@ -116,12 +145,34 @@ const mutations = {
     documentBox(state) {
         state.document_box = !state.document_box
     },
+    //음성,영상제어
+    audioControl(state) {
+        console.log('뮤테이션')
+        console.log(state.participant[state.my_name].rtcPeer)
+        state.participant[state.my_name].rtcPeer.audioEnabled = !state.participant[state.my_name].rtcPeer.audioEnabled
+        state.micro_phone = !state.micro_phone
+    },
+    videoControl(state) {
+        console.log('비디오우')
+        state.participant[state.my_name].rtcPeer.videoEnabled = !state.participant[state.my_name].rtcPeer.videoEnabled
+        state.video = !state.video
+    },
     participantInfo(state, data) {
         state.participantInfo = data
     }
 };
 
 const actions = {
+    //음성, 영상 제어
+    getAudioControl: function (context) {
+        console.log('액션')
+        return context.commit('audioControl');
+    },
+    getVideoControl: function (context) {
+        console.log('액션')
+        return context.commit('videoControl');
+    },
+
     // 토론 리스트 검색 API 요청
     async searchDebateList({state, commit}, search) {
         search.condition = state.condition;
@@ -130,6 +181,7 @@ const actions = {
             search.page = 0;
         }
         search.categoryList = state.selectedCategoryIdList;
+        console.log(state.selectedCategoryIdList);
         await searchAll(search, ({data}) => {
             if (data.message === "Success") {
                 commit("SET_DEBATE_LIST", data.data.content);
@@ -145,12 +197,17 @@ const actions = {
         })
     },
     // 토론 카테고리 검색 API 요청
-    async getCategoryList({commit}){
+    async getCategoryList({state, commit}){
         await getCategoryList(
             ({data}) => {
-                commit("SET_CATEGORY_LIST", data.data);
-                if(state.selectedCategoryIdList == [])
-                    commit("SET_SELECTED_CATEGORY_LIST", data.data);
+                commit("SET_CATEGORY_LIST", data.data); 
+                // 처음 카테고리 로드 시에만 전체 검색으로 설정
+                if(state.selectedCategoryIdList != -1) return;
+                var list = [];
+                for(var i = 0; i < data.data.length; i++){
+                    list[i] = data.data[i].id;
+                }
+                commit("SET_SELECTED_CATEGORY_LIST", list);
             },
             (error) => {
                 console.log(error);
@@ -166,5 +223,5 @@ export default {
     state,
     getters,
     mutations,
-    actions,
+    actions
 };

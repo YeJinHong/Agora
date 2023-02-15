@@ -1,13 +1,25 @@
 <template>
+  <button @click="start" value="start">스타트</button>
+  <button @click="stop" value="stop">스탑</button>
   <div>
     <div id="room">
-      <h2 id="room-header"></h2>
+      <div style="height: 3vh;"></div>
+<!--      <h2 id="room-header">{{info.title}}</h2>-->
+      <div style="padding: 15px;">
+        <div class="title-wrapper">
+          <img src="../../../assets/img/Agora3.png"/>
+          <h2 class="title">토론 주제</h2>
+          <div class="debate-title">{{ data.title }}</div>
+        </div>
+      </div>
+      <div style="height: 3vh;"></div>
       <div
-          :class="[middle_box ? 'participant-box' : 'participant-box_2']"
+          :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
         <div id="participants-agree"
              :class="[middle_box ? 'A_box' : 'A_box_2']"></div>
-        <div id="moderator"></div>
+        <div id="moderator"
+             class=moderator></div>
         <div id="participants-opp"
              :class="[middle_box ? 'B_box' : 'B_box_2']"></div>
       </div>
@@ -50,6 +62,7 @@ export default {
   name: 'debate2',
   components: {},
   computed: {
+    ...mapState('debate', {info: 'participantInfo'}),
     ...mapState('debate', {middle_box: 'middle_box'})
   },
   props: {
@@ -86,7 +99,6 @@ export default {
       data.ws.onmessage = (message) => {
         let parsedMessage = JSON.parse(message.data);
         console.info('Received message: ' + message.data);
-
         switch (parsedMessage.id) {
           case 'existingParticipants':
             onExistingParticipants(parsedMessage)
@@ -114,11 +126,16 @@ export default {
             break;
           case 'timeRemaining':
             let time = parsedMessage.time;
-            document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
-            break
-          case 'pauseSpeaking':
+            if (data.position === '찬성') {
+              document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
+            }
+            else if (data.position === '반대'){
+              document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
+          }
+            break;
+          case 'pauseSpeaking':``
             time = parsedMessage.time;
-            document.getElementById('timer').innerText = parseInt(time / 60) + ':' + time % 60
+            document.getElementById('timer-' + data.position).innerText = parseInt(time / 60) + ':' + time % 60
             break
           case 'receiveSystemComment':
             alert(parsedMessage.comment)
@@ -159,6 +176,8 @@ export default {
         position: data.position,
       }
       sendMessage(message);
+      console.log('드루와', store)
+      store.state.debate.participant_list.add(data.name)
     }
 
     const onIceCandidate = (candidate) => {
@@ -172,15 +191,16 @@ export default {
 
     const onNewParticipant = (request) => {
       console.log('리퀘스트', request)
+      store.state.debate.participant_list.add(request.userName)
       receiveVideo(request.userName, request.position, request.isScreen);
     }
 
     const onExistingParticipants = (msg) => {
       let constraints = {
-        audio: true,
+        audio: false,
         video: {
           mandatory: {
-            maxWidth: 320,
+            maxWidth: 600,
             maxFrameRate: 15,
             minFrameRate: 15
           }
@@ -190,6 +210,8 @@ export default {
       console.log(data.name + " registered in room " + data.title);
       let participant = new Participant(data.name, data.position, msg.isScreen);
       data.participants[data.name] = participant;
+      participant.constraints = constraints;
+
       let video = participant.getVideoElement();
 
       participant.onIceCandidate = (candidate) => {
@@ -208,6 +230,13 @@ export default {
       }
 
       data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
+        console.log('이젠여기', options)
+        console.log('이젠여기2', data.participants[data.name])
+        console.log('이젠여기333', data.participants)
+        store.commit("debate/participantRegister", data.participants)
+        store.commit("debate/Register", data.name)
+        console.log('이젠여기3', store.state.debate.participant)
+
         if (error) {
           return console.error(error);
         }
@@ -221,8 +250,12 @@ export default {
         });
       });
 
-      msg.data.forEach(m => (receiveVideo(m.userName, m.position, m.isScreen)));
+      msg.data.forEach(m => {
+        receiveVideo(m.userName, m.position, m.isScreen)
+        store.state.debate.participant_list.add(m.userName)
+      });
     }
+
 
     const receiveVideoResponse = (result) => {
       console.log(data.participants);
@@ -232,16 +265,18 @@ export default {
     }
 
     const start = () => {
-      let debateId = document.getElementById('debateId').value;
+      let debateId = store.state.debate.participantInfo.debateId
+      let time = store.state.debate.participantInfo.time
 
       sendMessage({
         id: 'startSpeaking',
-        debateId: debateId
+        debateId: debateId,
+        time: time
       });
     }
 
     const stop = () => {
-      let debateId = document.getElementById('debateId').value;
+      let debateId = store.state.debate.participantInfo.debateId
 
       sendMessage({
         id: 'pauseSpeaking',
@@ -266,6 +301,7 @@ export default {
         }
       }
       delete data.participants[data.name];
+      store.state.debate.participant_list.delete(data.name)
       document.getElementById("video-" + name).parentElement.remove();
 
       var message = {
@@ -336,6 +372,7 @@ export default {
       data.participants[name] = participant;
       var video = participant.getVideoElement();
 
+
       participant.onIceCandidate = (candidate) => {
         let message = {
           id: 'onIceCandidate',
@@ -376,13 +413,13 @@ export default {
     //     });
     //   }
     // }
-
     const onParticipantLeft = (request) => {
-      console.log('Participant ' + request.name + ' left');
-      var participant = data.participants[request.name];
+      console.log('Participant ' + request.userName + ' left');
+      var participant = data.participants[request.userName];
+      document.getElementById('video-' + request.userName).remove();
       participant.dispose();
-      document.getElementById('video-' + request.name).remove();
-      delete data.participants[request.name];
+      delete data.participants[request.userName];
+      store.state.debate.participant_list.delete(request.userName)
     }
     const sendMessage = (message) => {
       console.log(data.ws)
@@ -392,29 +429,29 @@ export default {
       data.ws.send(jsonMessage);
       console.log(data.ws)
     }
-    const videoOnOff = () => {
-      if (data.participants[name].rtcPeer.videoEnabled) {
-        // 끌때
-        data.participants[name].rtcPeer.videoEnabled = false;
-        document.getElementById("vidOn").style.display = "";
-        document.getElementById("vidOff").style.display = "none";
-      } else {
-        data.participants[name].rtcPeer.videoEnabled = true;
-        document.getElementById("vidOn").style.display = "none";
-        document.getElementById("vidOff").style.display = "";
-      }
-    }
-    const audioOnOff = () => {
-      if (data.participants[name].rtcPeer.audioEnabled) {
-        data.participants[name].rtcPeer.audioEnabled = false;
-        document.getElementById("audOn").style.display = "";
-        document.getElementById("audOff").style.display = "none";
-      } else {
-        data.participants[name].rtcPeer.audioEnabled = true;
-        document.getElementById("audOn").style.display = "none";
-        document.getElementById("audOff").style.display = "";
-      }
-    }
+    // const videoOnOff = () => {
+    //   if (data.participants[data.name].rtcPeer.videoEnabled) {
+    //     // 끌때
+    //     data.participants[name].rtcPeer.videoEnabled = false;
+    //     document.getElementById("vidOn").style.display = "";
+    //     document.getElementById("vidOff").style.display = "none";
+    //   } else {
+    //     data.participants[name].rtcPeer.videoEnabled = true;
+    //     document.getElementById("vidOn").style.display = "none";
+    //     document.getElementById("vidOff").style.display = "";
+    //   }
+    // }
+    // const audioOnOff = () => {
+    //   if (data.participants[name].rtcPeer.audioEnabled) {
+    //     data.participants[name].rtcPeer.audioEnabled = false;
+    //     document.getElementById("audOn").style.display = "";
+    //     document.getElementById("audOff").style.display = "none";
+    //   } else {
+    //     data.participants[name].rtcPeer.audioEnabled = true;
+    //     document.getElementById("audOn").style.display = "none";
+    //     document.getElementById("audOff").style.display = "";
+    //   }
+    // }
     const sendSystemComment = () => {
       let debateId = document.getElementById('debateId').value;
 
@@ -433,7 +470,7 @@ export default {
       })
     }
 
-    return {store, data}
+    return {store, data, start, stop, connect}
   }
 }
 
@@ -454,14 +491,14 @@ export default {
   width: 90vw;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  justify-content: center;
+  /*align-items: center;*/
+  /*justify-content: center;*/
   margin: auto;
 }
 
 .A_box {
-  height: 20vh;
-  width: 40vw;
+  height: 249px;
+  width: 329px;
   display: flex;
   flex-direction: row;
   border: orangered solid 5px;
@@ -488,8 +525,9 @@ export default {
 }
 
 .B_box {
-  height: 20vh;
-  width: 40vw;
+  height: 249px;
+  width: 329px;
+
   display: flex;
   flex-direction: row;
   border: navy solid 5px;
@@ -509,6 +547,57 @@ export default {
     display: none;
 
   }
+}
+
+.btn {
+  color: red;
+  background-color: red;
+}
+
+.moderator {
+  height: 249px;
+  width: 330px;
+  border: purple 5px solid;
+}
+
+#timer {
+  color: red;
+}
+
+#room-header {
+  text-align: center;
+  color: blueviolet;
+}
+
+.debate-title {
+  font-size: 30px;
+  padding: 10px;
+}
+
+.title-wrapper {
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.6); /* 배경색상 */
+  padding: 10px; /* 제목 주위 여백 */
+  text-align: center;
+
+}
+
+
+.title-wrapper img {
+  display: inline-block;
+  width: 30px;
+
+}
+
+.title-wrapper .title {
+  display: inline-block;
+  font-size: 20px;
+  /*color: #FF4667;*/
+  color: #392C7D;
+}
+
+.title {
+  text-align: center; /* 제목 가운데 정렬 */
 }
 
 </style>
