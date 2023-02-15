@@ -5,10 +5,13 @@ const state = {
     debateId : '',
     debateInfo : {debateId : 3, title : "환승이별 vs 잠수이별"}, // TODO : 더미데이터 삭제
 
+    // 토론 목록 표시 방법용
+    howToShow : 'list',
+
     // 토론 목록 검색용 1
     keyword :"",
     condition: "",
-    selectedCategoryIdList : [],
+    selectedCategoryIdList : -1,
     categoryList : [],
     debateList: [],
 
@@ -71,6 +74,10 @@ const mutations = {
             state.debateList.push(debate);
         });
     },
+    // 토론 보기 방법
+    SET_HOW_TO_SHOW : (state, howToShow) => {
+        state.howToShow = howToShow;
+    },
     // 토론 검색 기능 관련
     SET_KEYWORD : (state, keyword) => {
         state.keyword = keyword;
@@ -81,8 +88,8 @@ const mutations = {
     SET_CATEGORY_LIST : (state, categoryList) => {
         state.categoryList = categoryList;
     },
-    SET_SELECTED_CATEGORY_LIST : (state, categoryList) => {
-        state.selectedCategoryIdList = categoryList;
+    SET_SELECTED_CATEGORY_LIST : (state, selectedCategoryList) => {
+        state.selectedCategoryIdList = selectedCategoryList;
     },
     // 토론 검색기능 - 페이징 관련
     SET_TOTAL_PAGES : (state, totalPages) => {
@@ -102,6 +109,11 @@ const mutations = {
     },
     SET_DEBATE_INFO : (state, debate) => {
         state.debateInfo = debate;
+    },
+    INIT_SEARCH_CONDITION : (state) => {
+        state.keyword = '';
+        state.condition = '';
+        state.selectedCategoryIdList = -1;
     },
     //토론메인창 UI
     Register(state, name) {
@@ -169,6 +181,7 @@ const actions = {
             search.page = 0;
         }
         search.categoryList = state.selectedCategoryIdList;
+        console.log(state.selectedCategoryIdList);
         await searchAll(search, ({data}) => {
             if (data.message === "Success") {
                 commit("SET_DEBATE_LIST", data.data.content);
@@ -184,12 +197,17 @@ const actions = {
         })
     },
     // 토론 카테고리 검색 API 요청
-    async getCategoryList({commit}){
+    async getCategoryList({state, commit}){
         await getCategoryList(
             ({data}) => {
-                commit("SET_CATEGORY_LIST", data.data);
-                if(state.selectedCategoryIdList == [])
-                    commit("SET_SELECTED_CATEGORY_LIST", data.data);
+                commit("SET_CATEGORY_LIST", data.data); 
+                // 처음 카테고리 로드 시에만 전체 검색으로 설정
+                if(state.selectedCategoryIdList != -1) return;
+                var list = [];
+                for(var i = 0; i < data.data.length; i++){
+                    list[i] = data.data[i].id;
+                }
+                commit("SET_SELECTED_CATEGORY_LIST", list);
             },
             (error) => {
                 console.log(error);
