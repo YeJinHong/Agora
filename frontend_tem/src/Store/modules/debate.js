@@ -23,12 +23,14 @@ const state = {
     offset : 0, // 현재 페이지 시작 인덱스값.
 
     // 토론 참여용
-    participant: 0,
+    participant: {},
+    my_name: null,
     participant_list: false,
     micro_phone: true,
+    video: true,
     chat_box: false,
     document_box: false,
-    middle_box: false,
+    middle_box: true,
     chatList: [],
     chatSocket: null,
     stompClient: null,
@@ -51,7 +53,10 @@ const getters = {
     },
     getPageNumber : function(state){
         return state.pageNumber;
-    }
+    },
+    getParticipant: () => {
+        return state.participant;
+    },
 };
 
 const mutations = {
@@ -101,6 +106,14 @@ const mutations = {
     SET_DEBATE_INFO : (state, debate) => {
         state.debateInfo = debate;
     },
+    //토론메인창 UI
+    Register(state, name) {
+        state.my_name = name
+    },
+    participantRegister(state, participant) {
+        console.log('실행실행')
+        state.participant = participant
+    },
     participantList(state) {
         if (state.chat_box === true) {
             state.chat_box = false
@@ -123,12 +136,34 @@ const mutations = {
     documentBox(state) {
         state.document_box = !state.document_box
     },
+    //음성,영상제어
+    audioControl(state) {
+        console.log('뮤테이션')
+        console.log(state.participant[state.my_name].rtcPeer)
+        state.participant[state.my_name].rtcPeer.audioEnabled = !state.participant[state.my_name].rtcPeer.audioEnabled
+        state.micro_phone = !state.micro_phone
+    },
+    videoControl(state) {
+        console.log('비디오우')
+        state.participant[state.my_name].rtcPeer.videoEnabled = !state.participant[state.my_name].rtcPeer.videoEnabled
+        state.video = !state.video
+    },
     participantInfo(state, data) {
         state.participantInfo = data
     }
 };
 
 const actions = {
+    //음성, 영상 제어
+    getAudioControl: function (context) {
+        console.log('액션')
+        return context.commit('audioControl');
+    },
+    getVideoControl: function (context) {
+        console.log('액션')
+        return context.commit('videoControl');
+    },
+
     // 토론 리스트 검색 API 요청
     async searchDebateList({state, commit}, search) {
         search.condition = state.condition;
@@ -177,5 +212,5 @@ export default {
     state,
     getters,
     mutations,
-    actions,
+    actions
 };

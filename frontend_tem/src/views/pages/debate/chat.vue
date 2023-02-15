@@ -48,7 +48,7 @@ export default {
       if (this.content.trim() !== '' && this.stompClient !== null) {
         let chatMessage = {
           'content': this.content,
-          'roomId': 1,
+          'roomId': this.participantInfo.debateId,
           'author': this.participantInfo.name
         }
         console.log(chatMessage)

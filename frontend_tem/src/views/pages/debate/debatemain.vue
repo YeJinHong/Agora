@@ -30,6 +30,11 @@ import debate2 from "./debate2.vue";
 
 export default {
   components: {Documentbox, Sidebox, participant, middlebox, participant_list, chat, uibar, debate2},
+  setup() {
+    const store = useStore();
+
+    return {store};
+  },
   data() {
     return {
       call: ''
