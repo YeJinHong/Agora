@@ -65,71 +65,80 @@
               </div>
             </div>
 
-							
-							
-						</div>	
-						
-						<div class="col-lg-4">
-							<div class="sidebar-sec">
-							
-								<!-- Video -->
-								<div class="video-sec vid-bg">
-									<div class="card">
-										<div class="card-body">
-											<a class="video-thumbnail" data-fancybox="">
+
+          </div>
+
+          <div class="col-lg-4">
+            <div class="sidebar-sec">
+
+              <!-- Video -->
+              <div class="video-sec vid-bg">
+                <div class="card">
+                  <div class="card-body">
+                    <a class="video-thumbnail" data-fancybox="">
                       <img class="" :src="data.debate.thumbnailUrl" alt="">
-												<!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
-											</a>
-											<div class="video-details">
-												<!-- <div class="row gx-2">
-													<div class="col-md-6">
-														<router-link to="course-wishlist" class="btn btn-wish w-100"><i class="feather-heart"></i> 위시리스트에 넣기 </router-link>
-													</div>
-													<div class="col-md-6">
-														<a href="javascript:;" class="btn btn-wish w-100"><i class="feather-share-2"></i> 공유하기 </a>
-													</div>
-												</div> -->
-												<button class="btn btn-primary w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('찬성')"> 찬성측으로 입장하기 </button>
-												<button class="btn btn-info w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('반대')"> 반대측으로 입장하기 </button>
-												<button class="btn btn-dark w-100 mb-2" v-if="data.debate.state == 'active'" @click ="setDebateLink('사회자')"> 사회자로 입장하기 </button>
-                        <router-link to="checkout" class="btn btn-enroll w-100 disabled" v-else-if="data.debate.state == 'inactive'" > 아직 시작되지 않은 토론이에요 </router-link>
-												<router-link to="checkout" class="btn btn-enroll w-100" v-else-if="data.debate.state == 'in ready'" > 토론이 곧 시작됩니다 </router-link>
-	                      <router-link to="checkout" class="btn btn-dark w-100 disabled" v-else> 종료됨 </router-link> <!-- state : closed -->
-											</div>
-										</div>
-									</div>
-								</div>
-								<!-- /Video -->
-								
-								
-								<!-- Features -->
-								<div class="card feature-sec" v-if="Object.keys(data.debate_files).length != 0">
-									<div class="card-body">
-										<div class="cat-title">
-											<h4> 사용된 파일 </h4>
-										</div>
-										<div class="perspective wrapper pb-2" v-for="(perspective, index) in data.debate_files" :key ="index">
-											<h6 ><img src="../../../../assets/img/icon/chapter.svg" class="me-2" alt=""><strong>{{ perspective.perspective_name }}</strong></h6>
-											<ul class="mb-0">
-												<li v-for="file in perspective.files">{{ file.file_name }}</li>
-											</ul>
-											<br/>
-										</div>
-									</div>
-								</div>
-								<!-- /Features -->
-					
-								
-							</div>
-						</div>
-					</div>	
-				</div>
-			</section>
-			<!-- /Pricing Plan -->
-        <layouts1></layouts1>
-       
-    </div>
-    <!-- /Main Wrapper -->
+                      <!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
+                    </a>
+                    <div class="video-details">
+                      <!-- <div class="row gx-2">
+                        <div class="col-md-6">
+                          <router-link to="course-wishlist" class="btn btn-wish w-100"><i class="feather-heart"></i> 위시리스트에 넣기 </router-link>
+                        </div>
+                        <div class="col-md-6">
+                          <a href="javascript:;" class="btn btn-wish w-100"><i class="feather-share-2"></i> 공유하기 </a>
+                        </div>
+                      </div> -->
+                      <button class="btn btn-primary w-100 mb-2" v-if="data.debate.state == 'active'"
+                              @click="setDebateLink('찬성')"> 찬성측으로 입장하기
+                      </button>
+                      <button class="btn btn-info w-100 mb-2" v-if="data.debate.state == 'active'"
+                              @click="setDebateLink('반대')"> 반대측으로 입장하기
+                      </button>
+                      <button class="btn btn-dark w-100 mb-2" v-if="data.debate.state == 'active'"
+                              @click="setDebateLink('사회자')"> 사회자로 입장하기
+                      </button>
+                      <router-link to="checkout" class="btn btn-enroll w-100 disabled"
+                                   v-else-if="data.debate.state == 'inactive'"> 아직 시작되지 않은 토론이에요
+                      </router-link>
+                      <router-link to="checkout" class="btn btn-enroll w-100"
+                                   v-else-if="data.debate.state == 'in ready'"> 토론이 곧 시작됩니다
+                      </router-link>
+                      <router-link to="checkout" class="btn btn-dark w-100 disabled" v-else> 종료됨</router-link>
+                      <!-- state : closed -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- /Video -->
+
+
+              <!-- Features -->
+              <div class="card feature-sec" v-if="data.fileList != null">
+                <div class="card-body">
+                  <div class="cat-title">
+                    <h4> 사용된 파일 </h4>
+                  </div>
+                  <div class="perspective wrapper pb-2" v-for="file in data.fileList">
+                    <ul class="mb-0">
+                      <li><a :href="file.fileDownloadUri">{{ file.fileName }}</a></li>
+                    </ul>
+                    <br/>
+                  </div>
+                </div>
+              </div>
+              <!-- /Features -->
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- /Pricing Plan -->
+    <layouts1></layouts1>
+
+  </div>
+  <!-- /Main Wrapper -->
 </template>
 
 <script>
@@ -148,6 +157,7 @@ export default {
       // debateId : store.getters["debate/getDebateId"],
       debateId: store.state.debate.debateId,
       debate: {},
+      fileList: null,
 
       // TODO : 현재 페이지 진입시 debateId를 통해서 상세정보 요청. 혹은 기존 토론 정보 조회 개선.
       debate_detail: {
@@ -167,50 +177,60 @@ export default {
       getDebateInfo();
     })
 
-		const getDebateInfo  = async () => {
-			console.log(data.debateId);
-			await api.get('/debates/'+data.debateId)
-        .then((response) => {
-          if(response.status == 200){
-            data.debate = response.data.data;
-            data.debate.callEndTime = data.debate.callEndTime.substr(0, 19);
-            data.debate.callStartTime = data.debate.callStartTime.substr(0, 19);
-            data.debate.insertedTime = data.debate.insertedTime.substr(0, 19);
-            store.commit('debate/SET_DEBATE_INFO', response.data.data);
-            console.log('특정 토론 정보 조회 완료');
-            console.log(data.debate);
-            checkState();
-          } else {
+    onMounted(() => {
+      api.get("/files/list/" + data.debateId)
+          .then((file) => {
+            data.fileList = file.data;
+            console.log(data.fileList);
+          }).catch((error) => {
+        console.log(error);
+      })
+    })
+
+    const getDebateInfo = async () => {
+      console.log(data.debateId);
+      await api.get('/debates/' + data.debateId)
+          .then((response) => {
+            if (response.status == 200) {
+              data.debate = response.data.data;
+              data.debate.callEndTime = data.debate.callEndTime.substr(0, 19);
+              data.debate.callStartTime = data.debate.callStartTime.substr(0, 19);
+              data.debate.insertedTime = data.debate.insertedTime.substr(0, 19);
+              store.commit('debate/SET_DEBATE_INFO', response.data.data);
+              console.log('특정 토론 정보 조회 완료');
+              console.log(data.debate);
+              checkState();
+            } else {
               console.log(response);
               console.log('정상 조회 실패')
-          }
-      }).catch((error)=>{
-          console.log(error);
-      });
-		}
-		
-		const setDebateLink = async (position) => {
-			//TODO : 입장시 user_debate 테이블에 입장 정보 생성.
-			console.log('찬성측 입장합니다.');
-			await api.post('/userDebates', {
-				debateId : data.debateId,
-				userEmail : store.state.userStore.userInfo.userEmail,
-				role : position,
-			})
-            .then((response) => {
-                if(response.status == 201){
-                    console.log(response);
-                    console.log('토론 참가 신청 완료');
-					store.commit('debate/SET_MYTEAM', position);
-					moveToDebateMain(position);
-                } else {
-                    console.log(response);
-                    console.log('정상 조회 실패')
-                }
-            }).catch((error)=>{
-                console.log('  참가 신청중 에러 발생  ');
-                console.log(error);
-            });
+            }
+          }).catch((error) => {
+            console.log(error);
+          });
+    }
+
+    const setDebateLink = async (position) => {
+      //TODO : 입장시 user_debate 테이블에 입장 정보 생성.
+      console.log('찬성측 입장합니다.');
+      await api.post('/userDebates', {
+        debateId: data.debateId,
+        userEmail: store.state.userStore.userInfo.userEmail,
+        role: position,
+      })
+          .then((response) => {
+            if (response.status == 201) {
+              console.log(response);
+              console.log('토론 참가 신청 완료');
+              store.commit('debate/SET_MYTEAM', position);
+              moveToDebateMain(position);
+            } else {
+              console.log(response);
+              console.log('정상 조회 실패')
+            }
+          }).catch((error) => {
+            console.log('  참가 신청중 에러 발생  ');
+            console.log(error);
+          });
 
     }
 

@@ -16,7 +16,7 @@
 									</div>
 									<div class="course-group mb-0 d-flex">
 										<div class="course-group-img d-flex align-items-center">
-											<router-link to="student-profile"><img :src="'http://i8c205.p.ssafy.io:8082/api/v1/users/images/' + userInfo.userEmail" alt="" class="img-fluid"></router-link>
+											<router-link to="student-profile"><img :src="'http://i8c205.p.ssafy.io/api/v1/users/images/' + userInfo.userEmail" alt="" class="img-fluid"></router-link>
                       <div class="course-name">
 												<h4><router-link to="student-profile">프로필사진</router-link></h4>
 												<p>800px 이하의 png, jpg 파일이 허용됩니다.</p>
