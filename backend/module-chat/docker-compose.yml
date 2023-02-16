@@ -1,0 +1,8 @@
+version: '2'
+services:
+  back-module-chat:
+    build:
+      context: .
+    container_name: agora-back-module-chat
+    ports:
+      - "8084:8084"

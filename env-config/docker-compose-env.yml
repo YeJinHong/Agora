@@ -1,0 +1,77 @@
+version: '2.1'
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: agora-zookeeper
+    ports:
+      - "2181:2181"
+    networks:
+      - agora_network
+
+  kafka:
+    image: wurstmeister/kafka:2.12-2.0.1
+    container_name: agora-kafka
+    environment:
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://i8c205.p.ssafy.io:9092
+      KAFKA_ADVERTISED_HOST_NAME: i8c205.p.ssafy.io
+      KAFKA_ADVERTISED_PORT: 9092
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "kafka-chat:1:1"   # Topic명:Partition개수:Replica개수
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    networks:
+      - agora_network
+
+  redis:
+    image: redis
+    container_name: agora-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - agora_network
+
+  mysql:
+    image: mysql
+    container_name: agora-mysql
+    ports:
+      - 3306:3306
+    environment:
+      LC_ALL: C.UTF-8
+      MYSQL_ROOT_PASSWORD: ssafy
+      MYSQL_DATABASE: ssafy_web_db
+    volumes:
+      - /home/docker/agora/volume-data/mysql:/var/lib/mysql
+    command:
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+    networks:
+      - agora_network
+
+  coturn:
+    image: zenosmosis/docker-coturn
+    container_name: agora-coturn
+    network_mode: "host"
+    ports:
+      - 3478:3478
+      - 3478:3478/udp
+      - 65435-65535:65435-65535/udp
+    environment:
+      - USERNAME=kurento
+      - PASSWORD=ssafy
+
+  kurento:
+    image: kurento/kurento-media-server
+    container_name: agora-kurento
+    ports:
+      - 8888:8888
+      - 5000-5050:5000-5050/udp
+    environment:
+      KMS_TURN_URL: kurento:ssafy@3.38.178.217:3478?transport=udp
+
+networks:
+  agora_network:
+    driver: bridge

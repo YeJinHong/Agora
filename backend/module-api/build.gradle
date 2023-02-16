@@ -1,0 +1,34 @@
+dependencies {
+
+    implementation project(':module-core')
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    // Redis
+    // implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-redis', version: '2.7.5'
+
+    // Swagger
+    implementation("io.springfox:springfox-swagger2:3.0.0")
+    implementation("io.springfox:springfox-swagger-ui:3.0.0")
+    implementation("io.springfox:springfox-data-rest:3.0.0")
+    implementation("io.springfox:springfox-bean-validators:3.0.0")
+    implementation("io.springfox:springfox-boot-starter:3.0.0")
+
+    // JWT
+    implementation('com.auth0:java-jwt:4.2.1')
+    implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.11.5'
+    runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.11.5'
+
+    //email 인증
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-mail', version: '2.5.4'
+
+    // 증명서 발급 관련
+    implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+    implementation group: 'org.xhtmlrenderer', name: 'flying-saucer-pdf-openpdf', version: '9.1.22'
+    implementation group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation 'com.itextpdf:html2pdf:3.0.0'
+}
