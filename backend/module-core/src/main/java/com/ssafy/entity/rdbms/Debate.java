@@ -27,7 +27,7 @@ public class Debate extends BaseEntity {
     @Column
     private String title;
 
-    @Column(columnDefinition = "TEXT")
+    @Column
     private String description;
 
     @Column
