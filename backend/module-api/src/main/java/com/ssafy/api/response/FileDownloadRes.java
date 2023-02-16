@@ -34,7 +34,7 @@ public class FileDownloadRes {
         String fileName = fileRes.getOriginFileName() + "_" + fileRes.getSavedFileName().substring(savedFileNameLength - 2, savedFileNameLength) + fileRes.getExtension();
         String id = Long.toString(fileRes.getFileId());
         String downloadUri = UriComponentsBuilder.newInstance()
-                .path("https://i8c205.p.ssafy.io:8082/api/v1/files/downloads/")
+                .path("https://i8c205.p.ssafy.io/api/v1/files/downloads/")
                 .path(id)
                 .toUriString();
         res.setFileName(fileName);

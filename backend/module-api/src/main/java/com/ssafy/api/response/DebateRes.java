@@ -95,7 +95,7 @@ public class DebateRes {
 
     private static String downloadUrlConvertor(long debateId) {
         String downloadUri = UriComponentsBuilder.newInstance()
-                .path("https://i8c205.p.ssafy.io:8082/api/v1/files/images/")
+                .path("https://i8c205.p.ssafy.io/api/v1/files/images/")
                 .path(Long.toString(debateId))
                 .toUriString();
         return downloadUri;
