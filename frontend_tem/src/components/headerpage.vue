@@ -1,11 +1,11 @@
 <template>
     <ul class="nav header-navbar-rht">
         <li class="nav-item">
-            <router-link to="course-message"><img src="../assets/img/icon/messages.svg" alt="img"></router-link>
+            <router-link to="course-message"><img src="../assets/img/icon/messages.svg" alt="img"></router-link> 
         </li>
         <li class="nav-item cart-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
-                <img src="../assets/img/icon/cart.svg" alt="img">
+                <img src="../assets/img/icon/cart.svg" alt="img"> 
             </a>
             <div class="wishes-list dropdown-menu dropdown-menu-right">
                 <div class="wish-header">
@@ -150,6 +150,7 @@
         <li class="nav-item noti-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
                 <img src="../assets/img/icon/notification.svg" alt="img">
+
             </a>
             <div class="notifications dropdown-menu dropdown-menu-right">
                 <div class="topnav-dropdown-header">
@@ -165,7 +166,11 @@
                     <ul class="notification-list">
                         <li class="notification-message">
                             <div class="media d-flex">
+<<<<<<< HEAD
                                 <div>
+=======
+                                <div>															
+>>>>>>> parent of da8f6d2 (Merge branch 'debate-room' into 'main')
                                     <router-link to="notifications" class="avatar">
                                         <img class="avatar-img" alt="" src="../assets/img/user/user1.jpg">
                                     </router-link>
@@ -180,7 +185,11 @@
                         </li>
                         <li class="notification-message">
                             <div class="media d-flex">
+<<<<<<< HEAD
                                 <div>
+=======
+                                <div>															
+>>>>>>> parent of da8f6d2 (Merge branch 'debate-room' into 'main')
                                     <router-link to="notifications" class="avatar">
                                         <img class="avatar-img" alt="" src="../assets/img/user/user2.jpg">
                                     </router-link>
@@ -193,7 +202,11 @@
                         </li>
                         <li class="notification-message">
                             <div class="media d-flex">
+<<<<<<< HEAD
                                 <div>
+=======
+                                <div>															
+>>>>>>> parent of da8f6d2 (Merge branch 'debate-room' into 'main')
                                     <router-link to="notifications" class="avatar">
                                         <img class="avatar-img" alt="" src="../assets/img/user/user3.jpg">
                                     </router-link>
@@ -209,7 +222,11 @@
                             <div class="media d-flex">
                                 <div>
                                     <router-link to="notifications" class="avatar">
+<<<<<<< HEAD
                                         <img class="avatar-img" alt="" :src="'http://i8c205.p.ssafy.io:8082/api/v1/users/images/' + data.userEmail">
+=======
+                                        <img class="avatar-img" alt="" :src="'http://i8c205.p.ssafy.io/api/v1/users/images/' + data.userEmail">
+>>>>>>> parent of da8f6d2 (Merge branch 'debate-room' into 'main')
                                     </router-link>
                                 </div>
                                 <div class="media-body">
