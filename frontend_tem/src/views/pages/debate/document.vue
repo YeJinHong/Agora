@@ -38,7 +38,6 @@ export default {
       state.debate.id = store.getters["debate/getDebateId"];
       state.debate.userEmail = store.getters["userStore/checkUserInfo"].userEmail;
       // state.debate.role = store.getters.["debate/getParticipantInfo"].position;
-      console.log(state.debate.id);
     })
 
     onMounted(() => {
