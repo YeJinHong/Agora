@@ -258,13 +258,17 @@ public ResponseEntity<BaseResponseBody> checkEmail(@RequestBody UserEmailReq use
 
 
 
-	@GetMapping("/images")
+	@GetMapping("/images/{userEmail}")
 	@ApiOperation(value = "이미지 파일")
-	public Resource showImage(@ApiIgnore Authentication authentication) throws IOException {
-
-		CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
-		File profileUrl = userFileManagerService.getProfileUrl(userFileManagerService.getFileManager(userDetails.getUsername()));
-
+	public Resource showImage(@PathVariable String userEmail) throws IOException {
+		File profileUrl = null;
+		try {
+			FileManager fileManager = userFileManagerService.getFileManager(userEmail);
+			profileUrl = userFileManagerService.getProfileUrl(fileManager);
+			Path normalize = Paths.get(profileUrl.getSavedPath()).toAbsolutePath().normalize();
+		} catch (NullPointerException e) {
+			return null;
+		}
 		return new UrlResource("file:" + Paths.get(profileUrl.getSavedPath()).toAbsolutePath().normalize());
 	}
 
