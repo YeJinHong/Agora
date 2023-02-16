@@ -77,7 +77,6 @@
       }
 
       const setHowToShow = (howToShow) => {
-        console.log(howToShow);
         document.getElementById('grid').className = "noactive grid-view";
         document.getElementById('list').className = "noactive list-view";
 

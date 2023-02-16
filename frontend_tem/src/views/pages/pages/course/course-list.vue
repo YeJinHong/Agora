@@ -69,7 +69,7 @@
 						<div class="product">
 							<div class="product-img">
 								<router-link to="course-details">
-									<img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg">
+						  			<img class="img-fluid" alt="" :src="debate.thumbnailUrl" @click="setDebateId(debate.debateId)">
 								</router-link>
 								<div class="price">
 									<h3 :class="debate.state">{{ debate.state }}</h3>

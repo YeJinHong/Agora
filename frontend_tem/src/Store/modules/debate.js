@@ -199,7 +199,6 @@ const debate = {
                 search.page = 0;
             }
             search.categoryList = state.selectedCategoryIdList;
-            console.log(state.selectedCategoryIdList);
             await searchAll(search, ({data}) => {
                 if (data.message === "Success") {
                     commit("SET_DEBATE_LIST", data.data.content);
@@ -217,7 +216,6 @@ const debate = {
                         debate.insertedTime = debate.insertedTime.substr(0, 19);
                         state.debateList[idx] = debate; 
                     }
-                    console.log(state.debateList);
                 }
             }, (error) => {
                 console.log("토론 목록 조회 중 문제가 발생하였습니다.")

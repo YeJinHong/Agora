@@ -6,26 +6,26 @@
             <div class="col-md-7">
                 <div class="home-slide-face aos" data-aos="fade-up">
                     <div class="home-slide-text ">
-                        <h5 class="Sub_text" style="font-size: 25px; font-weight: bold">온라인 화상 토론 플랫폼</h5>
-                        <h1 class="Main_text">어서오세요 <br> 아고라에 오신걸 환영합니다</h1>
-<!--                        <p class="Sub_text"> 아고라 아고라 아고라 </p>-->
+                        <h5>온라인 화상 토론 플랫폼</h5>
+                        <h1>어서오세요 아고라에 오신걸 환영합니다</h1>
+                        <p> 아고라 아고라 아고라 </p>
                     </div>
                     <div class="banner-content">
                     <form class="form"  action="course-list">
                         <div class="form-inner">
                             <div class="input-group">
                                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                                <input type="email" class="form-control" placeholder="Search School, Online eductional centers, etc">
-                                <span class="drop-detail">
+                                <input type="text" class="form-control" placeholder="관심있는 토론의 키워드를 검색해보세요!">
+                                <!-- <span class="drop-detail">
                                     <vue-select :options="Category" placeholder="Category" class="vueselect" />
-                                </span>
-                                <button class="btn btn-primary sub-btn" type="submit"><i class="fas fa-arrow-right"></i></button>
+                                </span> -->
+                                <button class="btn btn-primary sub-btn" type="submit" @click ="loadDebateList(this.value())" ><i class="fas fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </form>
                     </div>
                     <div class="trust-user">
-                        <p> 데이터와 별점으로 증명합니다 <br>  </p>
+                        <p>Trusted by over 15K Users <br>worldwide since 2022</p>
                         <div class="trust-rating d-flex align-items-center">
                             <div class="rate-head">
                                 <h2><span><vue3-autocounter class="counter" ref='counter' :startAmount='200' :delay='3' :endAmount='1000' :duration='5' :autoinit='true' /></span>+</h2>
@@ -175,7 +175,7 @@
             },
         data() {
             return {
-                Category : ["Category", "Angular", "Node Js", "React", "Python"],
+                Category : ["정치", "경제", "사회", "문화", "교육", "과학/IT", "역사", "철학", "스포츠", "환경"],
                 dashboard : dashboard
             }
         },
@@ -204,7 +204,14 @@
 					itemsToShow: 4,
 					snapAlign: "start"
 				}
-			}
+			},
+            
+            loadDebateList : async (value) => {
+                console.log(value);
+                store.commit('debate/SET_KEYWORD', value);
+                store.commit('debate/SET_CONDITION', "title");
+                await store.dispatch("debate/searchDebateList", {})
+            }
 		};
 	},
 
@@ -220,28 +227,3 @@
        
     }
     </script>
-
-<style scoped>
-@font-face {
-  font-family: 'KyoboHandwriting2021sjy';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KyoboHandwriting2021sjy.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
-.Main_text {
-  font-family: 'KyoboHandwriting2021sjy'
-
-}
-
-@font-face {
-  font-family: 'GmarketSansMedium';
-  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
-  font-weight: normal;
-  font-style: normal;
-}
-
-.Sub_text {
-  font-family: 'GmarketSansMedium';
-}
-</style>

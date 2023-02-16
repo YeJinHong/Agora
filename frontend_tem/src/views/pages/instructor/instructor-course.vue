@@ -24,6 +24,7 @@
                         </div>
                         <div v-if="check" style="text-align: end">
                           <a class="btn btn-primary download-link attach-input" :href="'http://i8c205.p.ssafy.io:8082/api/v1/certification/' + userEmail">증명서 발급하기</a>
+
                         </div>
                       </div>
                       <div class="comman-space pb-0">
@@ -264,7 +265,16 @@ export default {
         async certification() {
           const http = axios.create({
             // baseURL: process.env.VUE_APP_API_BASE_URL,
+<<<<<<< HEAD
             baseURL: "http://i8c205.p.ssafy.io:8082/api/v1",
+=======
+<<<<<<< frontend_tem/src/views/pages/instructor/instructor-course.vue
+            baseURL: "http://localhost:8082/api/v1",
+            // baseURL: "http://i8c205.p.ssafy.io:8082/api/v1",
+=======
+            baseURL: "http://i8c205.p.ssafy.io/api/v1",
+>>>>>>> frontend_tem/src/views/pages/instructor/instructor-course.vue
+>>>>>>> 05a881bae0d05bf88da49ac75f050a3b26134dda
             headers: {'Content-Type': 'application/pdf',
               'charset': 'utf-8'},
           });
