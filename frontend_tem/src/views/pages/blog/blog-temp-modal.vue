@@ -5,7 +5,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addpaymentMethod"> {{ this.debate_info.debate_title }} 토론 상호평가</h5>
+          <h5 class="modal-title" id="addpaymentMethod"> {{ this.debate_info.title }} 토론 상호평가</h5>
           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i
               class="fa-regular fa-circle-xmark"></i></button>
         </div>

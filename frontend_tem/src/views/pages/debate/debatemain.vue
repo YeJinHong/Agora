@@ -43,7 +43,7 @@ export default {
     ...mapState('debate', {chat_box: 'chat_box'}),
     ...mapState('debate', {middle_box: 'middle_box'}),
   },
-  mounted() {
+  created() {
     console.log(this.$route.query)
     this.call = this.$route.query
     this.store.commit('debate/participantInfo', this.call)

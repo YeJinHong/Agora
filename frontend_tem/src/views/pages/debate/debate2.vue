@@ -88,7 +88,7 @@ export default {
     })
 
     const makeWebsocket = () => {
-      data.ws = new WebSocket('wss://localhost:8086/groupcall');
+      data.ws = new WebSocket('wss://i8c205.p.ssafy.io:8083/groupcall');
       data.ws.onopen = () => {
         console.log('WebSocket connection established');
         register()
