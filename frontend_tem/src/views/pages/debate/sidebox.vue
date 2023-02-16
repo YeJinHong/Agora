@@ -38,7 +38,7 @@ export default {
   },
   created() {
     // const serverURL = "http://i8c205.p.ssafy.io:8084/my-chat/"
-    const serverURL = "http://i8c205.p.ssafy.io/my-chat/"
+    const serverURL = "http://i8c205.p.ssafy.io:8084/my-chat/"
     this.chatSocket = new SockJS(serverURL);
     this.stompClient = Stomp.over(this.chatSocket);
     this.store.state.debate.chatSocket = this.chatSocket
