@@ -8,6 +8,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { VueLoaderPlugin } = require('vue-loader');
 
 const publicPath = '/';
+const fs = require("fs");
 
 module.exports = (env = {}) => ({
   context: path.resolve(__dirname, 'src'),
@@ -111,6 +112,11 @@ module.exports = (env = {}) => ({
     overlay: {
       warnings: true,
       errors: true
+    },
+    https: {
+      key: fs.readFileSync('/usr/local/share/ssl/domaincomkey.pem'),
+      cert: fs.readFileSync('/usr/local/share/ssl/domaincomcrt.pem'),
+      ca: fs.readFileSync('/usr/local/share/ssl/rootca.pem'),
     },
     historyApiFallback: true,
   }
