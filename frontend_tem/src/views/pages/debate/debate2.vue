@@ -1,10 +1,10 @@
 <template>
-  <button @click="start" value="start">스타트</button>
-  <button @click="stop" value="stop">스탑</button>
+<!--  <button @click="start" value="start">스타트</button>-->
+<!--  <button @click="stop" value="stop">스탑</button>-->
   <div>
     <div id="room">
-      <div style="height: 3vh;"></div>
-<!--      <h2 id="room-header">{{info.title}}</h2>-->
+      <div style="height: 8vh;"></div>
+      <!--      <h2 id="room-header">{{info.title}}</h2>-->
       <div style="padding: 15px;">
         <div class="title-wrapper">
           <img src="../../../assets/img/Agora3.png"/>
@@ -12,7 +12,11 @@
           <div class="debate-title">{{ data.title }}</div>
         </div>
       </div>
-      <div style="height: 3vh;"></div>
+      <div class="box_1" style="color: purple;">
+        <div id="timer-찬성" style="margin-left: 300px;">{{addZeros(parseInt(parseInt(data.time) / 60), 2) + ':' + addZeros(data.time % 60, 2)}}</div>
+        <div id="timer-반대" style="margin-right: 300px;">{{addZeros(parseInt(parseInt(data.time) / 60), 2) + ':' + addZeros(data.time % 60, 2)}}</div>
+      </div>
+        <div style="height: 5vh; margin-bottom: 15px;"></div>
       <div
           :class="[middle_box ? 'participant-box_2' : 'participant-box_2']"
           id="participants">
@@ -75,7 +79,8 @@ export default {
       participants: {},
       name: '',
       title: '',
-      position: ''
+      position: '',
+      time: '00:00',
     })
     onMounted(() => {
       connect();
@@ -101,7 +106,7 @@ export default {
         console.info('Received message: ' + message.data);
         switch (parsedMessage.id) {
           case 'existingParticipants':
-            onExistingParticipants(parsedMessage)
+            onExistingParticipants(parsedMessage);
             break;
           case 'newParticipantArrived':
             onNewParticipant(parsedMessage);
@@ -126,16 +131,21 @@ export default {
             break;
           case 'timeRemaining':
             let time = parsedMessage.time;
-            if (data.position === '찬성') {
-              document.getElementById('timer-' + '찬성').innerText = parseInt(time / 60) + ':' + time % 60
+            if (parsedMessage.position === '찬성') {
+              document.getElementById('timer-' + '찬성').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
             }
-            else if (data.position === '반대'){
-              document.getElementById('timer-' + '반대').innerText = parseInt(time / 60) + ':' + time % 60
+            else if (parsedMessage.position === '반대'){
+              document.getElementById('timer-' + '반대').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
           }
             break;
           case 'pauseSpeaking':``
             time = parsedMessage.time;
-            document.getElementById('timer-' + data.position).innerText = parseInt(time / 60) + ':' + time % 60
+            if (parsedMessage.position === '찬성') {
+              document.getElementById('timer-' + '찬성').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
+            }
+            else if (parsedMessage.position === '반대'){
+              document.getElementById('timer-' + '반대').innerText = addZeros(parseInt(time / 60), 2) + ':' + addZeros(time % 60, 2)
+            }
             break
           case 'receiveSystemComment':
             alert(parsedMessage.comment)
@@ -151,6 +161,17 @@ export default {
       console.log('connect done')
     }
 
+    const addZeros = (num, digit) => { // 자릿수 맞춰주기
+      let zero = '';
+      num = num.toString();
+      if (num.length < digit) {
+        for (let i = 0; i < digit - num.length; i++) {
+          zero += '0';
+        }
+      }
+      return zero + num;
+    }
+
     const register = () => {
       console.log('register')
       data.name = props.call.name;
@@ -158,14 +179,14 @@ export default {
       let debateId = props.call.debateId;
       data.position = props.call.position;
       let roomType = props.call.roomType;
-      let time = props.call.time;
+      data.time = props.call.time;
 
       sendMessage({
         id: 'createRoom',
         debateId: debateId,
         title: data.title,
         roomType: roomType,
-        time: time
+        time: data.time
       })
 
       let message = {
@@ -176,7 +197,6 @@ export default {
         position: data.position,
       }
       sendMessage(message);
-      console.log('드루와', store)
       store.state.debate.participant_list.add(data.name)
     }
 
@@ -231,8 +251,6 @@ export default {
 
       data.participants[data.name].rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options, function (error) {
         console.log('이젠여기', options)
-        console.log('이젠여기2', data.participants[data.name])
-        console.log('이젠여기333', data.participants)
         store.commit("debate/participantRegister", data.participants)
         store.commit("debate/Register", data.name)
         console.log('이젠여기3', store.state.debate.participant)
@@ -470,12 +488,11 @@ export default {
       })
     }
 
-    return {store, data, start, stop, connect}
+    return {store, data, start, stop, connect, addZeros}
   }
 }
 
 </script>
-
 
 <style scoped>
 .participant-box {
@@ -492,7 +509,7 @@ export default {
   display: flex;
   flex-direction: row;
   /*align-items: center;*/
-  /*justify-content: center;*/
+  justify-content: center;
   margin: auto;
 }
 
@@ -572,6 +589,7 @@ export default {
 .debate-title {
   font-size: 30px;
   padding: 10px;
+  font-family: 'KIMM_Bold';
 }
 
 .title-wrapper {
@@ -598,6 +616,30 @@ export default {
 
 .title {
   text-align: center; /* 제목 가운데 정렬 */
+}
+
+.box_1 {
+  height: 3vh;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  font-family: "LABD";
+  font-size: 50px;
+}
+
+@font-face {
+  font-family: 'KIMM_Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2212@1.0/KIMM_Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "LABD";
+  src:url("../../../assets/fonts/LABD.woff") format("woff");
+  font-weight: normal;;
+  font-style: normal;
 }
 
 </style>

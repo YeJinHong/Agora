@@ -10,8 +10,6 @@ function Participant(userName, position, isScreen) {
     container.id = userName;
 
     let span = document.createElement('span');
-    var timer = document.createElement('span');
-    timer.id = 'timer-'+ position;
     let video = document.createElement('video');
     video.id = 'video-' + userName;
     video.autoplay = true;
@@ -32,8 +30,6 @@ function Participant(userName, position, isScreen) {
     }
 
     container.appendChild(video);
-    container.appendChild(timer);
-    timer.appendChild(document.createTextNode('타이머'));
 
 
     if (isScreen) {

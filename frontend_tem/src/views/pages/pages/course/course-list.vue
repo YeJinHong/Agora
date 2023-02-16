@@ -18,8 +18,7 @@
 					<div class="product">
 					  <div class="product-img">
 						<router-link to="course-details">
-						  <img class="img-fluid" alt="" src="../../../../assets/img/course/testImg.jpg" @click="setDebateId(debate.debateId)">
-						  <!-- <img class="img-fluid" alt="" src="https://robohash.org/competition" @click="setDebateId(debate.debateId)"> -->
+						  <img class="img-fluid" alt="" :src="debate.thumbnailUrl" @click="setDebateId(debate.debateId)">
 						</router-link>
 						<div class="price">
 						  <!-- <h3>$300 <span>$99.00</span></h3> -->
