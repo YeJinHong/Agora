@@ -113,11 +113,6 @@ module.exports = (env = {}) => ({
       warnings: true,
       errors: true
     },
-    https: {
-      // key: fs.readFileSync('/usr/local/share/ssl/domaincomkey.pem'),
-      // cert: fs.readFileSync('/usr/local/share/ssl/domaincomcrt.pem'),
-      // ca: fs.readFileSync('/usr/local/share/ssl/rootca.pem'),
-    },
     historyApiFallback: true,
   }
 });

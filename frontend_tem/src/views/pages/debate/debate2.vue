@@ -91,11 +91,8 @@ export default {
     })
 
     const makeWebsocket = () => {
-<<<<<<< HEAD
-      data.ws = new WebSocket('wss://i8c205.p.ssafy.io:8083/groupcall');
-=======
-      data.ws = new WebSocket('wss://i8c205.p.ssafy.io/groupcall');
->>>>>>> parent of da8f6d2 (Merge branch 'debate-room' into 'main')
+      data.ws = new WebSocket('wss://localhost:8083/groupcall');
+
       data.ws.onopen = () => {
         console.log('WebSocket connection established');
         register()
