@@ -80,16 +80,14 @@
                       <!-- <img class="" :src="debate.thumbnail_url" alt=""> -->
                     </a>
                     <div class="video-details">
-                      <div class="row gx-2">
+                      <!-- <div class="row gx-2">
                         <div class="col-md-6">
-                          <router-link to="course-wishlist" class="btn btn-wish w-100"><i class="feather-heart"></i>
-                            위시리스트에 넣기
-                          </router-link>
+                          <router-link to="course-wishlist" class="btn btn-wish w-100"><i class="feather-heart"></i> 위시리스트에 넣기 </router-link>
                         </div>
                         <div class="col-md-6">
                           <a href="javascript:;" class="btn btn-wish w-100"><i class="feather-share-2"></i> 공유하기 </a>
                         </div>
-                      </div>
+                      </div> -->
                       <button class="btn btn-primary w-100 mb-2" v-if="data.debate.state == 'active'"
                               @click="setDebateLink('찬성')"> 찬성측으로 입장하기
                       </button>
@@ -100,10 +98,10 @@
                               @click="setDebateLink('사회자')"> 사회자로 입장하기
                       </button>
                       <router-link to="checkout" class="btn btn-enroll w-100 disabled"
-                                   v-else-if="data.debate.state == 'inactive'"> 토론 준비 중
+                                   v-else-if="data.debate.state == 'inactive'"> 아직 시작되지 않은 토론이에요
                       </router-link>
                       <router-link to="checkout" class="btn btn-enroll w-100"
-                                   v-else-if="data.debate.state == 'in ready'"> 대기열 입장
+                                   v-else-if="data.debate.state == 'in ready'"> 토론이 곧 시작됩니다
                       </router-link>
                       <router-link to="checkout" class="btn btn-dark w-100 disabled" v-else> 종료됨</router-link>
                       <!-- state : closed -->
@@ -120,9 +118,9 @@
                   <div class="cat-title">
                     <h4> 사용된 파일 </h4>
                   </div>
-                  <div class="perspective wrapper pb-2" v-for="file in data.fileList" >
+                  <div class="perspective wrapper pb-2" v-for="file in data.fileList">
                     <ul class="mb-0">
-                      <li ><a :href="file.fileDownloadUri">{{file.fileName}}</a></li>
+                      <li><a :href="file.fileDownloadUri">{{ file.fileName }}</a></li>
                     </ul>
                     <br/>
                   </div>
@@ -159,7 +157,7 @@ export default {
       // debateId : store.getters["debate/getDebateId"],
       debateId: store.state.debate.debateId,
       debate: {},
-      fileList : null,
+      fileList: null,
 
       // TODO : 현재 페이지 진입시 debateId를 통해서 상세정보 요청. 혹은 기존 토론 정보 조회 개선.
       debate_detail: {
@@ -195,6 +193,9 @@ export default {
           .then((response) => {
             if (response.status == 200) {
               data.debate = response.data.data;
+              data.debate.callEndTime = data.debate.callEndTime.substr(0, 19);
+              data.debate.callStartTime = data.debate.callStartTime.substr(0, 19);
+              data.debate.insertedTime = data.debate.insertedTime.substr(0, 19);
               store.commit('debate/SET_DEBATE_INFO', response.data.data);
               console.log('특정 토론 정보 조회 완료');
               console.log(data.debate);
@@ -220,6 +221,7 @@ export default {
             if (response.status == 201) {
               console.log(response);
               console.log('토론 참가 신청 완료');
+              store.commit('debate/SET_MYTEAM', position);
               moveToDebateMain(position);
             } else {
               console.log(response);

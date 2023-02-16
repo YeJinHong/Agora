@@ -25,6 +25,7 @@ const debate = {
         offset : 0, // 현재 페이지 시작 인덱스값.
 
         // 토론 참여용
+        myTeam : '',
         participant: {},
         my_name: null,
         participant_list: new Set(),
@@ -39,8 +40,8 @@ const debate = {
         stompClient: null,
         webRtcSocket: null,
         participantInfo: null,
-
         selectedOptionName: "",
+        leaved: false
     },
     getters: {
         getDebateId: function (state) {
@@ -75,6 +76,7 @@ const debate = {
         }
     },
     mutations: {
+        // 토론 리스트 관련
         SET_DEBATE_ID: (state, debateId) => {
             state.debateId = debateId;
         },
@@ -125,6 +127,10 @@ const debate = {
             state.condition = '';
             state.selectedCategoryIdList = -1;
         },
+        // 토론 참가시 나의 팀 설정
+        SET_MYTEAM : (state, myTeam) => {
+            state.myTeam = myTeam;
+        },
         //토론메인창 UI
         Register(state, name) {
             state.my_name = name
@@ -139,6 +145,14 @@ const debate = {
                 state.participant_list_btn = !state.participant_list_btn
             } else {
                 state.participant_list_btn = !state.participant_list_btn
+            }
+        },
+        chatBox(state) {
+            if (state.participant_list_btn === true) {
+                state.participant_list_btn = false
+                state.chat_box = !state.chat_box
+            } else {
+                state.chat_box = !state.chat_box
             }
         },
         microPhone(state) {
@@ -174,7 +188,7 @@ const debate = {
             return context.commit('videoControl');
         },
 
-        // 토론 리스트 검색 API 요청
+    // 토론 리스트 검색 API 요청
         async searchDebateList({state, commit}, search) {
             search.condition = state.condition;
             search.keyword = state.keyword;
@@ -191,7 +205,16 @@ const debate = {
                     commit("SET_PAGE_NUMBER", data.data.pageable.pageNumber);
                     commit("SET_NUMBER_OF_ELEMENTS", data.data.numberOfElements);
                     commit("SET_OFFSET", data.data.pageable.offset);
-                    console.log(data.data.content);
+                    
+                    // 밀리센컨드까지 시간이 출력되는 문제제거용
+                    for(var idx = 0; idx < state.debateList.length; idx++){
+                        var debate = state.debateList[idx];
+                        debate.callEndTime = debate.callEndTime.substr(0, 19);
+                        debate.callStartTime = debate.callStartTime.substr(0, 19);
+                        debate.insertedTime = debate.insertedTime.substr(0, 19);
+                        state.debateList[idx] = debate; 
+                    }
+                    console.log(state.debateList);
                 }
             }, (error) => {
                 console.log("토론 목록 조회 중 문제가 발생하였습니다.")
@@ -201,7 +224,7 @@ const debate = {
         async getCategoryList({state, commit}){
             await getCategoryList(
                 ({data}) => {
-                    commit("SET_CATEGORY_LIST", data.data);
+                    commit("SET_CATEGORY_LIST", data.data); 
                     // 처음 카테고리 로드 시에만 전체 검색으로 설정
                     if(state.selectedCategoryIdList != -1) return;
                     var list = [];
@@ -217,6 +240,6 @@ const debate = {
             )
         },
     }
-};
+}
 
 export default debate;
