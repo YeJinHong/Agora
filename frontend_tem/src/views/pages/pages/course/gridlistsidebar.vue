@@ -4,9 +4,9 @@
             <div class="filter-clear">
                 <div class="clear-filter d-flex align-items-center">
                     <h4><i class="feather-filter"></i>Filters</h4>
-                    <div class="clear-text">
+                    <!-- <div class="clear-text">
                         <p>CLEAR</p>
-                    </div>
+                    </div> -->
                 </div>
                 
                 <!-- Search Filter -->
