@@ -5,7 +5,7 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="addpaymentMethod"> {{ this.debate_info.debate_title }} 토론 상호평가</h5>
+          <h5 class="modal-title" id="addpaymentMethod"> {{ this.debate_info.title }} 토론 상호평가</h5>
           <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close"><i
               class="fa-regular fa-circle-xmark"></i></button>
         </div>
@@ -84,13 +84,12 @@ import {useStore} from "vuex";
 const api = apiInstance();
 
 export default {
-  setup() {
-    const store = useStore();
-    // TODO : 토론 참여시 DB와 Store에 나의 팀정보 저장.
-    const myTeam = "반대";
+    setup(){
+        const store = useStore();
+        const myTeam = store.state.debate.myTeam;
+        
 
-
-    const debate_info = store.state.debate.debateInfo;
+    const debate_info = store.state.debate.participantInfo;
 
     return {debate_info, myTeam};
   },
