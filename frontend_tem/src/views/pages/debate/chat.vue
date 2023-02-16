@@ -30,7 +30,7 @@ export default {
     const stompClient = store.state.debate.stompClient
     const chatList = store.state.debate.chatList
     const api = Axios.create({
-      baseURL: "https://localhost:8084/kafka",
+      baseURL: "http://localhost:8084/kafka",
     });
     const participantInfo = store.state.debate.participantInfo
     return {store, chatSocket, stompClient, chatList, api, participantInfo}
