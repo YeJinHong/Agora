@@ -115,16 +115,14 @@
 
 
               <!-- Features -->
-              <div class="card feature-sec" v-if="Object.keys(data.debate_files).length != 0">
+              <div class="card feature-sec" v-if="data.fileList != null">
                 <div class="card-body">
                   <div class="cat-title">
                     <h4> 사용된 파일 </h4>
                   </div>
-                  <div class="perspective wrapper pb-2" v-for="(perspective, index) in data.debate_files" :key="index">
-                    <h6><img src="../../../../assets/img/icon/chapter.svg" class="me-2"
-                             alt=""><strong>{{ perspective.perspective_name }}</strong></h6>
+                  <div class="perspective wrapper pb-2" v-for="file in data.fileList" >
                     <ul class="mb-0">
-                      <li v-for="file in perspective.files">{{ file.file_name }}</li>
+                      <li ><a :href="file.fileDownloadUri">{{file.fileName}}</a></li>
                     </ul>
                     <br/>
                   </div>
@@ -161,6 +159,7 @@ export default {
       // debateId : store.getters["debate/getDebateId"],
       debateId: store.state.debate.debateId,
       debate: {},
+      fileList : null,
 
       // TODO : 현재 페이지 진입시 debateId를 통해서 상세정보 요청. 혹은 기존 토론 정보 조회 개선.
       debate_detail: {
@@ -178,6 +177,16 @@ export default {
     onMounted(() => {
       // data.debateId = store.getters["debate/getDebateId"];
       getDebateInfo();
+    })
+
+    onMounted(() => {
+      api.get("/files/list/" + data.debateId)
+          .then((file) => {
+            data.fileList = file.data;
+            console.log(data.fileList);
+          }).catch((error) => {
+        console.log(error);
+      })
     })
 
     const getDebateInfo = async () => {

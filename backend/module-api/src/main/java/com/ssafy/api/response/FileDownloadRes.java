@@ -29,7 +29,8 @@ public class FileDownloadRes {
 
     public static FileDownloadRes of(FileRes fileRes) {
         FileDownloadRes res = new FileDownloadRes();
-        String fileName = fileRes.getOriginFileName() + fileRes.getExtension();
+        int savedFileNameLength = fileRes.getSavedFileName().length();
+        String fileName = fileRes.getOriginFileName() + "_" + fileRes.getSavedFileName().substring(savedFileNameLength - 2, savedFileNameLength) + fileRes.getExtension();
         String id = Long.toString(fileRes.getFileId());
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/v1/files/downloads/")

@@ -154,10 +154,11 @@ public class FileController {
         if (debates.getFileList() == null) {
             return ResponseEntity.status(200).body(null);
         }
-        List<FileDownloadRes> fileList = new FileDownloadRes().toDtoList(debates.getFileList())
+        List<FileRes> files = debates.getFileList()
                 .stream()
-                .filter(fileDownloadRes -> !fileDownloadRes.getFileDownloadUri().contains("thumbnail"))
+                .filter(fileRes -> !fileRes.getSavedFileName().contains("thumbnail") && !fileRes.isDeleted())
                 .collect(Collectors.toList());
+        List<FileDownloadRes> fileList = new FileDownloadRes().toDtoList(files);
         return ResponseEntity.status(200).body(fileList);
 
     }
