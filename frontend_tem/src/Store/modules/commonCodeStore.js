@@ -22,7 +22,7 @@ const commonCodeStore = {
     },
     actions: {
         getCategories({commit}) {
-            axios.defaults.baseURL = "http://i8c205.p.ssafy.io/api/v1";
+            axios.defaults.baseURL = "https://i8c205.p.ssafy.io/api/v1";
             axios.get(`codes/category`)
                 .then((data) => {
                     let result = data["data"];
