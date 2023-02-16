@@ -265,16 +265,7 @@ export default {
         async certification() {
           const http = axios.create({
             // baseURL: process.env.VUE_APP_API_BASE_URL,
-<<<<<<< HEAD
             baseURL: "http://i8c205.p.ssafy.io:8082/api/v1",
-=======
-<<<<<<< frontend_tem/src/views/pages/instructor/instructor-course.vue
-            baseURL: "http://localhost:8082/api/v1",
-            // baseURL: "http://i8c205.p.ssafy.io:8082/api/v1",
-=======
-            baseURL: "http://i8c205.p.ssafy.io/api/v1",
->>>>>>> frontend_tem/src/views/pages/instructor/instructor-course.vue
->>>>>>> 05a881bae0d05bf88da49ac75f050a3b26134dda
             headers: {'Content-Type': 'application/pdf',
               'charset': 'utf-8'},
           });
