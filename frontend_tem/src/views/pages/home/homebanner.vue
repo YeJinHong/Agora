@@ -163,7 +163,6 @@
 <script>
     import AOS from 'aos';
     import dashboard from '../../../assets/json/dashboard.json'
-    import { defineComponent } from 'vue'
     import { Carousel, Pagination, Slide } from 'vue3-carousel';
     const images = require.context('../../../assets/img', false, /\.png$|\.jpg$/)
     import 'vue3-carousel/dist/carousel.css';
