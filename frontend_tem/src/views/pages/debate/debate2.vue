@@ -1,6 +1,6 @@
 <template>
-<!--  <button @click="start" value="start">스타트</button>-->
-<!--  <button @click="stop" value="stop">스탑</button>-->
+  <button @click="start" value="start">스타트</button>
+  <button @click="stop" value="stop">스탑</button>
   <div>
     <div id="room">
       <div style="height: 8vh;"></div>
@@ -91,8 +91,7 @@ export default {
     })
 
     const makeWebsocket = () => {
-
-      data.ws = new WebSocket('wss://i8c205.p.ssafy.io/groupcall');
+      data.ws = new WebSocket('wss://i8c205.p.ssafy.io:8083/groupcall');
       data.ws.onopen = () => {
         console.log('WebSocket connection established');
         register()
