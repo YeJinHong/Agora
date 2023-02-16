@@ -1,13 +1,11 @@
 <template>
     <ul class="nav header-navbar-rht">
-<<<<<<< HEAD
-=======
         <li class="nav-item">
-            <router-link to="course-message"><img src="../assets/img/icon/messages.svg" alt="img"></router-link> 
+            <router-link to="course-message"><img src="../assets/img/icon/messages.svg" alt="img"></router-link>
         </li>
         <li class="nav-item cart-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
-                <img src="../assets/img/icon/cart.svg" alt="img"> 
+                <img src="../assets/img/icon/cart.svg" alt="img">
             </a>
             <div class="wishes-list dropdown-menu dropdown-menu-right">
                 <div class="wish-header">
@@ -83,7 +81,7 @@
         </li>
         <li class="nav-item wish-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
-                <img src="../assets/img/icon/wish.svg" alt="img"> 
+                <img src="../assets/img/icon/wish.svg" alt="img">
             </a>
             <div class="wishes-list dropdown-menu dropdown-menu-right">
                 <div class="wish-content">
@@ -151,7 +149,7 @@
         </li>
         <li class="nav-item noti-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
-                <img src="../assets/img/icon/notification.svg" alt="img"> 
+                <img src="../assets/img/icon/notification.svg" alt="img">
             </a>
             <div class="notifications dropdown-menu dropdown-menu-right">
                 <div class="topnav-dropdown-header">
@@ -167,7 +165,7 @@
                     <ul class="notification-list">
                         <li class="notification-message">
                             <div class="media d-flex">
-                                <div>															
+                                <div>
                                     <router-link to="notifications" class="avatar">
                                         <img class="avatar-img" alt="" src="../assets/img/user/user1.jpg">
                                     </router-link>
@@ -182,7 +180,7 @@
                         </li>
                         <li class="notification-message">
                             <div class="media d-flex">
-                                <div>															
+                                <div>
                                     <router-link to="notifications" class="avatar">
                                         <img class="avatar-img" alt="" src="../assets/img/user/user2.jpg">
                                     </router-link>
@@ -195,7 +193,7 @@
                         </li>
                         <li class="notification-message">
                             <div class="media d-flex">
-                                <div>															
+                                <div>
                                     <router-link to="notifications" class="avatar">
                                         <img class="avatar-img" alt="" src="../assets/img/user/user3.jpg">
                                     </router-link>
@@ -224,18 +222,17 @@
                 </div>
             </div>
         </li>
->>>>>>> parent of 670219e (메인 수정)
         <li class="nav-item user-nav">
             <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
                 <span class="user-img">
-                    <img :src="'https://i8c205.p.ssafy.io/api/v1/users/images/' + data.userEmail" alt="">
+                    <img :src="'http://i8c205.p.ssafy.io:8082/api/v1/users/images/' + data.userEmail" alt="">
                     <span class="status online"></span>
                 </span>
             </a>
             <div class="users dropdown-menu dropdown-menu-right" data-popper-placement="bottom-end" >
                 <div class="user-header">
                     <div class="avatar avatar-sm">
-                        <img :src="'https://i8c205.p.ssafy.io/api/v1/users/images/' + data.userEmail" alt="User Image" class="avatar-img rounded-circle">
+                        <img :src="'http://i8c205.p.ssafy.io:8082/api/v1/users/images/' + data.userEmail" alt="User Image" class="avatar-img rounded-circle">
                     </div>
                     <div class="user-text">
                         <h6>{{data.username}}</h6>

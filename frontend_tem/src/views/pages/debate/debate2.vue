@@ -91,12 +91,7 @@ export default {
     })
 
     const makeWebsocket = () => {
-<<<<<<< HEAD
-
-      data.ws = new WebSocket('wss://i8c205.p.ssafy.io/groupcall');
-=======
       data.ws = new WebSocket('wss://i8c205.p.ssafy.io:8083/groupcall');
->>>>>>> parent of 670219e (메인 수정)
       data.ws.onopen = () => {
         console.log('WebSocket connection established');
         register()
