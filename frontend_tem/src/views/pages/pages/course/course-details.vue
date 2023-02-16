@@ -238,7 +238,7 @@ export default {
         name: 'debatemain',
         query: {
           debateId: data.debateId,
-          name: store.state.userStore.userInfo.name,
+          name: store.getters["user/checkUserInfo"],
           title: data.debate.title,
           position: position,
           roomType: data.debate.debateMode,
