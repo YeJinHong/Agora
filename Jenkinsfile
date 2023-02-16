@@ -130,7 +130,7 @@ pipeline
 				sh '''
 					docker stop front-app
 					docker rm front-app
-					docker run -d -p 80:8083 --name front-app app-vue -v /usr/local/share/ssl:/usr/local/share/ssl
+					docker run -d -v /usr/local/share/ssl:/usr/local/share -p 80:8083 --name front-app app-vue 
 				'''
 				echo 'Deploy End Front App'
 			}
