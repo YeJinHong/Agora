@@ -44,7 +44,7 @@
             </div>
             <div class="col-md-5 d-flex align-items-center">
                 <div class="girl-slide-img aos" data-aos="fade-up">
-                    <img src="../../../assets/img/object.png" alt="">
+                    <img src="../../../assets/img/agora_main.png" alt="">
                 </div>
             </div>
         </div>

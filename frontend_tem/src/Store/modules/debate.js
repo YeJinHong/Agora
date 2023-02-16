@@ -30,7 +30,7 @@ const debate = {
         my_name: null,
         participant_list: new Set(),
         participant_list_btn: false,
-        micro_phone: true,
+        micro_phone: false,
         video: true,
         chat_box: false,
         document_box: false,
@@ -68,11 +68,11 @@ const debate = {
         getPageNumber : function(state){
             return state.pageNumber;
         },
-        getParticipant: () => {
-            return state.participant;
-        },
-        getParticipants: () => {
+        getParticipants: (state) => {
             return state.participant_list
+        },
+        getMicroPhone: (state) => {
+            return state.micro_phone
         }
     },
     mutations: {
@@ -163,8 +163,8 @@ const debate = {
         },
         //음성,영상제어
         audioControl(state) {
-            console.log('뮤테이션')
-            console.log(state.participant[state.my_name].rtcPeer)
+            // console.log('뮤테이션')
+            // console.log(state.participant[state.my_name].rtcPeer)
             state.participant[state.my_name].rtcPeer.audioEnabled = !state.participant[state.my_name].rtcPeer.audioEnabled
             state.micro_phone = !state.micro_phone
         },
@@ -175,12 +175,15 @@ const debate = {
         },
         participantInfo(state, data) {
             state.participantInfo = data
-        }
+        },
+        SET_WEB_SOCKET (state, webRtcSocket) {
+            state.webRtcSocket = webRtcSocket;
+        },
     },
     actions: {
         //음성, 영상 제어
-        getAudioControl: function (context) {
-            console.log('액션')
+        getAudioControl: function (context,state) {
+            console.log('오디오')
             return context.commit('audioControl');
         },
         getVideoControl: function (context) {
@@ -192,7 +195,7 @@ const debate = {
         async searchDebateList({state, commit}, search) {
             search.condition = state.condition;
             search.keyword = state.keyword;
-            if(search.page == undefined){
+            if(search.page === undefined){
                 search.page = 0;
             }
             search.categoryList = state.selectedCategoryIdList;
@@ -239,6 +242,41 @@ const debate = {
                 }
             )
         },
+        // 토론 타이머 관련 웹 소켓 통신용
+        start({state, dispatch}){
+            console.log('start test!!!!!!!!!!!');
+            console.log(state.participantInfo.debateId);
+            console.log(state.participantInfo.time);
+            dispatch('sendMessage22',{
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            }).then((response) => {
+                console.log(response);
+                console.log('sendMessage22 정상 요청 완료')
+            }).catch((error) => {
+                console.log(error);
+                console.log('sendMessage22 에러 발생');
+            });
+        },
+        async sendMessage22({state}){
+            console.log('send message222!!!!', {
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            })
+            console.log(JSON.stringify({
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            }));
+            data.ws.send(JSON.stringify({
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            }));
+            console.log('send end');
+        }
     }
 }
 
