@@ -138,11 +138,6 @@ public class FileController {
         } catch (IOException e) {
             return ResponseEntity.status(511).body(BaseResponseBody.of(511, "잘못된 파일 입니다"));
         }
-//        List<FileRes> files = debateService.search(debateId).getFileList();
-//        List<FileDownloadRes> result = new FileDownloadRes().toDtoList(files)
-//                .stream()
-//                .filter(fileDownloadRes -> fileDownloadRes.getFileDownloadUri().contains("thumbnail"))
-//                .collect(Collectors.toList());
         return ResponseEntity.status(201).body(BaseResponseBody.of(200, "Success"));
     }
 
@@ -154,10 +149,11 @@ public class FileController {
         if (debates.getFileList() == null) {
             return ResponseEntity.status(200).body(null);
         }
-        List<FileDownloadRes> fileList = new FileDownloadRes().toDtoList(debates.getFileList())
+        List<FileRes> files = debates.getFileList()
                 .stream()
-                .filter(fileDownloadRes -> !fileDownloadRes.getFileDownloadUri().contains("thumbnail"))
+                .filter(fileRes -> !fileRes.getSavedFileName().contains("thumbnail") && !fileRes.isDeleted())
                 .collect(Collectors.toList());
+        List<FileDownloadRes> fileList = new FileDownloadRes().toDtoList(files);
         return ResponseEntity.status(200).body(fileList);
 
     }
