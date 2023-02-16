@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.domain.Page;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.text.ParseException;
 import java.time.LocalDateTime;
@@ -94,8 +93,8 @@ public class DebateRes {
     }
 
     private static String downloadUrlConvertor(long debateId) {
-        String downloadUri = UriComponentsBuilder.newInstance()
-                .path("https://i8c205.p.ssafy.io/api/v1/files/images/")
+        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/files/images/")
                 .path(Long.toString(debateId))
                 .toUriString();
         return downloadUri;
