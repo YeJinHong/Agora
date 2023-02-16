@@ -15,11 +15,11 @@
                         <div class="form-inner">
                             <div class="input-group">
                                 <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                                <input type="email" class="form-control" placeholder="Search School, Online eductional centers, etc">
-                                <span class="drop-detail">
+                                <input type="text" class="form-control" placeholder="관심있는 토론의 키워드를 검색해보세요!">
+                                <!-- <span class="drop-detail">
                                     <vue-select :options="Category" placeholder="Category" class="vueselect" />
-                                </span>
-                                <button class="btn btn-primary sub-btn" type="submit"><i class="fas fa-arrow-right"></i></button>
+                                </span> -->
+                                <button class="btn btn-primary sub-btn" type="submit" @click ="loadDebateList(this.value())" ><i class="fas fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </form>
@@ -175,7 +175,7 @@
             },
         data() {
             return {
-                Category : ["Category", "Angular", "Node Js", "React", "Python"],
+                Category : ["정치", "경제", "사회", "문화", "교육", "과학/IT", "역사", "철학", "스포츠", "환경"],
                 dashboard : dashboard
             }
         },
@@ -204,7 +204,14 @@
 					itemsToShow: 4,
 					snapAlign: "start"
 				}
-			}
+			},
+            
+            loadDebateList : async (value) => {
+                console.log(value);
+                store.commit('debate/SET_KEYWORD', value);
+                store.commit('debate/SET_CONDITION', "title");
+                await store.dispatch("debate/searchDebateList", {})
+            }
 		};
 	},
 
