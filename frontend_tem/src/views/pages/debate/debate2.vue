@@ -1,6 +1,6 @@
 <template>
-<!--  <button @click="start" value="start">스타트</button>-->
-<!--  <button @click="stop" value="stop">스탑</button>-->
+  <button @click="start" value="start">스타트</button>
+  <button @click="stop" value="stop">스탑</button>
   <div>
     <div id="room">
       <div style="height: 8vh;"></div>
@@ -75,7 +75,7 @@ export default {
   setup(props) {
     const store = useStore();
     const data = reactive({
-      ws: store.getters["debate/getWebRtcSocket"],
+      ws: store.state.debate.webRtcSocket,
       participants: {},
       name: '',
       title: '',
@@ -84,6 +84,9 @@ export default {
     })
     onMounted(() => {
       connect();
+      console.log('============= ws 테스트 ==============')
+      console.log(data.ws);
+      store.commit('debate/SET_WEB_SOCKET', data.ws);
     })
 
     const makeWebsocket = () => {
@@ -286,6 +289,11 @@ export default {
       let debateId = store.state.debate.participantInfo.debateId
       let time = store.state.debate.participantInfo.time
 
+      console.log({
+        id: 'startSpeaking',
+        debateId: debateId,
+        time: time
+      });
       sendMessage({
         id: 'startSpeaking',
         debateId: debateId,

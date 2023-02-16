@@ -29,7 +29,7 @@ const debate = {
         my_name: null,
         participant_list: new Set(),
         participant_list_btn: false,
-        micro_phone: true,
+        micro_phone: false,
         video: true,
         chat_box: false,
         document_box: false,
@@ -161,7 +161,10 @@ const debate = {
         },
         participantInfo(state, data) {
             state.participantInfo = data
-        }
+        },
+        SET_WEB_SOCKET (state, webRtcSocket) {
+            state.webRtcSocket = webRtcSocket;
+        },
     },
     actions: {
         //음성, 영상 제어
@@ -217,6 +220,41 @@ const debate = {
                 }
             )
         },
+        // 토론 타이머 관련 웹 소켓 통신용
+        start({state, dispatch}){
+            console.log('start test!!!!!!!!!!!');
+            console.log(state.participantInfo.debateId);
+            console.log(state.participantInfo.time);
+            dispatch('sendMessage22',{
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            }).then((response) => {
+                console.log(response);
+                console.log('sendMessage22 정상 요청 완료')
+            }).catch((error) => {
+                console.log(error);
+                console.log('sendMessage22 에러 발생');
+            });
+        },
+        async sendMessage22({state}){
+            console.log('send message222!!!!', {
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            })
+            console.log(JSON.stringify({
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            }));
+            data.ws.send(JSON.stringify({
+                id: 'startSpeaking',
+                debateId: state.participantInfo.debateId,
+                time: state.participantInfo.time,
+            }));
+            console.log('send end');
+        }
     }
 };
 
