@@ -114,9 +114,9 @@ module.exports = (env = {}) => ({
       errors: true
     },
     https: {
-      key: fs.readFileSync('/usr/local/share/ssl/domaincomkey.pem'),
-      cert: fs.readFileSync('/usr/local/share/ssl/domaincomcrt.pem'),
-      ca: fs.readFileSync('/usr/local/share/ssl/rootca.pem'),
+      // key: fs.readFileSync('/usr/local/share/ssl/domaincomkey.pem'),
+      // cert: fs.readFileSync('/usr/local/share/ssl/domaincomcrt.pem'),
+      // ca: fs.readFileSync('/usr/local/share/ssl/rootca.pem'),
     },
     historyApiFallback: true,
   }

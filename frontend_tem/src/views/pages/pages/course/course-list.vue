@@ -125,7 +125,7 @@
   
   import {apiInstance} from "/api/index.js";
   import {useStore} from "vuex";
-  import {reactive, watch, onMounted} from "vue";
+  import {reactive, watch} from "vue";
   
   const api = apiInstance();
   
