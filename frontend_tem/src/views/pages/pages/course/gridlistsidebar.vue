@@ -38,7 +38,7 @@
 
 import { apiInstance } from "/api/index.js";      
 import {useStore} from "vuex";
-import { onMounted, reactive,  watch} from "vue";
+import { onMounted} from "vue";
 
 const api = apiInstance();
 
