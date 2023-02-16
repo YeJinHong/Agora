@@ -126,14 +126,12 @@
   import {apiInstance} from "/api/index.js";
   import {useStore} from "vuex";
   import {reactive, watch, onMounted} from "vue";
-  import {useRouter} from "vue-router";
   
   const api = apiInstance();
   
   export default {
 	setup() {
 	  const store = useStore();
-	  const router = useRouter();
 	  const data = reactive({
 		debate_list : [],
 	  })
