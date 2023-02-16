@@ -90,7 +90,7 @@ export default {
     const myTeam = "반대";
 
 
-    const debate_info = store.state.debate.debateInfo;
+    const debate_info = store.state.debate.participantInfo;
 
     return {debate_info, myTeam};
   },

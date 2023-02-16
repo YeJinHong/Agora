@@ -47,6 +47,7 @@ export default {
     console.log(this.$route.query)
     this.call = this.$route.query
     this.store.commit('debate/participantInfo', this.call)
+    this.store.state.debate.participant_list = new Set();
   }
 }
 </script>

@@ -64,7 +64,8 @@
         <path
             d="M3 3.5a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9a.5.5 0 0 1-.5-.5zM3 6a.5.5 0 0 1 .5-.5h9a.5.5 0 0 1 0 1h-9A.5.5 0 0 1 3 6zm0 2.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5z"/>
       </svg>
-      <a href="javascript:;" data-bs-toggle="modal" data-bs-target="#depositMethod">
+      <a
+          href="javascript:;" data-bs-toggle="modal" data-bs-target="#depositMethod">
         <svg
             xmlns="http://www.w3.org/2000/svg" width="50" height="40" fill="currentColor" class="bi bi-x-lg"
             viewBox="0 0 16 16" style="color: white">

@@ -41,6 +41,8 @@ const debate = {
         participantInfo: null,
 
         selectedOptionName: "",
+
+        leaved: false
     },
     getters: {
         getDebateId: function (state) {
@@ -139,6 +141,14 @@ const debate = {
                 state.participant_list_btn = !state.participant_list_btn
             } else {
                 state.participant_list_btn = !state.participant_list_btn
+            }
+        },
+        chatBox(state) {
+            if (state.participant_list_btn === true) {
+                state.participant_list_btn = false
+                state.chat_box = !state.chat_box
+            } else {
+                state.chat_box = !state.chat_box
             }
         },
         microPhone(state) {

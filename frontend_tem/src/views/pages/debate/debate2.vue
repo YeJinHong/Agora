@@ -59,7 +59,7 @@
 <script>
 import {mapState, useStore} from "vuex";
 import kurentoUtils from "kurento-utils";
-import {onMounted, reactive} from "vue";
+import {onMounted, reactive, watch} from "vue";
 import Participant from "../../../assets/js/participant.js";
 
 export default {
@@ -74,6 +74,7 @@ export default {
   },
   setup(props) {
     const store = useStore();
+    console.log('보고타', store)
     const data = reactive({
       ws: store.getters["debate/getWebRtcSocket"],
       participants: {},
@@ -197,6 +198,11 @@ export default {
         position: data.position,
       }
       sendMessage(message);
+      console.log(store.state.debate.participant)
+      console.log(data.name)
+      if (store.state.debate.participant_list === undefined) {
+        store.state.debate.participant_list = new Set();
+      }
       store.state.debate.participant_list.add(data.name)
     }
 
@@ -378,9 +384,6 @@ export default {
         data.participants[key].dispose();
       }
 
-      document.getElementById('join').style.display = 'block';
-      document.getElementById('room').style.display = 'none';
-
       data.ws.close();
     }
     const receiveVideo = (name, position, isScreen) => {
@@ -488,7 +491,7 @@ export default {
       })
     }
 
-    return {store, data, start, stop, connect, addZeros}
+    return {store, data, start, stop, connect, addZeros, leaveRoom}
   }
 }
 
