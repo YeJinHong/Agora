@@ -84,11 +84,10 @@ import {useStore} from "vuex";
 const api = apiInstance();
 
 export default {
-  setup() {
-    const store = useStore();
-    // TODO : 토론 참여시 DB와 Store에 나의 팀정보 저장.
-    const myTeam = "반대";
-
+    setup(){
+        const store = useStore();
+        const myTeam = store.state.debate.myTeam;
+        
 
     const debate_info = store.state.debate.participantInfo;
 

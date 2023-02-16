@@ -14,6 +14,7 @@ const userStore = {
             name : "김임시",
             position : "임시고등학교"
         },
+        userProfile : "",
         isValidToken: false,
     },
     getters: {
@@ -55,6 +56,7 @@ const userStore = {
                         sessionStorage.setItem("access-token", accessToken);
                         sessionStorage.setItem("refresh-token", refreshToken);
                         await findById(async ({data}) => {
+                            console.log(data)
                             let userInfo = {
                                 userEmail: data.userEmail,
                                 name: data.name,
@@ -62,8 +64,11 @@ const userStore = {
                                 position: data.position,
                                 grade: data.grade,
                                 classNum: data.classNum,
-                                profile: data.profileUrl
                             }
+                            // await findImg(async ({data}) => {
+                            //     commit("SET_USER_PROFILE", data);
+                            // })
+
                             if (data.message === "Success") {
                                 commit("SET_USER_INFO", userInfo);
                                 await router.push('/');
