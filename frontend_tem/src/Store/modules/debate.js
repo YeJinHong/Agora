@@ -69,6 +69,9 @@ const debate = {
         },
         getParticipants: (state) => {
             return state.participant_list
+        },
+        getMicroPhone: (state) => {
+            return state.micro_phone
         }
     },
     mutations: {
@@ -162,14 +165,15 @@ const debate = {
     },
     actions: {
         //음성, 영상 제어
-        getAudioControl: function (context) {
-            console.log('액션')
+        getAudioControl: function (context,state) {
+            console.log('오디오')
             return context.commit('audioControl');
         },
         getVideoControl: function (context) {
             console.log('액션')
             return context.commit('videoControl');
         },
+
 
         // 토론 리스트 검색 API 요청
         async searchDebateList({state, commit}, search) {

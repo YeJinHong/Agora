@@ -189,7 +189,7 @@ public class TotalTimeLimitRoom implements Closeable, Room {
                     jsonObject.addProperty("position", positionName);
                     jsonObject.addProperty("time", time--);
                     positions.get(positionName).updateLastSecond(time);
-                    log.info("타이머 {}", time);
+                    log.info("타이머 {} {}", positionName, time);
 
                     sendToParticipants(jsonObject);
                 } else {
