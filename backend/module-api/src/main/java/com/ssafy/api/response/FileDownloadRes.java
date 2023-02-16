@@ -6,7 +6,6 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,8 +32,8 @@ public class FileDownloadRes {
         int savedFileNameLength = fileRes.getSavedFileName().length();
         String fileName = fileRes.getOriginFileName() + "_" + fileRes.getSavedFileName().substring(savedFileNameLength - 2, savedFileNameLength) + fileRes.getExtension();
         String id = Long.toString(fileRes.getFileId());
-        String downloadUri = UriComponentsBuilder.newInstance()
-                .path("https://i8c205.p.ssafy.io/api/v1/files/downloads/")
+        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/v1/files/downloads/")
                 .path(id)
                 .toUriString();
         res.setFileName(fileName);
