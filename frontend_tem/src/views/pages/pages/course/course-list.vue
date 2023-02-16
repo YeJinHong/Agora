@@ -89,7 +89,7 @@
 									</div>
 								</div>
 								<h3 class="title" @click="setDebateId(debate.debateId)">
-								<router-link to="course-details"> {{ debate.title }}</router-link>
+								<router-link to="course-details"> {{ debate.title }} </router-link>
 								</h3>
 								<div class="course-info align-items-center">
 									<div class="rating-img d-flex align-items-center pb-2">
