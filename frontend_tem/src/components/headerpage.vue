@@ -3,14 +3,14 @@
     <li class="nav-item user-nav">
       <a href="javascript:void(0)" class="dropdown-toggle" data-bs-toggle="dropdown">
                 <span class="user-img">
-                    <img :src="'http://i8c205.p.ssafy.io/api/v1/users/images/' + data.userEmail" alt="">
+                    <img :src="'https://i8c205.p.ssafy.io:8082/api/v1/users/images/' + data.userEmail" alt="">
                     <span class="status online"></span>
                 </span>
       </a>
       <div class="users dropdown-menu dropdown-menu-right" data-popper-placement="bottom-end" >
         <div class="user-header">
           <div class="avatar avatar-sm">
-            <img :src="'http://i8c205.p.ssafy.io/api/v1/users/images/' + data.userEmail" alt="User Image" class="avatar-img rounded-circle">
+            <img :src="'https://i8c205.p.ssafy.io:8082/api/v1/users/images/' + data.userEmail" alt="User Image" class="avatar-img rounded-circle">
           </div>
           <div class="user-text">
             <h6>{{data.username}}</h6>

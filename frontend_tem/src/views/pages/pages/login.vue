@@ -87,8 +87,8 @@ export default {
     const route = useRoute();
     const state = reactive({
       form: {
-        userEmail: 'hrlim@naver.com',
-        password: '1q2w3e4r!',
+        userEmail: '',
+        password: '',
         align: 'left',
         isFormValid: false,
       },
