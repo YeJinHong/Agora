@@ -8,7 +8,7 @@
           </div>
         </div>
         <div class="modal-body">
-                <img :src="'https://i8c205.p.ssafy.io:8082/api/v1/users/images/' + userInfo.userEmail" alt="" class="img-fluid">
+                <img :src="'https://i8c205.p.ssafy.io/api/v1/users/images/' + userInfo.userEmail" alt="" class="img-fluid">
 
             </div>
             <div class="profile-group">
@@ -96,7 +96,7 @@ export default {
       try {
         const api = axios.create({
           // baseURL: process.env.VUE_APP_API_BASE_URL,
-          baseURL: "https://i8c205.p.ssafy.io:8082/api/v1",
+          baseURL: "https://i8c205.p.ssafy.io/api/v1",
           headers: {},
         });
 
