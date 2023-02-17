@@ -6,9 +6,9 @@
             <div class="settings-menu p-0">
                 <div class="profile-bg">
 <!--                    <h5>Student여기에 직위</h5>-->
-                    <img :src="'https://i8c205.p.ssafy.io:8082/api/v1/users/images/' + userInfo.userEmail" alt="">
+                    <img :src="'https://i8c205.p.ssafy.io/api/v1/users/images/' + userInfo.userEmail" alt="">
                     <div class="profile-img">
-                        <img :src="'https://i8c205.p.ssafy.io:8082/api/v1/users/images/' + userInfo.userEmail" alt="">
+                        <img :src="'https://i8c205.p.ssafy.io/api/v1/users/images/' + userInfo.userEmail" alt="">
                     </div>
                 </div>
                 <div class="profile-group">
