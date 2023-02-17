@@ -23,7 +23,7 @@
                           <h3>이전 참여 목록</h3>
                         </div>
                         <div v-if="check" style="text-align: end">
-                          <a class="btn btn-primary download-link attach-input" :href="'http://i8c205.p.ssafy.io:8082/api/v1/certification/' + userEmail">증명서 발급하기</a>
+                          <a class="btn btn-primary download-link attach-input" :href="'https://i8c205.p.ssafy.io:8082/api/v1/certification/' + userEmail">증명서 발급하기</a>
 
                         </div>
                       </div>
@@ -265,7 +265,7 @@ export default {
         async certification() {
           const http = axios.create({
             // baseURL: process.env.VUE_APP_API_BASE_URL,
-            baseURL: "http://i8c205.p.ssafy.io:8082/api/v1",
+            baseURL: "https://i8c205.p.ssafy.io:8082/api/v1",
             headers: {'Content-Type': 'application/pdf',
               'charset': 'utf-8'},
           });
